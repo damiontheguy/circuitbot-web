@@ -1,0 +1,647 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Download CircuitBot" description="Download CircuitBot for Windows, macOS, or Linux. Free 7-day trial.">
+
+  <!-- Hero -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-green">// GET STARTED</span>
+        <h1 class="download-title">Download <span class="gradient-text">CircuitBot</span></h1>
+        <p class="download-desc">Get up and running in minutes. Install the desktop app, connect your Discord server, and start shipping code faster.</p>
+      </div>
+
+      <!-- Auto-detected download -->
+      <div class="auto-detect" id="auto-detect">
+        <div class="detect-scanline"></div>
+        <div class="detect-inner">
+          <div class="detect-info">
+            <p class="detect-os" id="detect-os-label">Detecting your operating system...</p>
+            <h2 id="detect-heading">Download for Windows</h2>
+            <p class="detect-meta">v1.0.0 &middot; ~80MB &middot; <span id="detect-format">.msi</span></p>
+          </div>
+          <div class="detect-actions">
+            <a href="https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_x64_en-US.msi" class="btn btn-primary btn-lg" id="detect-btn">
+              <span class="btn-icon">&gt;_</span>
+              Download for Windows
+            </a>
+            <p class="detect-alt">Not your OS? <a href="#all-platforms">See all platforms below</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- All Platforms -->
+  <section class="section" id="all-platforms">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title"><span class="title-prefix">&gt;</span> All Platforms</h2>
+        <p class="section-desc">Choose your operating system</p>
+      </div>
+
+      <div class="grid grid-3 platform-grid">
+        <!-- Windows -->
+        <div class="platform-card">
+          <div class="platform-icon">[W]</div>
+          <h3>Windows</h3>
+          <span class="badge badge-cyan">.msi</span>
+          <a href="https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_x64_en-US.msi" class="btn btn-primary platform-btn">Download for Windows</a>
+          <div class="platform-reqs">
+            <h4>System Requirements</h4>
+            <ul>
+              <li>Windows 10 or later</li>
+              <li>4GB RAM</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- macOS -->
+        <div class="platform-card">
+          <div class="platform-icon">[M]</div>
+          <h3>macOS</h3>
+          <span class="badge badge-purple">.dmg</span>
+          <a href="https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_aarch64.dmg" class="btn btn-primary platform-btn">Download for macOS</a>
+          <div class="platform-reqs">
+            <h4>System Requirements</h4>
+            <ul>
+              <li>macOS 12 (Monterey) or later</li>
+              <li>Apple Silicon or Intel</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Linux -->
+        <div class="platform-card">
+          <div class="platform-icon">[L]</div>
+          <h3>Linux</h3>
+          <span class="badge badge-green">.AppImage</span>
+          <a href="https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_amd64.AppImage" class="btn btn-primary platform-btn">Download for Linux</a>
+          <div class="platform-reqs">
+            <h4>System Requirements</h4>
+            <ul>
+              <li>Ubuntu 20.04+ / Fedora 36+ / Arch</li>
+              <li>4GB RAM</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Shared System Requirements -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title"><span class="title-prefix">&gt;</span> System Requirements</h2>
+        <p class="section-desc">Shared requirements across all platforms</p>
+      </div>
+
+      <div class="grid grid-2 reqs-grid">
+        <div class="req-card">
+          <h4 class="req-card-title">Runtime</h4>
+          <ul class="req-list">
+            <li><span class="req-highlight">Python 3.11+</span> -- auto-installed if missing</li>
+            <li><span class="req-highlight">Git</span> -- for repository operations</li>
+          </ul>
+        </div>
+        <div class="req-card">
+          <h4 class="req-card-title">Resources</h4>
+          <ul class="req-list">
+            <li><span class="req-highlight">500MB</span> free disk space</li>
+            <li><span class="req-highlight">Internet connection</span> for cloud API access</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- What's Next -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title"><span class="title-prefix">&gt;</span> What's Next?</h2>
+        <p class="section-desc">After downloading, follow these guides to get started</p>
+      </div>
+
+      <div class="grid grid-2 next-grid">
+        <a href="/docs/setup" class="next-card">
+          <div class="next-card-label">GUIDE</div>
+          <h3>Setup Guide</h3>
+          <p>Step-by-step walkthrough to configure CircuitBot with your projects and API keys.</p>
+          <span class="next-link">cd /docs/setup --&gt;</span>
+        </a>
+        <a href="/docs/discord-bot" class="next-card">
+          <div class="next-card-label">GUIDE</div>
+          <h3>Discord Bot Creation</h3>
+          <p>Learn how to create a Discord bot and connect it to CircuitBot for task dispatch.</p>
+          <span class="next-link">cd /docs/discord-bot --&gt;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Release Notes -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title"><span class="title-prefix">&gt;</span> Release Notes</h2>
+        <p class="section-desc">Latest version highlights</p>
+      </div>
+
+      <div class="release-card">
+        <div class="release-header">
+          <span class="badge badge-cyan">Latest</span>
+          <h3>v1.0.0</h3>
+          <span class="release-date">Initial Release</span>
+        </div>
+        <div class="release-body">
+          <ul class="release-list">
+            <li>Standard and Advanced AI model support with automatic routing</li>
+            <li>Multi-project management with per-project configuration</li>
+            <li>Real-time dashboard with live task monitoring</li>
+            <li>Discord integration with natural language task dispatch</li>
+            <li>Usage tracking and spend cap controls</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ── Download title ──────────────────────── */
+  .download-title {
+    font-family: var(--font-mono);
+    font-size: 52px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  .download-desc {
+    color: var(--text-secondary);
+    font-size: 17px;
+    max-width: 560px;
+    margin: 0 auto;
+    font-family: var(--font-sans);
+  }
+
+  /* ── Section titles ──────────────────────── */
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .title-prefix {
+    color: var(--accent-green);
+    text-shadow: 0 0 8px rgba(46, 204, 94, 0.5);
+  }
+
+  .section-desc {
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+  }
+
+  /* ── Auto-detect card ────────────────────── */
+  .auto-detect {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-green);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glow-green);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .detect-scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-green), var(--accent-cyan), transparent);
+  }
+
+  .detect-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+  }
+
+  .detect-info h2 {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 8px 0;
+    color: var(--text-primary);
+  }
+
+  .detect-os {
+    font-size: 13px;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detect-meta {
+    font-family: var(--font-code);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .detect-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .detect-alt {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    font-family: var(--font-sans);
+  }
+
+  .detect-alt a {
+    color: var(--accent-cyan);
+  }
+
+  .btn-icon {
+    font-family: var(--font-mono);
+    margin-right: 6px;
+  }
+
+  /* ── Platform cards ──────────────────────── */
+  .platform-grid {
+    gap: 20px;
+  }
+
+  .platform-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 32px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .platform-card:hover {
+    border-color: var(--border-bright);
+    box-shadow: var(--glow-green);
+  }
+
+  .platform-icon {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    color: var(--accent-cyan);
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border-light);
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    text-shadow: 0 0 6px rgba(62, 235, 212, 0.3);
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .platform-card:hover .platform-icon {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(62, 235, 212, 0.2);
+  }
+
+  .platform-card h3 {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .platform-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .platform-reqs {
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .platform-reqs h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .platform-reqs ul {
+    list-style: none;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+  }
+
+  .platform-reqs li {
+    padding: 3px 0;
+  }
+
+  .platform-reqs li::before {
+    content: "> ";
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  /* ── Requirements ────────────────────────── */
+  .reqs-grid {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .req-card {
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .req-card-title {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-green);
+    margin-bottom: 12px;
+    text-shadow: 0 0 6px rgba(46, 204, 94, 0.3);
+  }
+
+  .req-list {
+    list-style: none;
+    margin-top: 0;
+  }
+
+  .req-list li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+  }
+
+  .req-highlight {
+    color: var(--accent-cyan);
+    font-weight: 600;
+    font-family: var(--font-code);
+  }
+
+  /* ── What's Next ─────────────────────────── */
+  .next-grid {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .next-card {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .next-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .next-card:hover {
+    border-color: var(--border-bright);
+    box-shadow: var(--glow-green);
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+
+  .next-card:hover::before {
+    opacity: 1;
+  }
+
+  .next-card-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-green);
+  }
+
+  .next-card h3 {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+  }
+
+  .next-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    flex: 1;
+    font-family: var(--font-sans);
+  }
+
+  .next-link {
+    font-family: var(--font-code);
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: color 0.25s;
+  }
+
+  .next-card:hover .next-link {
+    color: var(--accent-green);
+    text-shadow: 0 0 6px rgba(46, 204, 94, 0.4);
+  }
+
+  /* ── Release Notes ───────────────────────── */
+  .release-card {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .release-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .release-header h3 {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+  }
+
+  .release-date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .release-list {
+    list-style: none;
+  }
+
+  .release-list li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+  }
+
+  .release-list li::before {
+    content: "+ ";
+    color: var(--accent-green);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-shadow: 0 0 4px rgba(46, 204, 94, 0.3);
+  }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 768px) {
+    .download-title {
+      font-size: clamp(28px, 6vw, 36px);
+      letter-spacing: 1px;
+    }
+
+    .auto-detect {
+      padding: 24px;
+    }
+
+    .detect-info h2 {
+      font-size: 22px;
+    }
+
+    .detect-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .platform-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .platform-btn {
+      padding: 14px 20px;
+    }
+
+    .next-grid,
+    .reqs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .download-title {
+      font-size: 26px;
+    }
+
+    .auto-detect {
+      padding: 20px 16px;
+    }
+
+    .detect-info h2 {
+      font-size: 18px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var ua = navigator.userAgent || '';
+    var os = 'Windows';
+    var url = 'https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_x64_en-US.msi';
+    var format = '.msi';
+    var label = 'Download for Windows';
+
+    if (/Macintosh|Mac OS X/.test(ua)) {
+      os = 'macOS';
+      url = 'https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_aarch64.dmg';
+      format = '.dmg';
+      label = 'Download for macOS';
+    } else if (/Linux/.test(ua)) {
+      os = 'Linux';
+      url = 'https://github.com/damiontheguy/circuitbot-desktop/releases/latest/download/CircuitBot_0.1.0_amd64.AppImage';
+      format = '.AppImage';
+      label = 'Download for Linux';
+    }
+
+    var osLabel = document.getElementById('detect-os-label');
+    var heading = document.getElementById('detect-heading');
+    var formatEl = document.getElementById('detect-format');
+    var btn = document.getElementById('detect-btn');
+
+    if (osLabel) osLabel.textContent = '[ DETECTED: ' + os.toUpperCase() + ' ]';
+    if (heading) heading.textContent = label;
+    if (formatEl) formatEl.textContent = format;
+    if (btn) {
+      btn.textContent = label;
+      btn.setAttribute('href', url);
+    }
+  })();
+</script>
