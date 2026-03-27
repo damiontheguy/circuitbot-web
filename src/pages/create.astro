@@ -94,101 +94,93 @@ import Layout from '../layouts/Layout.astro';
 
 </Layout>
 
-<script>
-  const API_BASE = window.location.hostname === 'localhost'
+<script is:inline>
+  var API_BASE = window.location.hostname === 'localhost'
     ? 'http://localhost:8000'
     : 'https://circuitbot-api-production.up.railway.app';
 
   // Chip click -> fill textarea
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const textarea = document.getElementById('game-prompt') as HTMLTextAreaElement;
+  document.querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      var textarea = document.getElementById('game-prompt');
       if (textarea) {
-        textarea.value = chip.getAttribute('data-prompt') || chip.textContent?.trim() || '';
+        textarea.value = chip.getAttribute('data-prompt') || chip.textContent.trim() || '';
         textarea.focus();
       }
-      // Highlight active chip
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-active'));
+      document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('chip-active'); });
       chip.classList.add('chip-active');
     });
   });
 
   // Generate button
-  document.getElementById('generate-btn')?.addEventListener('click', async () => {
-    const textarea = document.getElementById('game-prompt') as HTMLTextAreaElement;
-    const prompt = textarea?.value?.trim();
+  var genBtn = document.getElementById('generate-btn');
+  if (genBtn) {
+    genBtn.addEventListener('click', function() {
+      var textarea = document.getElementById('game-prompt');
+      var prompt = textarea ? textarea.value.trim() : '';
 
-    if (!prompt) {
-      showError('Please describe the game you want to create.');
-      textarea?.focus();
-      return;
-    }
+      if (!prompt) {
+        showError('Please describe the game you want to create.');
+        if (textarea) textarea.focus();
+        return;
+      }
 
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
-      const redirect = encodeURIComponent('/create');
-      window.location.href = `/login?redirect=${redirect}`;
-      return;
-    }
+      var token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login?redirect=' + encodeURIComponent('/create');
+        return;
+      }
 
-    const btn = document.getElementById('generate-btn') as HTMLButtonElement;
-    btn.disabled = true;
-    btn.textContent = 'Creating job...';
+      genBtn.disabled = true;
+      genBtn.textContent = 'Creating job...';
 
-    try {
-      // 1. Create game job
-      const jobRes = await fetch(`${API_BASE}/api/games`, {
+      fetch(API_BASE + '/api/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': 'Bearer ' + token,
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt: prompt }),
+      })
+      .then(function(jobRes) {
+        if (!jobRes.ok) return jobRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create game job'); });
+        return jobRes.json();
+      })
+      .then(function(job) {
+        return fetch(API_BASE + '/api/billing/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({ game_job_id: job.id }),
+        });
+      })
+      .then(function(checkoutRes) {
+        if (!checkoutRes.ok) return checkoutRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create checkout'); });
+        return checkoutRes.json();
+      })
+      .then(function(checkout) {
+        if (checkout.checkout_url) {
+          window.location.href = checkout.checkout_url;
+        } else {
+          throw new Error('No checkout URL returned');
+        }
+      })
+      .catch(function(err) {
+        showError(err.message || 'Something went wrong. Please try again.');
+        genBtn.disabled = false;
+        genBtn.textContent = 'Generate My Game — $14.99';
       });
+    });
+  }
 
-      if (!jobRes.ok) {
-        const err = await jobRes.json().catch(() => ({}));
-        throw new Error(err.detail || `Failed to create game job (${jobRes.status})`);
-      }
-
-      const job = await jobRes.json();
-
-      // 2. Create Stripe checkout session
-      const checkoutRes = await fetch(`${API_BASE}/api/billing/checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ game_job_id: job.id }),
-      });
-
-      if (!checkoutRes.ok) {
-        const err = await checkoutRes.json().catch(() => ({}));
-        throw new Error(err.detail || `Failed to create checkout (${checkoutRes.status})`);
-      }
-
-      const checkout = await checkoutRes.json();
-
-      // 3. Redirect to Stripe
-      if (checkout.url) {
-        window.location.href = checkout.url;
-      } else {
-        throw new Error('No checkout URL returned');
-      }
-    } catch (err: any) {
-      showError(err.message || 'Something went wrong. Please try again.');
-      btn.disabled = false;
-      btn.textContent = 'Generate My Game — $14.99';
-    }
-  });
-
-  function showError(msg: string) {
-    const toast = document.getElementById('error-toast');
+  function showError(msg) {
+    var toast = document.getElementById('error-toast');
     if (toast) {
       toast.textContent = msg;
       toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 5000);
+      setTimeout(function() { toast.style.display = 'none'; }, 5000);
     }
   }
 </script>

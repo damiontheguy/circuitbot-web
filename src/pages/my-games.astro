@@ -213,7 +213,7 @@ import Layout from '../layouts/Layout.astro';
 
   // ── Auth guard ──────────────────────────────
   function getToken(): string | null {
-    return localStorage.getItem('cb_token');
+    return localStorage.getItem('token');
   }
 
   function requireAuth(): string {
@@ -310,7 +310,7 @@ import Layout from '../layouts/Layout.astro';
 
       if (!res.ok) {
         if (res.status === 401) {
-          localStorage.removeItem('cb_token');
+          localStorage.removeItem('token');
           window.location.href = '/login?redirect=/my-games';
           return;
         }

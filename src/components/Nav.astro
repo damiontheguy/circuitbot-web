@@ -30,7 +30,8 @@ const links = [
     </div>
 
     <div class="nav-actions">
-      <a href="/login" class="btn btn-ghost nav-login hide-mobile">Log in</a>
+      <a href="/login" class="btn btn-ghost nav-login hide-mobile" id="nav-login-btn">Log in</a>
+      <a href="#" class="btn btn-ghost nav-login hide-mobile" id="nav-logout-btn" style="display:none;">Log out</a>
       <a href="/create" class="btn btn-primary nav-cta">Create a Game</a>
     </div>
 
@@ -198,8 +199,26 @@ const links = [
   }
 </style>
 
-<script>
-  const toggle = document.getElementById('nav-toggle');
-  const mobile = document.getElementById('nav-mobile');
-  toggle?.addEventListener('click', () => mobile?.classList.toggle('open'));
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('nav-toggle');
+    var mobile = document.getElementById('nav-mobile');
+    if (toggle && mobile) {
+      toggle.addEventListener('click', function() { mobile.classList.toggle('open'); });
+    }
+
+    // Auth state
+    var token = localStorage.getItem('token');
+    var loginBtn = document.getElementById('nav-login-btn');
+    var logoutBtn = document.getElementById('nav-logout-btn');
+    if (token) {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = '';
+      logoutBtn && logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      });
+    }
+  });
 </script>
