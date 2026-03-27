@@ -310,59 +310,80 @@ import Layout from '../layouts/Layout.astro';
   }
 </style>
 
-<script>
-  const API_BASE = window.location.hostname === 'localhost'
+<script is:inline>
+  var API_BASE = window.location.hostname === 'localhost'
     ? 'http://localhost:8000' : 'https://circuitbot-api-production.up.railway.app';
 
-  let isSignup = false;
-  const form = document.getElementById('login-form');
-  const heading = document.querySelector('.login-heading');
-  const sub = document.querySelector('.login-sub');
-  const submitBtn = form?.querySelector('button[type="submit"]');
-  const signupToggle = document.getElementById('signup-toggle');
-  const signupPrompt = document.querySelector('.signup-prompt');
+  var isSignup = false;
 
-  signupToggle?.addEventListener('click', (e) => {
-    e.preventDefault();
-    isSignup = !isSignup;
+  function updateToggle() {
+    var heading = document.querySelector('.login-heading');
+    var sub = document.querySelector('.login-sub');
+    var submitBtn = document.querySelector('#login-form button[type="submit"]');
+    var signupPrompt = document.querySelector('.signup-prompt');
+
     if (heading) heading.textContent = isSignup ? 'Sign Up' : 'Log In';
     if (sub) sub.textContent = isSignup ? 'Create your account' : 'Access your account';
     if (submitBtn) submitBtn.textContent = isSignup ? 'Sign Up' : 'Log In';
     if (signupPrompt) signupPrompt.innerHTML = isSignup
       ? 'Already have an account? <a href="#" id="signup-toggle">Log in</a>'
       : 'Don\'t have an account? <a href="#" id="signup-toggle">Sign up</a>';
-    // Re-attach listener to new link
-    document.getElementById('signup-toggle')?.addEventListener('click', arguments.callee);
-  });
 
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
-    if (submitBtn) submitBtn.textContent = 'Loading...';
-
-    try {
-      const endpoint = isSignup ? '/api/auth/register' : '/api/auth/login';
-      const resp = await fetch(`${API_BASE}${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+    var newToggle = document.getElementById('signup-toggle');
+    if (newToggle) {
+      newToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        isSignup = !isSignup;
+        updateToggle();
       });
+    }
+  }
 
-      if (!resp.ok) {
-        const err = await resp.json();
-        throw new Error(err.detail || 'Authentication failed');
-      }
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('signup-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        isSignup = !isSignup;
+        updateToggle();
+      });
+    }
 
-      const data = await resp.json();
-      localStorage.setItem('token', data.access_token);
+    var form = document.getElementById('login-form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var emailEl = document.getElementById('email');
+        var passEl = document.getElementById('password');
+        var submitBtn = form.querySelector('button[type="submit"]');
+        var email = emailEl ? emailEl.value : '';
+        var password = passEl ? passEl.value : '';
+        if (submitBtn) submitBtn.textContent = 'Loading...';
 
-      // Redirect to intended page or /create
-      const params = new URLSearchParams(window.location.search);
-      window.location.href = params.get('redirect') || '/create';
-    } catch (err: any) {
-      alert(err.message || 'Something went wrong');
-      if (submitBtn) submitBtn.textContent = isSignup ? 'Sign Up' : 'Log In';
+        var endpoint = isSignup ? '/api/auth/register' : '/api/auth/login';
+        fetch(API_BASE + endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password }),
+        })
+        .then(function(resp) {
+          if (!resp.ok) {
+            return resp.json().then(function(err) {
+              throw new Error(err.detail || 'Authentication failed');
+            });
+          }
+          return resp.json();
+        })
+        .then(function(data) {
+          localStorage.setItem('token', data.access_token);
+          var params = new URLSearchParams(window.location.search);
+          window.location.href = params.get('redirect') || '/create';
+        })
+        .catch(function(err) {
+          alert(err.message || 'Something went wrong');
+          if (submitBtn) submitBtn.textContent = isSignup ? 'Sign Up' : 'Log In';
+        });
+      });
     }
   });
 </script>
