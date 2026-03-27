@@ -56,11 +56,11 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <p class="signup-prompt">
-          Don't have an account? <a href="/pricing">Sign up</a>
+          Don't have an account? <a href="#" id="signup-toggle">Sign up</a>
         </p>
 
         <p class="desktop-note">
-          Or log in through the <a href="/download">desktop app</a>
+          Or use the <a href="/download">desktop app</a>
         </p>
       </div>
     </div>
@@ -311,13 +311,58 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  (function() {
-    var form = document.getElementById('login-form');
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Authentication is handled through the desktop app. Download CircuitBot at circuit-bot.com/download to log in.');
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000' : 'https://api.circuitbot.dev';
+
+  let isSignup = false;
+  const form = document.getElementById('login-form');
+  const heading = document.querySelector('.login-heading');
+  const sub = document.querySelector('.login-sub');
+  const submitBtn = form?.querySelector('button[type="submit"]');
+  const signupToggle = document.getElementById('signup-toggle');
+  const signupPrompt = document.querySelector('.signup-prompt');
+
+  signupToggle?.addEventListener('click', (e) => {
+    e.preventDefault();
+    isSignup = !isSignup;
+    if (heading) heading.textContent = isSignup ? 'Sign Up' : 'Log In';
+    if (sub) sub.textContent = isSignup ? 'Create your account' : 'Access your account';
+    if (submitBtn) submitBtn.textContent = isSignup ? 'Sign Up' : 'Log In';
+    if (signupPrompt) signupPrompt.innerHTML = isSignup
+      ? 'Already have an account? <a href="#" id="signup-toggle">Log in</a>'
+      : 'Don\'t have an account? <a href="#" id="signup-toggle">Sign up</a>';
+    // Re-attach listener to new link
+    document.getElementById('signup-toggle')?.addEventListener('click', arguments.callee);
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+    if (submitBtn) submitBtn.textContent = 'Loading...';
+
+    try {
+      const endpoint = isSignup ? '/api/auth/register' : '/api/auth/login';
+      const resp = await fetch(`${API_BASE}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.detail || 'Authentication failed');
+      }
+
+      const data = await resp.json();
+      localStorage.setItem('token', data.access_token);
+
+      // Redirect to intended page or /create
+      const params = new URLSearchParams(window.location.search);
+      window.location.href = params.get('redirect') || '/create';
+    } catch (err: any) {
+      alert(err.message || 'Something went wrong');
+      if (submitBtn) submitBtn.textContent = isSignup ? 'Sign Up' : 'Log In';
     }
-  })();
+  });
 </script>

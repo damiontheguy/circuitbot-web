@@ -1,0 +1,421 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Create Your Game — CircuitBot" description="Describe a game in plain language and get a playable executable in minutes.">
+
+  <!-- Hero -->
+  <section class="section create-hero">
+    <div class="container">
+      <div class="bg-grid"></div>
+      <div class="section-header">
+        <span class="badge badge-green">New Game</span>
+        <h1 class="create-title">Create Your <span class="gradient-text">Game</span></h1>
+        <p>Describe what you want to build. We handle the rest.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Prompt Input -->
+  <section class="section">
+    <div class="container-narrow">
+      <div class="prompt-wrapper">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">game prompt</span>
+          </div>
+          <div class="terminal-body prompt-body">
+            <label for="game-prompt" class="prompt-label">// describe your game</label>
+            <textarea
+              id="game-prompt"
+              class="prompt-textarea"
+              placeholder="Describe the game you want to create. Be as specific as you'd like — genre, mechanics, art style, story..."
+              rows="8"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Example Chips -->
+        <div class="chips-section">
+          <p class="chips-label">Try an example:</p>
+          <div class="chips-row">
+            <button class="chip" data-prompt="A retro pixel-art roguelike dungeon crawler with procedural levels, permadeath, and loot drops">
+              A retro pixel-art roguelike dungeon crawler
+            </button>
+            <button class="chip" data-prompt="A 2D platformer with a cute cat protagonist who collects fish and avoids dogs across colorful levels">
+              A 2D platformer with a cute cat protagonist
+            </button>
+            <button class="chip" data-prompt="A tower defense game with medieval theme, upgradeable towers, and wave-based enemy progression">
+              A tower defense game with medieval theme
+            </button>
+            <button class="chip" data-prompt="A space shooter with procedural enemy waves, power-ups, and a boss fight every 5 waves">
+              A space shooter with procedural enemy waves
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Price + CTA -->
+  <section class="section">
+    <div class="container-narrow">
+      <div class="price-card">
+        <div class="price-amount">
+          <span class="price-dollar">$</span>
+          <span class="price-value">14.99</span>
+        </div>
+        <p class="price-subtitle">One game, fully generated</p>
+        <ul class="price-includes">
+          <li><span class="check">+</span> Complete Godot 4 project</li>
+          <li><span class="check">+</span> AI-generated art assets</li>
+          <li><span class="check">+</span> Compiled Windows executable</li>
+          <li><span class="check">+</span> Source code included</li>
+        </ul>
+        <button id="generate-btn" class="btn btn-primary btn-lg generate-btn">
+          Generate My Game — $14.99
+        </button>
+        <p class="disclaimer">
+          By clicking generate, you agree to our <a href="/terms">Terms of Service</a>.
+          Generation takes ~15-30 minutes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Error display -->
+  <div id="error-toast" class="error-toast" style="display: none;"></div>
+
+</Layout>
+
+<script>
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://api.circuitbot.dev';
+
+  // Chip click -> fill textarea
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const textarea = document.getElementById('game-prompt') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.value = chip.getAttribute('data-prompt') || chip.textContent?.trim() || '';
+        textarea.focus();
+      }
+      // Highlight active chip
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-active'));
+      chip.classList.add('chip-active');
+    });
+  });
+
+  // Generate button
+  document.getElementById('generate-btn')?.addEventListener('click', async () => {
+    const textarea = document.getElementById('game-prompt') as HTMLTextAreaElement;
+    const prompt = textarea?.value?.trim();
+
+    if (!prompt) {
+      showError('Please describe the game you want to create.');
+      textarea?.focus();
+      return;
+    }
+
+    const token = localStorage.getItem('auth_token');
+    if (!token) {
+      const redirect = encodeURIComponent('/create');
+      window.location.href = `/login?redirect=${redirect}`;
+      return;
+    }
+
+    const btn = document.getElementById('generate-btn') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = 'Creating job...';
+
+    try {
+      // 1. Create game job
+      const jobRes = await fetch(`${API_BASE}/api/games`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!jobRes.ok) {
+        const err = await jobRes.json().catch(() => ({}));
+        throw new Error(err.detail || `Failed to create game job (${jobRes.status})`);
+      }
+
+      const job = await jobRes.json();
+
+      // 2. Create Stripe checkout session
+      const checkoutRes = await fetch(`${API_BASE}/api/billing/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ game_job_id: job.id }),
+      });
+
+      if (!checkoutRes.ok) {
+        const err = await checkoutRes.json().catch(() => ({}));
+        throw new Error(err.detail || `Failed to create checkout (${checkoutRes.status})`);
+      }
+
+      const checkout = await checkoutRes.json();
+
+      // 3. Redirect to Stripe
+      if (checkout.url) {
+        window.location.href = checkout.url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (err: any) {
+      showError(err.message || 'Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Generate My Game — $14.99';
+    }
+  });
+
+  function showError(msg: string) {
+    const toast = document.getElementById('error-toast');
+    if (toast) {
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 5000);
+    }
+  }
+</script>
+
+<style>
+  /* ── Hero ────────────────────────── */
+  .create-hero {
+    position: relative;
+    padding-bottom: 40px;
+  }
+
+  .create-title {
+    font-family: var(--font-mono);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 0 0 30px rgba(46, 204, 94, 0.2);
+    margin-bottom: 12px;
+  }
+
+  /* ── Prompt Area ────────────────── */
+  .prompt-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .prompt-body {
+    padding: 0 !important;
+  }
+
+  .prompt-label {
+    display: block;
+    padding: 16px 20px 8px;
+    font-family: var(--font-code);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .prompt-textarea {
+    display: block;
+    width: 100%;
+    min-height: 200px;
+    padding: 8px 20px 20px;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: vertical;
+    font-family: var(--font-code);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+
+  .prompt-textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .prompt-textarea:focus {
+    background: rgba(46, 204, 94, 0.02);
+  }
+
+  /* ── Example Chips ──────────────── */
+  .chips-section {
+    margin-top: 20px;
+  }
+
+  .chips-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    padding: 8px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .chip:hover {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+    box-shadow: var(--glow-green);
+  }
+
+  .chip-active {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    background: rgba(62, 235, 212, 0.06);
+  }
+
+  /* ── Price Card ─────────────────── */
+  .price-card {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .price-amount {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .price-dollar {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    color: var(--text-muted);
+  }
+
+  .price-value {
+    font-family: var(--font-mono);
+    font-size: 56px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .price-subtitle {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+
+  .price-includes {
+    list-style: none;
+    text-align: left;
+    max-width: 300px;
+    margin: 0 auto 28px;
+  }
+
+  .price-includes li {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+  }
+
+  .price-includes .check {
+    color: var(--accent-green);
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  .generate-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 16px;
+    padding: 16px 28px;
+    margin-bottom: 16px;
+  }
+
+  .generate-btn:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .disclaimer a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+  }
+
+  /* ── Error Toast ────────────────── */
+  .error-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(239, 83, 80, 0.15);
+    border: 1px solid var(--accent-red);
+    color: var(--accent-red);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(239, 83, 80, 0.2);
+  }
+
+  /* ── Responsive ─────────────────── */
+  @media (max-width: 600px) {
+    .price-card {
+      padding: 28px 20px;
+    }
+
+    .price-value {
+      font-size: 44px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 6px 10px;
+    }
+  }
+</style>

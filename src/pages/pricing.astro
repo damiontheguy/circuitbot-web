@@ -1,8 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-
-<Layout title="Pricing — CircuitBot" description="Simple, transparent pricing. $29/mo platform fee plus pay-as-you-go API usage.">
+<Layout title="Pricing — CircuitBot" description="One price. One game. No subscriptions. $14.99 per game, fully generated.">
 
   <!-- Hero -->
   <section class="section pricing-hero">
@@ -10,8 +9,8 @@ import Layout from '../layouts/Layout.astro';
       <div class="bg-grid"></div>
       <div class="section-header">
         <span class="badge badge-green">Pricing</span>
-        <h1 class="pricing-title">Simple, <span class="gradient-text">Transparent</span> Pricing</h1>
-        <p class="pricing-subtitle-text">A flat platform fee plus pay-as-you-go API usage. No hidden costs, no per-seat charges, no surprises.</p>
+        <h1 class="pricing-title">Simple <span class="gradient-text">Pricing</span></h1>
+        <p class="pricing-subtitle-text">One price. One game. No subscriptions.</p>
       </div>
     </div>
   </section>
@@ -23,37 +22,32 @@ import Layout from '../layouts/Layout.astro';
     <div class="container">
       <div class="pricing-card-wrapper">
         <div class="pricing-card">
+          <div class="pricing-card-glow"></div>
           <div class="pricing-card-header">
-            <span class="badge badge-green">All-In-One</span>
+            <span class="badge badge-cyan">Pay Per Game</span>
             <div class="pricing-amount">
               <span class="pricing-dollar">$</span>
-              <span class="pricing-value">29</span>
-              <span class="pricing-period">/mo</span>
+              <span class="pricing-value">14.99</span>
             </div>
-            <p class="pricing-label">Platform Fee</p>
+            <p class="pricing-label">per game</p>
           </div>
 
           <div class="pricing-divider"></div>
 
           <div class="pricing-includes">
-            <p class="pricing-includes-label">// Everything included</p>
+            <p class="pricing-includes-label">// everything included</p>
             <ul class="pricing-features">
-              <li><span class="feature-prefix">+</span> Unlimited projects</li>
-              <li><span class="feature-prefix">+</span> Unlimited team members</li>
-              <li><span class="feature-prefix">+</span> All AI models (Lite, Standard, Advanced)</li>
-              <li><span class="feature-prefix">+</span> Real-time usage dashboard</li>
-              <li><span class="feature-prefix">+</span> Spending caps and alerts</li>
-              <li><span class="feature-prefix">+</span> Priority support</li>
+              <li><span class="feature-check">&#10003;</span> Complete Godot 4 project</li>
+              <li><span class="feature-check">&#10003;</span> AI-generated 2D &amp; 3D art</li>
+              <li><span class="feature-check">&#10003;</span> Full GDScript game code</li>
+              <li><span class="feature-check">&#10003;</span> Compiled Windows executable</li>
+              <li><span class="feature-check">&#10003;</span> Delivered in ~15-30 minutes</li>
+              <li><span class="feature-check">&#10003;</span> Source code included — edit freely</li>
             </ul>
           </div>
 
-          <div class="pricing-usage-note">
-            <span class="plus-badge">+</span>
-            <span>Pay-as-you-go API usage</span>
-          </div>
-
-          <a href="/signup" class="btn btn-primary btn-lg pricing-cta">Start Free Trial</a>
-          <p class="pricing-trial-note">7-day free trial, no credit card required</p>
+          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Create Your Game</a>
+          <p class="pricing-note">No account needed until you generate</p>
         </div>
       </div>
     </div>
@@ -61,155 +55,40 @@ import Layout from '../layouts/Layout.astro';
 
   <hr class="divider" />
 
-  <!-- Usage Calculator -->
-  <section class="section" id="calculator">
-    <div class="container">
-      <div class="section-header">
-        <span class="badge badge-purple">Calculator</span>
-        <h2>Estimate Your <span class="gradient-text-purple">Monthly Cost</span></h2>
-        <p>Adjust the sliders to see what you would pay based on your usage patterns.</p>
-      </div>
-
-      <div class="calculator-layout">
-        <div class="calculator-controls">
-          <div class="calc-control">
-            <div class="calc-control-header">
-              <label for="loops-per-day" class="calc-label">Tasks per day</label>
-              <span class="calc-value-display" id="loops-display">5</span>
-            </div>
-            <input type="range" id="loops-per-day" min="1" max="50" value="5" class="calc-slider slider-green" />
-            <div class="calc-range-labels">
-              <span>1</span>
-              <span>50</span>
-            </div>
-          </div>
-
-          <div class="calc-divider"></div>
-
-          <div class="calc-control">
-            <div class="calc-control-header">
-              <label class="calc-label">Model mix</label>
-              <div class="toggle-wrapper">
-                <button id="toggle-model-mix" class="circuit-toggle" aria-pressed="true" type="button">
-                  <span class="circuit-toggle-track">
-                    <span class="circuit-toggle-knob"></span>
-                  </span>
-                </button>
-                <span class="toggle-status" id="mix-label">ON</span>
-              </div>
-            </div>
-            <p class="calc-hint">Enable to use a mix of Standard and Advanced. Disable for Standard-only.</p>
-          </div>
-
-          <div class="calc-control advanced-control" id="opus-control">
-            <div class="calc-control-header">
-              <label for="opus-percent" class="calc-label">Advanced model usage</label>
-              <span class="calc-value-display calc-value-purple" id="opus-display">10%</span>
-            </div>
-            <input type="range" id="opus-percent" min="0" max="100" value="10" class="calc-slider slider-purple" />
-            <div class="calc-range-labels">
-              <span>0%</span>
-              <span>100%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="calculator-result">
-          <p class="calc-result-label">// Estimated monthly cost</p>
-          <div class="calc-total" id="calc-total">$0.00</div>
-
-          <div class="calc-breakdown">
-            <div class="calc-line">
-              <span class="calc-line-label">Platform fee</span>
-              <span class="calc-line-value">$29.00</span>
-            </div>
-            <div class="calc-line">
-              <span class="calc-line-label">Standard tasks</span>
-              <span class="calc-line-value" id="sonnet-cost">$0.00</span>
-            </div>
-            <div class="calc-line" id="opus-cost-line">
-              <span class="calc-line-label">Advanced tasks</span>
-              <span class="calc-line-value calc-line-value-purple" id="opus-cost">$0.00</span>
-            </div>
-            <div class="calc-line">
-              <span class="calc-line-label">Lite triage</span>
-              <span class="calc-line-value" id="haiku-cost">$0.00</span>
-            </div>
-            <div class="calc-divider-line"></div>
-            <div class="calc-line calc-line-total">
-              <span class="calc-line-label">Total</span>
-              <span class="calc-line-value" id="total-value">$0.00</span>
-            </div>
-          </div>
-
-          <div class="calc-details">
-            <p class="calc-detail-item" id="detail-loops"></p>
-            <p class="calc-detail-item" id="detail-model"></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- Model Comparison Table -->
+  <!-- What's Included -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <span class="badge badge-cyan">Models</span>
-        <h2>Model Comparison</h2>
-        <p>Choose the right model for each task.</p>
+        <span class="badge badge-green">Deliverables</span>
+        <h2>What's <span class="gradient-text">Included</span></h2>
+        <p>Every generated game ships with these three pillars.</p>
       </div>
 
-      <div class="table-wrapper">
-        <table class="pricing-table">
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Input<br /><span class="th-sub">per M tokens</span></th>
-              <th>Output<br /><span class="th-sub">per M tokens</span></th>
-              <th>Cached Input<br /><span class="th-sub">per M tokens</span></th>
-              <th>Typical Cost<br /><span class="th-sub">per task</span></th>
-              <th>Best For</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="model-cell">
-                <span class="model-name">Lite</span>
-                <span class="badge badge-green model-badge">Fast</span>
-              </td>
-              <td>$1.60</td>
-              <td>$8.00</td>
-              <td>$0.16</td>
-              <td class="cost-cell">~$0.02</td>
-              <td class="use-cell">Triage, routing, classification</td>
-            </tr>
-            <tr class="row-highlight">
-              <td class="model-cell">
-                <span class="model-name">Standard</span>
-                <span class="badge badge-cyan model-badge">Default</span>
-              </td>
-              <td>$6.00</td>
-              <td>$30.00</td>
-              <td>$0.60</td>
-              <td class="cost-cell">~$0.70</td>
-              <td class="use-cell">Code tasks, reviews, features</td>
-            </tr>
-            <tr>
-              <td class="model-cell">
-                <span class="model-name">Advanced</span>
-                <span class="badge badge-purple model-badge">Powerful</span>
-              </td>
-              <td>$30.00</td>
-              <td>$150.00</td>
-              <td>$3.00</td>
-              <td class="cost-cell">~$4.00</td>
-              <td class="use-cell">Complex architecture, refactors</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="grid grid-3">
+        <div class="card included-card">
+          <div class="included-icon">&#127912;</div>
+          <h3 class="included-title">AI Art Generation</h3>
+          <p class="included-desc">
+            Sprites, textures, tilesets, and backgrounds — all generated to match
+            your game's style. No placeholder art.
+          </p>
+        </div>
+        <div class="card included-card">
+          <div class="included-icon">&#9000;</div>
+          <h3 class="included-title">Game Logic</h3>
+          <p class="included-desc">
+            Complete GDScript code for all mechanics you described — movement,
+            combat, UI, menus, scoring, and game state.
+          </p>
+        </div>
+        <div class="card included-card">
+          <div class="included-icon">&#9654;</div>
+          <h3 class="included-title">Compiled Build</h3>
+          <p class="included-desc">
+            A Windows .exe ready to play, plus the full Godot project so you can
+            open it in the editor and keep building.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -218,65 +97,75 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- FAQ -->
   <section class="section">
-    <div class="container container-narrow">
+    <div class="container-narrow">
       <div class="section-header">
-        <h2>Frequently Asked Questions</h2>
+        <span class="badge badge-cyan">FAQ</span>
+        <h2>Common <span class="gradient-text">Questions</span></h2>
       </div>
 
       <div class="faq-list">
         <details class="faq-item">
-          <summary class="faq-question">How is usage calculated?</summary>
-          <div class="faq-answer">
-            <p>Usage is based on actual tokens consumed per API call. Every call records input and output token counts, which are multiplied by the per-token rate for the model used. You can monitor usage in real time from the dashboard.</p>
-          </div>
+          <summary class="faq-question">Is it a subscription?</summary>
+          <p class="faq-answer">
+            No. You pay once per game. There are no recurring charges, no monthly
+            fees, and no hidden costs. Each game generation is a one-time purchase
+            of $14.99.
+          </p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-question">Can I set a spending cap?</summary>
-          <div class="faq-answer">
-            <p>Yes. You can set a monthly spending cap from the dashboard. When you approach your limit, you will receive email alerts at 50%, 80%, and 95% thresholds so there are no surprises.</p>
-          </div>
+          <summary class="faq-question">Can I get a refund?</summary>
+          <p class="faq-answer">
+            If generation fails or produces something fundamentally broken, yes.
+            Contact us and we'll make it right. We stand behind the quality of
+            every generated game.
+          </p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-question">What happens if I hit my cap?</summary>
-          <div class="faq-answer">
-            <p>Tasks will pause until the next billing cycle or until you raise your cap. The bot stays online so you can still monitor projects, view dashboards, and manage settings -- only new API-consuming tasks are paused.</p>
-          </div>
+          <summary class="faq-question">How many games can I create?</summary>
+          <p class="faq-answer">
+            As many as you want. Each game costs $14.99 to generate. There are no
+            limits on how many games you can create.
+          </p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-question">Can I switch models mid-month?</summary>
-          <div class="faq-answer">
-            <p>Absolutely. Model selection is per-request. Standard is the default for tasks, but you can opt into Advanced for individual tasks when you need deeper reasoning. Lite is used automatically for triage and routing.</p>
-          </div>
+          <summary class="faq-question">Do I own the game?</summary>
+          <p class="faq-answer">
+            Yes, 100%. The generated game and all its assets are yours. You can
+            sell it, modify it, open-source it, or do anything you want with it.
+            No royalties, no attribution required.
+          </p>
         </details>
 
         <details class="faq-item">
-          <summary class="faq-question">Is there a free trial?</summary>
-          <div class="faq-answer">
-            <p>Yes. Every new account gets a 7-day free trial with no credit card required. You get full access to all features and models so you can evaluate CircuitBot with your real projects before committing.</p>
-          </div>
+          <summary class="faq-question">What engine does it use?</summary>
+          <p class="faq-answer">
+            All games are built with Godot 4, an open-source game engine. You get
+            the full project files so you can open them in the Godot editor and
+            continue development.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">How long does generation take?</summary>
+          <p class="faq-answer">
+            Typically 15-30 minutes depending on complexity. You'll receive an
+            email when your game is ready to download.
+          </p>
         </details>
       </div>
     </div>
   </section>
 
-  <hr class="divider" />
-
-  <!-- CTA -->
-  <section class="section cta-section">
+  <!-- Bottom CTA -->
+  <section class="section bottom-cta">
     <div class="container">
-      <div class="cta-card">
-        <div class="bg-grid"></div>
-        <div class="cta-card-inner">
-          <h2 class="cta-heading">Start Your <span class="gradient-text">Free Trial</span></h2>
-          <p class="cta-sub">7 days, all features, no credit card. See what CircuitBot can do for your team.</p>
-          <div class="cta-buttons">
-            <a href="/signup" class="btn btn-primary btn-lg">Start Free Trial</a>
-            <a href="/docs" class="btn btn-lg">Read the Docs</a>
-          </div>
-        </div>
+      <div class="section-header">
+        <h2>Ready to <span class="gradient-text">Build</span>?</h2>
+        <p>Describe your game idea and have a playable build in minutes.</p>
+        <a href="/create" class="btn btn-primary btn-lg cta-btn">Create Your Game — $14.99</a>
       </div>
     </div>
   </section>
@@ -284,130 +173,89 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-  /* ── Hero ──────────────────────────────────── */
-
+  /* ── Hero ────────────────────────── */
   .pricing-hero {
     position: relative;
-    text-align: center;
+    padding-bottom: 40px;
   }
 
   .pricing-title {
     font-family: var(--font-mono);
-    font-size: 48px;
+    font-size: clamp(28px, 5vw, 42px);
     font-weight: 400;
-    letter-spacing: 2px;
-    line-height: 1.2;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    text-shadow: 0 0 30px rgba(46, 204, 94, 0.3);
-    margin-top: 20px;
+    text-shadow: 0 0 30px rgba(46, 204, 94, 0.2);
+    margin-bottom: 12px;
   }
 
   .pricing-subtitle-text {
-    font-family: var(--font-sans);
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-secondary);
-    max-width: 600px;
-    margin: 16px auto 0;
   }
 
-  @media (max-width: 768px) {
-    .pricing-title {
-      font-size: clamp(24px, 5vw, 28px);
-      letter-spacing: 1px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .pricing-title {
-      font-size: 22px;
-      letter-spacing: 0.5px;
-    }
-
-    .pricing-card {
-      padding: 32px 20px;
-    }
-
-    .pricing-value {
-      font-size: 56px;
-    }
-  }
-
-  /* ── Pricing Card ─────────────────────────── */
-
+  /* ── Pricing Card ───────────────── */
   .pricing-card-wrapper {
-    max-width: 500px;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
   }
 
   .pricing-card {
-    background: var(--bg-card);
-    border: 1px solid var(--accent-green);
-    border-radius: var(--radius-lg);
-    padding: 48px 36px;
-    text-align: center;
-    box-shadow:
-      0 0 30px rgba(46, 204, 94, 0.12),
-      0 0 60px rgba(46, 204, 94, 0.06),
-      inset 0 1px 0 rgba(46, 204, 94, 0.1);
     position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    padding: 48px 40px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
   }
 
-  .pricing-card::before {
-    content: '';
+  .pricing-card-glow {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-    box-shadow: 0 0 20px rgba(46, 204, 94, 0.5);
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 120px;
+    background: radial-gradient(ellipse, rgba(46, 204, 94, 0.12), transparent 70%);
+    pointer-events: none;
   }
 
   .pricing-card-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    position: relative;
   }
 
   .pricing-amount {
     display: flex;
     align-items: baseline;
-    gap: 2px;
-    margin-top: 8px;
+    justify-content: center;
+    gap: 4px;
+    margin: 20px 0 4px;
   }
 
   .pricing-dollar {
     font-family: var(--font-mono);
     font-size: 28px;
-    font-weight: 400;
-    color: var(--accent-green);
-    text-shadow: 0 0 10px rgba(46, 204, 94, 0.5);
+    color: var(--text-muted);
   }
 
   .pricing-value {
     font-family: var(--font-mono);
-    font-size: 80px;
-    font-weight: 400;
-    letter-spacing: -2px;
+    font-size: 64px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1;
-    color: var(--text-primary);
-    text-shadow:
-      0 0 40px rgba(46, 204, 94, 0.4),
-      0 0 80px rgba(46, 204, 94, 0.15);
-  }
-
-  .pricing-period {
-    font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 400;
-    color: var(--text-secondary);
   }
 
   .pricing-label {
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -427,786 +275,164 @@ import Layout from '../layouts/Layout.astro';
     font-family: var(--font-code);
     font-size: 12px;
     color: var(--text-muted);
-    letter-spacing: 1px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
   }
 
   .pricing-features {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
   }
 
   .pricing-features li {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 6px 0;
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: var(--font-sans);
-    font-size: 15px;
-    color: var(--text-secondary);
   }
 
-  .feature-prefix {
-    font-family: var(--font-mono);
-    font-size: 16px;
-    font-weight: 700;
+  .feature-check {
     color: var(--accent-green);
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.4);
+    font-size: 14px;
+    font-weight: 700;
     flex-shrink: 0;
-    width: 18px;
-    text-align: center;
-  }
-
-  .pricing-usage-note {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    font-family: var(--font-mono);
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 28px;
-  }
-
-  .plus-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius);
-    border: 1px solid rgba(46, 204, 94, 0.3);
-    background: rgba(46, 204, 94, 0.08);
-    color: var(--accent-green);
-    font-weight: 700;
-    font-size: 18px;
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.5);
+    text-shadow: 0 0 6px rgba(46, 204, 94, 0.4);
   }
 
   .pricing-cta {
     width: 100%;
     justify-content: center;
     margin-top: 28px;
-  }
-
-  .pricing-trial-note {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    margin-top: 14px;
-  }
-
-  /* ── Calculator ────────────────────────────── */
-
-  .calculator-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    max-width: 920px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 768px) {
-    .calculator-layout { grid-template-columns: 1fr; }
-  }
-
-  .calculator-controls {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    box-shadow: var(--shadow);
-  }
-
-  .calc-control {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .calc-control-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .calc-label {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-primary);
-  }
-
-  .calc-value-display {
-    font-family: var(--font-code);
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--accent-green);
-    background: rgba(46, 204, 94, 0.08);
-    border: 1px solid rgba(46, 204, 94, 0.2);
-    padding: 3px 12px;
-    border-radius: var(--radius);
-    min-width: 48px;
-    text-align: center;
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.3);
-  }
-
-  .calc-value-purple {
-    color: var(--accent-purple);
-    background: rgba(123, 92, 191, 0.08);
-    border-color: rgba(123, 92, 191, 0.2);
-    text-shadow: 0 0 8px rgba(123, 92, 191, 0.3);
-  }
-
-  .calc-hint {
-    font-family: var(--font-sans);
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
-  .calc-range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--text-muted);
-    font-family: var(--font-code);
-    margin-top: -4px;
-  }
-
-  .calc-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-  }
-
-  /* ── Slider Styling ───────────────────────── */
-
-  .calc-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    outline: none;
-    cursor: pointer;
-  }
-
-  .calc-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 2px;
-    cursor: pointer;
-    border: 1px solid;
-    transition: box-shadow 0.2s;
-  }
-
-  .slider-green::-webkit-slider-thumb {
-    background: var(--accent-green);
-    border-color: var(--accent-green);
-    box-shadow: 0 0 12px rgba(46, 204, 94, 0.5), 0 0 4px rgba(46, 204, 94, 0.8);
-  }
-
-  .slider-green::-webkit-slider-thumb:hover {
-    box-shadow: 0 0 24px rgba(46, 204, 94, 0.7), 0 0 8px rgba(46, 204, 94, 1);
-  }
-
-  .slider-purple::-webkit-slider-thumb {
-    background: var(--accent-purple);
-    border-color: var(--accent-purple);
-    box-shadow: 0 0 12px rgba(123, 92, 191, 0.5), 0 0 4px rgba(123, 92, 191, 0.8);
-  }
-
-  .slider-purple::-webkit-slider-thumb:hover {
-    box-shadow: 0 0 24px rgba(123, 92, 191, 0.7), 0 0 8px rgba(123, 92, 191, 1);
-  }
-
-  .calc-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    border-radius: 2px;
-    cursor: pointer;
-    border: none;
-  }
-
-  .slider-green::-moz-range-thumb {
-    background: var(--accent-green);
-    box-shadow: 0 0 12px rgba(46, 204, 94, 0.5);
-  }
-
-  .slider-purple::-moz-range-thumb {
-    background: var(--accent-purple);
-    box-shadow: 0 0 12px rgba(123, 92, 191, 0.5);
-  }
-
-  .calc-slider::-moz-range-track {
-    height: 4px;
-    border-radius: 2px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-  }
-
-  /* ── Circuit Toggle ─────────────────────────── */
-
-  .toggle-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .circuit-toggle {
-    position: relative;
-    width: 52px;
-    height: 26px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--bg-elevated);
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.3s;
-    overflow: hidden;
-  }
-
-  .circuit-toggle::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 4px;
-    right: 4px;
-    height: 1px;
-    background: var(--border-light);
-    transform: translateY(-50%);
-  }
-
-  .circuit-toggle[aria-pressed="true"] {
-    background: rgba(46, 204, 94, 0.1);
-    border-color: var(--accent-green);
-    box-shadow: 0 0 16px rgba(46, 204, 94, 0.25), inset 0 0 8px rgba(46, 204, 94, 0.1);
-  }
-
-  .circuit-toggle[aria-pressed="true"]::before {
-    background: rgba(46, 204, 94, 0.3);
-    box-shadow: 0 0 6px rgba(46, 204, 94, 0.4);
-  }
-
-  .circuit-toggle-track {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .circuit-toggle-knob {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 18px;
-    height: 18px;
-    border-radius: 2px;
-    background: var(--text-muted);
-    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-  }
-
-  .circuit-toggle[aria-pressed="true"] .circuit-toggle-knob {
-    transform: translateX(26px);
-    background: var(--accent-green);
-    box-shadow: 0 0 10px rgba(46, 204, 94, 0.6);
-  }
-
-  .toggle-status {
-    font-family: var(--font-code);
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    min-width: 24px;
-  }
-
-  .circuit-toggle[aria-pressed="true"] ~ .toggle-status {
-    color: var(--accent-green);
-    text-shadow: 0 0 6px rgba(46, 204, 94, 0.4);
-  }
-
-  /* ── Advanced control visibility ─────────── */
-
-  .advanced-control {
-    transition: opacity 0.3s, max-height 0.3s;
-    max-height: 200px;
-    overflow: hidden;
-  }
-
-  .advanced-control.hidden {
-    opacity: 0;
-    max-height: 0;
-    pointer-events: none;
-  }
-
-  /* ── Calculator Result ─────────────────────── */
-
-  .calculator-result {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    box-shadow: var(--shadow);
-  }
-
-  .calc-result-label {
-    font-family: var(--font-code);
-    font-size: 12px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .calc-total {
-    font-family: var(--font-mono);
-    font-size: 56px;
-    font-weight: 400;
-    letter-spacing: -1px;
-    color: var(--accent-green);
-    text-shadow:
-      0 0 30px rgba(46, 204, 94, 0.4),
-      0 0 60px rgba(46, 204, 94, 0.15);
-    transition: opacity 0.15s;
-    margin-top: 8px;
-  }
-
-  .calc-breakdown {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-align: left;
-    margin-top: 28px;
-  }
-
-  .calc-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    padding: 6px 0;
-  }
-
-  .calc-line-label {
-    font-family: var(--font-sans);
-    color: var(--text-secondary);
-  }
-
-  .calc-line-value {
-    font-family: var(--font-code);
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--accent-green);
-    text-shadow: 0 0 6px rgba(46, 204, 94, 0.2);
-  }
-
-  .calc-line-value-purple {
-    color: var(--accent-purple);
-    text-shadow: 0 0 6px rgba(123, 92, 191, 0.2);
-  }
-
-  .calc-divider-line {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
-    margin: 4px 0;
-  }
-
-  .calc-line-total {
-    font-weight: 700;
     font-size: 15px;
   }
 
-  .calc-line-total .calc-line-label {
-    font-family: var(--font-mono);
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .calc-line-total .calc-line-value {
-    font-size: 18px;
-    color: var(--accent-green);
-    text-shadow: 0 0 12px rgba(46, 204, 94, 0.4);
-  }
-
-  .calc-details {
-    width: 100%;
-    text-align: left;
-    margin-top: 20px;
-  }
-
-  .calc-detail-item {
-    font-family: var(--font-code);
-    font-size: 11px;
-    color: var(--text-muted);
-    line-height: 1.8;
-  }
-
-  /* ── Model Table ───────────────────────────── */
-
-  .table-wrapper {
-    overflow-x: auto;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-  }
-
-  .pricing-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  .pricing-table th {
-    background: var(--bg-card);
-    padding: 16px;
-    text-align: left;
-    font-family: var(--font-mono);
-    font-weight: 400;
+  .pricing-note {
     font-size: 12px;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid var(--accent-green);
-    white-space: nowrap;
-  }
-
-  .th-sub {
-    font-weight: 400;
-    font-size: 10px;
     color: var(--text-muted);
-    text-transform: none;
-    letter-spacing: 0;
+    margin-top: 12px;
   }
 
-  .pricing-table td {
-    padding: 16px;
-    border-bottom: 1px solid var(--border);
-    font-family: var(--font-code);
-    font-size: 14px;
-    color: var(--text-primary);
+  /* ── Included Cards ─────────────── */
+  .included-card {
+    text-align: center;
+    padding: 32px 24px;
   }
 
-  .pricing-table tbody tr:last-child td {
-    border-bottom: none;
+  .included-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    filter: grayscale(0.3);
   }
 
-  .pricing-table tbody tr {
-    background: var(--bg-secondary);
-    transition: background 0.2s;
-  }
-
-  .pricing-table tbody tr:hover {
-    background: var(--bg-hover);
-  }
-
-  .row-highlight {
-    background: rgba(46, 204, 94, 0.04) !important;
-    border-left: 2px solid var(--accent-green);
-  }
-
-  .row-highlight:hover {
-    background: rgba(46, 204, 94, 0.08) !important;
-  }
-
-  .model-cell {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .model-name {
+  .included-title {
     font-family: var(--font-mono);
+    font-size: 16px;
     font-weight: 400;
-    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    color: var(--text-primary);
   }
 
-  .model-badge {
-    font-size: 10px;
-    vertical-align: middle;
-  }
-
-  .cost-cell {
-    color: var(--accent-green);
-    font-weight: 600;
-    text-shadow: 0 0 6px rgba(46, 204, 94, 0.2);
-  }
-
-  .use-cell {
-    font-family: var(--font-sans);
+  .included-desc {
+    font-size: 14px;
     color: var(--text-secondary);
-    font-size: 13px;
+    line-height: 1.6;
   }
 
-  /* ── FAQ ────────────────────────────────────── */
-
+  /* ── FAQ ─────────────────────────── */
   .faq-list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
   }
 
   .faq-item {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-left: 3px solid transparent;
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     transition: border-color 0.2s;
   }
 
   .faq-item[open] {
-    border-left-color: var(--accent-green);
     border-color: var(--border-light);
   }
 
   .faq-question {
-    padding: 20px 24px;
+    padding: 18px 24px;
     font-family: var(--font-mono);
-    font-weight: 400;
     font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--text-primary);
     cursor: pointer;
     list-style: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: var(--text-primary);
-    transition: color 0.2s, text-shadow 0.2s;
+    transition: color 0.2s;
   }
 
-  .faq-question::-webkit-details-marker { display: none; }
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
 
   .faq-question::after {
-    content: '[+]';
-    font-family: var(--font-code);
-    font-size: 14px;
-    color: var(--text-muted);
-    transition: color 0.3s;
+    content: '+';
+    font-size: 18px;
+    color: var(--accent-green);
+    font-weight: 400;
     flex-shrink: 0;
     margin-left: 16px;
+    transition: transform 0.2s;
   }
 
   .faq-item[open] .faq-question::after {
-    content: '[-]';
-    color: var(--accent-green);
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.4);
+    content: '-';
   }
 
   .faq-question:hover {
     color: var(--accent-green);
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.3);
   }
 
   .faq-answer {
-    padding: 0 24px 20px;
-  }
-
-  .faq-answer p {
-    font-family: var(--font-sans);
-    font-size: 15px;
+    padding: 0 24px 18px;
+    font-size: 14px;
+    color: var(--text-secondary);
     line-height: 1.7;
-    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin: 0 16px;
   }
 
-  /* ── CTA Section ───────────────────────────── */
-
-  .cta-section {
-    padding-bottom: 120px;
+  /* ── Bottom CTA ─────────────────── */
+  .bottom-cta {
+    padding-bottom: 80px;
   }
 
-  .cta-card {
-    position: relative;
-    overflow: hidden;
-    background: var(--bg-card);
-    border: 1px solid var(--accent-green);
-    border-radius: var(--radius-lg);
-    max-width: 720px;
-    margin: 0 auto;
-    box-shadow:
-      0 0 40px rgba(46, 204, 94, 0.12),
-      0 0 80px rgba(46, 204, 94, 0.06);
+  .cta-btn {
+    margin-top: 24px;
   }
 
-  .cta-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-    box-shadow: 0 0 20px rgba(46, 204, 94, 0.5);
-  }
-
-  .cta-card-inner {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding: 64px 40px;
-  }
-
-  .cta-heading {
-    font-family: var(--font-mono);
-    font-size: 32px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(46, 204, 94, 0.2);
-  }
-
-  .cta-sub {
-    font-family: var(--font-sans);
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-top: 16px;
-  }
-
-  .cta-buttons {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 28px;
-  }
-
-  /* ── Responsive ─────────────────────────────── */
-
-  @media (max-width: 768px) {
-    .calc-total { font-size: 40px; }
-    .pricing-value { font-size: 56px; }
-    .cta-card-inner { padding: 40px 24px; }
-    .cta-heading { font-size: clamp(20px, 4vw, 24px); letter-spacing: 1px; }
-    .calculator-controls,
-    .calculator-result { padding: 20px; }
-    .cta-buttons {
-      flex-direction: column;
-      align-items: stretch;
+  /* ── Responsive ─────────────────── */
+  @media (max-width: 600px) {
+    .pricing-card {
+      padding: 32px 24px;
     }
-    .cta-buttons .btn {
-      justify-content: center;
-      width: 100%;
-    }
-  }
 
-  @media (max-width: 480px) {
-    .calc-total { font-size: 32px; }
-    .pricing-value { font-size: 48px; }
-    .cta-card-inner { padding: 28px 16px; }
-    .cta-heading { font-size: 18px; }
+    .pricing-value {
+      font-size: 48px;
+    }
+
     .faq-question {
-      font-size: 12px;
-      padding: 16px 16px;
+      padding: 14px 18px;
+      font-size: 13px;
     }
-    .pricing-table { font-size: 12px; }
-    .pricing-table th,
-    .pricing-table td { padding: 10px 8px; }
+
+    .faq-answer {
+      padding: 0 18px 14px;
+      margin: 0 10px;
+    }
   }
 </style>
-
-<script>
-  const loopsSlider = document.getElementById('loops-per-day') as HTMLInputElement;
-  const opusSlider = document.getElementById('opus-percent') as HTMLInputElement;
-  const toggleBtn = document.getElementById('toggle-model-mix') as HTMLButtonElement;
-  const loopsDisplay = document.getElementById('loops-display')!;
-  const opusDisplay = document.getElementById('opus-display')!;
-  const mixLabel = document.getElementById('mix-label')!;
-  const opusControl = document.getElementById('opus-control')!;
-
-  const calcTotal = document.getElementById('calc-total')!;
-  const sonnetCostEl = document.getElementById('sonnet-cost')!;
-  const opusCostEl = document.getElementById('opus-cost')!;
-  const haikuCostEl = document.getElementById('haiku-cost')!;
-  const opusCostLine = document.getElementById('opus-cost-line')!;
-  const totalValueEl = document.getElementById('total-value')!;
-  const detailLoops = document.getElementById('detail-loops')!;
-  const detailModel = document.getElementById('detail-model')!;
-
-  const PLATFORM_FEE = 29;
-  const SONNET_PER_LOOP = 0.70;
-  const OPUS_PER_LOOP = 4.00;
-  const HAIKU_PER_LOOP = 0.02;
-  const DAYS_PER_MONTH = 30;
-
-  let modelMixEnabled = true;
-
-  function fmt(n: number): string {
-    return '$' + n.toFixed(2);
-  }
-
-  function calculate(): void {
-    const loopsPerDay = parseInt(loopsSlider.value, 10);
-    const opusPct = modelMixEnabled ? parseInt(opusSlider.value, 10) / 100 : 0;
-    const totalLoops = loopsPerDay * DAYS_PER_MONTH;
-
-    const opusLoops = Math.round(totalLoops * opusPct);
-    const sonnetLoops = totalLoops - opusLoops;
-
-    const sonnetCost = sonnetLoops * SONNET_PER_LOOP;
-    const opusCost = opusLoops * OPUS_PER_LOOP;
-    const haikuCost = totalLoops * HAIKU_PER_LOOP;
-
-    const usageCost = sonnetCost + opusCost + haikuCost;
-    const total = PLATFORM_FEE + usageCost;
-
-    loopsDisplay.textContent = String(loopsPerDay);
-    opusDisplay.textContent = (opusPct * 100).toFixed(0) + '%';
-
-    calcTotal.textContent = fmt(total);
-    sonnetCostEl.textContent = fmt(sonnetCost);
-    opusCostEl.textContent = fmt(opusCost);
-    haikuCostEl.textContent = fmt(haikuCost);
-    totalValueEl.textContent = fmt(total);
-
-    detailLoops.textContent = totalLoops + ' tasks/mo (' + loopsPerDay + '/day x ' + DAYS_PER_MONTH + ' days)';
-
-    if (modelMixEnabled && opusPct > 0) {
-      detailModel.textContent = sonnetLoops + ' Standard + ' + opusLoops + ' Advanced + ' + totalLoops + ' Lite triage';
-    } else {
-      detailModel.textContent = sonnetLoops + ' Standard + ' + totalLoops + ' Lite triage';
-    }
-
-    opusCostLine.style.display = (modelMixEnabled && opusPct > 0) ? 'flex' : 'none';
-  }
-
-  loopsSlider.addEventListener('input', calculate);
-  opusSlider.addEventListener('input', calculate);
-
-  toggleBtn.addEventListener('click', function () {
-    modelMixEnabled = !modelMixEnabled;
-    toggleBtn.setAttribute('aria-pressed', String(modelMixEnabled));
-    mixLabel.textContent = modelMixEnabled ? 'ON' : 'OFF';
-
-    if (modelMixEnabled) {
-      opusControl.classList.remove('hidden');
-    } else {
-      opusControl.classList.add('hidden');
-    }
-
-    calculate();
-  });
-
-  calculate();
-</script>

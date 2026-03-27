@@ -1,0 +1,364 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="My Games — CircuitBot">
+
+  <section class="section games-section">
+    <div class="container">
+      <div class="section-header">
+        <h1 class="gradient-text">My Games</h1>
+        <p class="section-sub">Your generated games and their current status.</p>
+      </div>
+
+      <div id="games-container">
+        <!-- Loading state -->
+        <div id="games-loading" class="state-msg">
+          <div class="loader-ring"></div>
+          <p>Loading your games...</p>
+        </div>
+
+        <!-- Empty state (hidden by default) -->
+        <div id="games-empty" class="state-msg" style="display:none;">
+          <div class="empty-icon">&#9889;</div>
+          <h2>No games yet</h2>
+          <p>Create your first game and watch it come to life.</p>
+          <a href="/create" class="btn btn-primary btn-lg">Create a Game</a>
+        </div>
+
+        <!-- Error state (hidden by default) -->
+        <div id="games-error" class="state-msg" style="display:none;">
+          <div class="empty-icon" style="color:var(--accent-red);">&#9888;</div>
+          <h2>Something went wrong</h2>
+          <p id="games-error-msg">Could not load your games.</p>
+          <button class="btn btn-primary" onclick="loadGames()">Retry</button>
+        </div>
+
+        <!-- Game cards grid (hidden by default) -->
+        <div id="games-grid" class="grid grid-3" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .games-section {
+    min-height: 70vh;
+    padding-top: 3rem;
+  }
+
+  .section-sub {
+    color: var(--text-muted, #888);
+    margin-top: 0.5rem;
+    font-family: var(--font-sans);
+  }
+
+  /* ---------- State messages ---------- */
+  .state-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: var(--text-muted, #888);
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    color: var(--accent-cyan);
+    line-height: 1;
+  }
+
+  .state-msg h2 {
+    color: var(--text-primary, #eee);
+    margin: 0;
+  }
+
+  .state-msg p {
+    max-width: 28rem;
+    line-height: 1.5;
+  }
+
+  /* ---------- Loader ring ---------- */
+  .loader-ring {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border, #333);
+    border-top-color: var(--accent-green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---------- Game cards ---------- */
+  .game-card {
+    background: var(--bg-card, #161b22);
+    border: 1px solid var(--border, #30363d);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .game-card:hover {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 20px rgba(0, 255, 135, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .game-card-prompt {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-primary, #e6edf3);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ---------- Status badges ---------- */
+  .game-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    width: fit-content;
+  }
+
+  .badge-pending  { background: rgba(255, 170, 0, 0.12); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.25); }
+  .badge-queued   { background: rgba(0, 200, 255, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 200, 255, 0.25); }
+  .badge-active   { background: rgba(0, 255, 135, 0.12); color: var(--accent-green); border: 1px solid rgba(0, 255, 135, 0.25); }
+  .badge-complete { background: rgba(0, 255, 135, 0.12); color: var(--accent-green); border: 1px solid rgba(0, 255, 135, 0.25); }
+  .badge-failed   { background: rgba(255, 70, 70, 0.12); color: var(--accent-red); border: 1px solid rgba(255, 70, 70, 0.25); }
+
+  .badge-pulse::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* ---------- Progress bar (mini) ---------- */
+  .mini-progress {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-secondary, #0d1117);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .mini-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+
+  /* ---------- Card footer ---------- */
+  .game-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border, #30363d);
+  }
+
+  .game-date {
+    font-size: 0.75rem;
+    color: var(--text-muted, #888);
+    font-family: var(--font-mono);
+  }
+
+  .game-arrow {
+    color: var(--text-muted, #555);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .game-card:hover .game-arrow {
+    color: var(--accent-green);
+    transform: translateX(3px);
+  }
+</style>
+
+<script>
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://api.circuitbot.dev';
+
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+  // ── Auth guard ──────────────────────────────
+  function getToken(): string | null {
+    return localStorage.getItem('cb_token');
+  }
+
+  function requireAuth(): string {
+    const token = getToken();
+    if (!token) {
+      window.location.href = '/login?redirect=/my-games';
+      throw new Error('Not authenticated');
+    }
+    return token;
+  }
+
+  // ── Status helpers ──────────────────────────
+  interface GameJob {
+    id: string;
+    prompt: string;
+    status: string;
+    progress?: number;
+    created_at: string;
+  }
+
+  const STATUS_MAP: Record<string, { label: string; cls: string; pulse: boolean }> = {
+    pending_payment: { label: 'Pending Payment', cls: 'badge-pending',  pulse: false },
+    queued:          { label: 'Queued',           cls: 'badge-queued',   pulse: false },
+    generating:      { label: 'Generating...',    cls: 'badge-active',   pulse: true  },
+    exporting:       { label: 'Exporting...',     cls: 'badge-active',   pulse: true  },
+    completed:       { label: 'Completed',        cls: 'badge-complete', pulse: false },
+    failed:          { label: 'Failed',           cls: 'badge-failed',   pulse: false },
+  };
+
+  function truncate(text: string, max = 100): string {
+    return text.length > max ? text.slice(0, max) + '...' : text;
+  }
+
+  function formatDate(iso: string): string {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function isInProgress(status: string): boolean {
+    return ['queued', 'generating', 'exporting'].includes(status);
+  }
+
+  // ── Render ──────────────────────────────────
+  function renderCards(games: GameJob[]): void {
+    const grid = document.getElementById('games-grid')!;
+    grid.innerHTML = '';
+
+    for (const game of games) {
+      const info = STATUS_MAP[game.status] ?? { label: game.status, cls: 'badge-queued', pulse: false };
+      const progress = game.progress ?? 0;
+      const showProgress = isInProgress(game.status);
+
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.setAttribute('role', 'link');
+      card.setAttribute('tabindex', '0');
+      card.onclick = () => { window.location.href = `/status?id=${game.id}`; };
+      card.onkeydown = (e: KeyboardEvent) => { if (e.key === 'Enter') card.click(); };
+
+      card.innerHTML = `
+        <span class="game-badge ${info.cls}${info.pulse ? ' badge-pulse' : ''}">${info.label}</span>
+        <div class="game-card-prompt">${truncate(game.prompt)}</div>
+        ${showProgress ? `
+          <div class="mini-progress">
+            <div class="mini-progress-fill" style="width:${progress}%"></div>
+          </div>` : ''}
+        <div class="game-card-footer">
+          <span class="game-date">${formatDate(game.created_at)}</span>
+          <span class="game-arrow">&rarr;</span>
+        </div>
+      `;
+      grid.appendChild(card);
+    }
+  }
+
+  // ── Data fetching ───────────────────────────
+  async function loadGames(): Promise<void> {
+    const token = requireAuth();
+
+    const loading = document.getElementById('games-loading')!;
+    const empty   = document.getElementById('games-empty')!;
+    const error   = document.getElementById('games-error')!;
+    const grid    = document.getElementById('games-grid')!;
+
+    loading.style.display = 'flex';
+    empty.style.display   = 'none';
+    error.style.display   = 'none';
+    grid.style.display    = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/games`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          localStorage.removeItem('cb_token');
+          window.location.href = '/login?redirect=/my-games';
+          return;
+        }
+        throw new Error(`Server returned ${res.status}`);
+      }
+
+      const games: GameJob[] = await res.json();
+      loading.style.display = 'none';
+
+      if (games.length === 0) {
+        empty.style.display = 'flex';
+        stopPolling();
+        return;
+      }
+
+      renderCards(games);
+      grid.style.display = 'grid';
+
+      // Poll only when at least one job is active
+      if (games.some(g => isInProgress(g.status))) {
+        startPolling();
+      } else {
+        stopPolling();
+      }
+    } catch (err: any) {
+      loading.style.display = 'none';
+      error.style.display = 'flex';
+      document.getElementById('games-error-msg')!.textContent = err.message || 'Could not load your games.';
+      stopPolling();
+    }
+  }
+
+  // ── Polling ─────────────────────────────────
+  function startPolling(): void {
+    if (pollTimer) return;
+    pollTimer = setInterval(loadGames, 10_000);
+  }
+
+  function stopPolling(): void {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  // ── Init ────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', loadGames);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopPolling();
+  });
+</script>

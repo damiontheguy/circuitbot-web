@@ -8,7 +8,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'AI-powered game dev assistant. Handles the tedious parts — scene assembly, boilerplate code, repetitive fixes — so your team can focus on creative work. Unity, Godot, Unreal.' } = Astro.props;
+const { title, description = 'Describe a game in plain language. We build it with AI and deliver a playable executable. Powered by Godot 4.' } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -28,7 +28,7 @@ const { title, description = 'AI-powered game dev assistant. Handles the tedious
 <body>
   <div class="top-accent"></div>
   <Nav />
-  <main style="padding-top: calc(var(--nav-height) + 2px);">
+  <main style="padding-top: var(--nav-height); overflow-x: hidden; max-width: 100vw;">
     <slot />
   </main>
   <Footer />

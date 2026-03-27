@@ -1,1153 +1,436 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
+<Layout title="CircuitBot — AI Game Generator">
 
-<Layout title="CircuitBot — AI-Powered Game Dev Assistant">
-
-  <!-- ═══ Hero ═══════════════════════════════════════ -->
-  <section class="hero">
-    <div class="bg-grid"></div>
-    <div class="hero-glow"></div>
-    <div class="hero-glow-secondary"></div>
-    <div class="container hero-inner">
-      <span class="badge badge-green hero-badge">Ship Games Faster</span>
-
-      <!-- Central orb with breathing ring -->
-      <div class="hero-orb-wrapper">
-        <div class="hero-orb-ring"></div>
-        <div class="hero-orb-ring ring-2"></div>
-        <div class="hero-orb-ring ring-3"></div>
-        <div class="hero-orb"></div>
-        <div class="hero-orb-particles">
-          <span class="particle p1"></span>
-          <span class="particle p2"></span>
-          <span class="particle p3"></span>
-          <span class="particle p4"></span>
+  <!-- Hero -->
+  <section class="hero section">
+    <div class="container">
+      <div class="hero-content">
+        <span class="badge badge-green">AI Game Generator</span>
+        <h1>
+          <span class="gradient-text">Describe a Game.</span><br>
+          <span class="gradient-text">Download an Executable.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Tell us what game you want in plain language. Our AI builds it with Godot 4
+          — complete with art, code, and a compiled executable.
+        </p>
+        <div class="hero-buttons">
+          <a href="/create" class="btn btn-primary btn-lg">Create a Game — $14.99</a>
+          <a href="#how-it-works" class="btn btn-lg">See How It Works</a>
         </div>
       </div>
 
-      <h1 class="hero-title">
-        Your Team's AI-Powered<br>
-        <span class="hero-title-glow">Game Dev Assistant</span>
-      </h1>
-      <p class="hero-subtitle">
-        The tedious parts of game dev — wiring up scenes, writing boilerplate,
-        fixing repetitive bugs — shouldn't eat your creative time. CircuitBot
-        handles the grunt work so your team can focus on what makes your game special.
-      </p>
-      <div class="hero-ctas">
-        <a href="/download" class="btn btn-primary btn-lg hero-btn-primary">Get Started</a>
-        <a href="/pricing" class="btn btn-lg">See Pricing</a>
-      </div>
       <div class="terminal hero-terminal">
         <div class="terminal-bar">
           <span class="terminal-dot red"></span>
           <span class="terminal-dot yellow"></span>
           <span class="terminal-dot green"></span>
-          <span class="terminal-title">#game-dev</span>
+          <span class="terminal-title">circuitbot — game generation</span>
         </div>
         <div class="terminal-body">
-          <div class="terminal-line">
-            <span class="prompt">circuittree</span>
-            <span class="cmd"> @CircuitBot build the boss arena — assets are in Assets/Sprites/BossArena</span>
+          <div class="term-line line-1">
+            <span class="prompt">&gt; </span>
+            <span class="cmd typewriter">A retro pixel-art roguelike dungeon crawler with procedural levels</span>
           </div>
-          <div class="terminal-line fade-in delay-1">
-            <span class="highlight">&gt;</span>
-            <span class="output"> Found 24 sprites. Building arena scene with spawn points and phase triggers...</span>
+          <div class="term-line line-2">
+            <span class="output">Planning your game...</span>
           </div>
-          <div class="terminal-line fade-in delay-2">
-            <span class="highlight">&gt;</span>
-            <span class="output"> Created BossArena — tilemap, hazard zones, camera bounds, boss AI, health bar</span>
+          <div class="term-line line-3">
+            <span class="highlight">Generating pixel art assets...</span>
           </div>
-          <div class="terminal-line fade-in delay-3">
-            <span class="highlight">&gt;</span>
-            <span class="success"> Scene validates. Ready to playtest.</span>
+          <div class="term-line line-4">
+            <span class="highlight">Implementing 4 game systems...</span>
           </div>
-          <div class="terminal-line fade-in delay-4">
-            <span class="highlight">&gt;</span>
-            <span class="output"> Committed: </span>
-            <span class="highlight">feat(boss): add arena with 3-phase boss fight and hazards</span>
+          <div class="term-line line-5">
+            <span class="output">Exporting executable...</span>
+          </div>
+          <div class="term-line line-6">
+            <span class="success">&#10004; Your game is ready! Download now.</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Social Proof ═══════════════════════════════ -->
-  <section class="section social-proof">
+  <hr class="divider">
+
+  <!-- How It Works -->
+  <section class="section" id="how-it-works">
     <div class="container">
-      <hr class="divider" />
-      <div class="social-proof-inner">
-        <p class="social-proof-label">// Works Where You Work</p>
-        <p class="social-proof-stat">Unity &middot; Godot &middot; Unreal &middot; Any engine with a codebase</p>
+      <div class="section-header">
+        <h2 class="gradient-text">How It Works</h2>
       </div>
-      <hr class="divider" />
+      <div class="grid grid-3">
+        <div class="card step-card">
+          <span class="step-number">01</span>
+          <h3>Describe Your Game</h3>
+          <p>Write a few sentences about the game you want. Genre, mechanics, art style — whatever you imagine.</p>
+        </div>
+        <div class="card step-card">
+          <span class="step-number">02</span>
+          <h3>We Build It</h3>
+          <p>Our AI pipeline plans the architecture, generates art, writes GDScript, and compiles everything in Godot 4.</p>
+        </div>
+        <div class="card step-card">
+          <span class="step-number">03</span>
+          <h3>Download &amp; Play</h3>
+          <p>Get a compiled Windows executable. Share it with friends, publish it, or use the Godot source to keep building.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ═══ How It Works ═══════════════════════════════ -->
+  <hr class="divider">
+
+  <!-- What You Get -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2>How It <span class="gradient-text">Works</span></h2>
-        <p>Describe what you need, review what it builds, and keep moving.</p>
+        <h2 class="gradient-text">What You Get</h2>
       </div>
-      <div class="grid grid-3 steps-grid">
-        <div class="card step-card">
-          <div class="step-node">
-            <span class="step-number">1</span>
-          </div>
-          <h3 class="step-title">Describe the Task</h3>
-          <p class="text-secondary">
-            "Set up the forest tilemap." "Add an inventory system."
-            "Fix the player knockback." Just describe it in plain English.
-          </p>
+      <div class="grid grid-3">
+        <div class="card feature-card accent-green">
+          <h3>2D &amp; 3D Art</h3>
+          <p>AI-generated sprites, textures, and 3D models that match your game's visual style.</p>
         </div>
-        <div class="card step-card">
-          <div class="step-node">
-            <span class="step-number">2</span>
-          </div>
-          <h3 class="step-title">It Drafts the Implementation</h3>
-          <p class="text-secondary">
-            Scripts, scenes, prefabs, UI, game logic — CircuitBot writes a working
-            first draft. Less time on boilerplate, more time on creative decisions.
-          </p>
+        <div class="card feature-card accent-cyan">
+          <h3>Game Logic</h3>
+          <p>Complete GDScript code — player movement, enemies, scoring, physics, and more.</p>
         </div>
-        <div class="card step-card">
-          <div class="step-node">
-            <span class="step-number">3</span>
-          </div>
-          <h3 class="step-title">Review and Refine</h3>
-          <p class="text-secondary">
-            Open your engine, review the changes, and tweak as needed. You stay
-            in control — keep it, adjust it, or ask for a different approach.
-          </p>
+        <div class="card feature-card accent-purple">
+          <h3>UI Systems</h3>
+          <p>Menus, HUD, health bars, score displays, and title screens.</p>
         </div>
-      </div>
-      <div class="steps-connector hide-mobile">
-        <div class="connector-line"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ Features Grid ══════════════════════════════ -->
-  <section class="section features-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Your Team's <span class="gradient-text-purple">Force Multiplier</span></h2>
-        <p>Handle more work without hiring more people. CircuitBot takes on the tasks your team doesn't have time for.</p>
-      </div>
-      <div class="grid grid-3 features-grid">
-        <div class="card feature-card">
-          <div class="feature-node node-cyan">
-            <span class="feature-icon-char">@</span>
-          </div>
-          <h3>Natural Language Tasks</h3>
-          <p class="text-secondary">
-            "Add a double-jump." "Set up the shop UI." Describe what you need and
-            CircuitBot writes the first pass — C#, GDScript, C++, shaders, scene files.
-          </p>
+        <div class="card feature-card accent-green">
+          <h3>Scene Architecture</h3>
+          <p>Properly structured Godot scenes with correct node hierarchies.</p>
         </div>
-        <div class="card feature-card">
-          <div class="feature-node node-green">
-            <span class="feature-icon-char">#</span>
-          </div>
-          <h3>Multiple Games at Once</h3>
-          <p class="text-secondary">
-            Working on multiple titles? CircuitBot handles them all.
-            One bot per studio, unlimited projects, each with its own context.
-          </p>
+        <div class="card feature-card accent-cyan">
+          <h3>Input Handling</h3>
+          <p>Keyboard and controller mappings configured for your game's mechanics.</p>
         </div>
-        <div class="card feature-card">
-          <div class="feature-node node-purple">
-            <span class="feature-icon-char">AI</span>
-          </div>
-          <h3>Fast or Powerful — You Pick</h3>
-          <p class="text-secondary">
-            Quick bug fix? Use the fast model. Complex system design?
-            Switch to advanced. Choose per task, optimize your budget.
-          </p>
-        </div>
-        <div class="card feature-card">
-          <div class="feature-node node-cyan">
-            <span class="feature-icon-char">//</span>
-          </div>
-          <h3>Watch It Work</h3>
-          <p class="text-secondary">
-            A live dashboard shows exactly what CircuitBot is thinking, building,
-            and committing — in real time. Full transparency, zero guesswork.
-          </p>
-        </div>
-        <div class="card feature-card">
-          <div class="feature-node node-green">
-            <span class="feature-icon-char">[ ]</span>
-          </div>
-          <h3>Scene Assembly</h3>
-          <p class="text-secondary">
-            Drop sprites into a folder and describe the level. CircuitBot
-            drafts the scene layout — tilemaps, colliders, NPCs, triggers — for you to review.
-          </p>
-        </div>
-        <div class="card feature-card">
-          <div class="feature-node node-purple">
-            <span class="feature-icon-char">$</span>
-          </div>
-          <h3>You Control the Budget</h3>
-          <p class="text-secondary">
-            Set monthly spending caps and get alerts before you hit them.
-            Indie-friendly pricing that scales with your studio.
-          </p>
+        <div class="card feature-card accent-purple">
+          <h3>Compiled Executable</h3>
+          <p>A ready-to-run Windows .exe. No Godot installation required to play.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Terminal Demo ══════════════════════════════ -->
+  <hr class="divider">
+
+  <!-- Pricing -->
   <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2>See It <span class="gradient-text">In Action</span></h2>
-        <p>A team member describes what they need. CircuitBot drafts the implementation.</p>
-      </div>
-      <div class="terminal demo-terminal">
-        <div class="terminal-bar">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title">CircuitBot Task</span>
-        </div>
-        <div class="terminal-body">
-          <div class="terminal-line">
-            <span class="prompt">maciaz</span>
-            <span class="cmd"> @CircuitBot build the forest level — assets are in Assets/Sprites/Forest,</span>
-          </div>
-          <div class="terminal-line">
-            <span class="cmd">   the player should enter from the left and find a merchant NPC at the clearing</span>
-          </div>
-          <div class="terminal-line mt-4">
-            <span class="comment">--- task started ---</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[scan]</span>
-            <span class="output"> Reading project... Unity 6, 156 assets indexed</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[scan]</span>
-            <span class="output"> Found 18 sprites in Forest folder — trees, ground tiles, bushes, NPC base</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[scan]</span>
-            <span class="output"> Found existing PlayerController, DialogueSystem, NPCBase prefab</span>
-          </div>
-          <div class="terminal-line mt-2">
-            <span class="highlight">[build]</span>
-            <span class="output"> Creating ForestLevel.unity scene</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[build]</span>
-            <span class="output"> Laying out tilemap — ground, path, clearing area</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[build]</span>
-            <span class="output"> Placing tree and bush sprites with collision layers</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[build]</span>
-            <span class="output"> Setting up player spawn point at left entry</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[build]</span>
-            <span class="output"> Creating MerchantNPC from NPCBase — positioned at clearing</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[code]</span>
-            <span class="output"> Writing ForestMerchant.cs — shop dialogue, inventory, interaction zone</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[code]</span>
-            <span class="output"> Adding scene transition trigger at left edge</span>
-          </div>
-          <div class="terminal-line mt-2">
-            <span class="highlight">[test]</span>
-            <span class="success"> Scene validation: all refs intact, no missing sprites</span>
-          </div>
-          <div class="terminal-line">
-            <span class="highlight">[test]</span>
-            <span class="success"> Static analysis: 0 errors</span>
-          </div>
-          <div class="terminal-line mt-2">
-            <span class="highlight">[git]</span>
-            <span class="output"> Committed: </span>
-            <span class="highlight">feat(world): add forest level with merchant NPC and dialogue</span>
-          </div>
-          <div class="terminal-line mt-4">
-            <span class="comment">--- task complete (4m 32s) ---</span>
-          </div>
-        </div>
+    <div class="container-narrow" style="text-align: center;">
+      <div class="card pricing-card">
+        <div class="pricing-amount">$14.99</div>
+        <div class="pricing-label">per game</div>
+        <ul class="pricing-features">
+          <li>Full Godot 4 project</li>
+          <li>AI-generated art assets</li>
+          <li>Compiled Windows executable</li>
+          <li>Delivered in ~15-30 minutes</li>
+        </ul>
+        <a href="/create" class="btn btn-primary btn-lg">Create Your Game</a>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Pricing Preview ════════════════════════════ -->
-  <section class="section pricing-section">
-    <div class="container">
+  <hr class="divider">
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container-narrow">
       <div class="section-header">
-        <h2>Simple, <span class="gradient-text-purple">Transparent</span> Pricing</h2>
-        <p>One plan. No tiers. Pay for what you use.</p>
+        <h2 class="gradient-text">Frequently Asked Questions</h2>
       </div>
-      <div class="pricing-card-wrapper">
-        <div class="card pricing-card">
-          <div class="pricing-header">
-            <span class="badge badge-cyan">Early Access</span>
-            <div class="pricing-amount">
-              <span class="pricing-dollar">$</span>
-              <span class="pricing-value">29</span>
-              <span class="pricing-period">/mo</span>
-            </div>
-            <p class="pricing-plus">+ usage-based API costs</p>
-          </div>
-          <hr class="divider" />
-          <ul class="pricing-features">
-            <li>Unlimited Discord servers and channels</li>
-            <li>Unlimited projects and repos</li>
-            <li>Standard (default) and Advanced (opt-in) models</li>
-            <li>Real-time dashboard and logs</li>
-            <li>Configurable spend caps and alerts</li>
-            <li>Transparent pay-as-you-go API usage</li>
-          </ul>
-          <a href="/pricing" class="btn btn-primary btn-lg pricing-cta">View Full Pricing</a>
-        </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How long does generation take?</summary>
+          <p>Most games are ready in 15-30 minutes, depending on complexity.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What engine is used?</summary>
+          <p>Godot 4 — open source, no license fees. You get the full source project.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I edit the game after?</summary>
+          <p>Yes! You receive the complete Godot project. Open it in Godot and modify anything.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What platforms can the game run on?</summary>
+          <p>We currently export Windows executables. Mac and Linux exports are coming soon.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What if generation fails?</summary>
+          <p>If we can't produce a working game, you'll receive a full refund.</p>
+        </details>
       </div>
     </div>
   </section>
 
-  <!-- ═══ Final CTA ══════════════════════════════════ -->
-  <section class="section cta-section">
-    <div class="bg-grid"></div>
-    <div class="cta-glow"></div>
-    <div class="container">
-      <div class="cta-inner">
-        <h2 class="cta-title">More time creating.<br><span class="cta-title-glow">Less time on busywork.</span></h2>
-        <p class="text-secondary cta-subtitle">
-          Let CircuitBot handle the repetitive tasks while your team focuses on
-          the creative work that actually makes your game great.
-        </p>
-        <div class="hero-ctas">
-          <a href="/download" class="btn btn-primary btn-lg">Download CircuitBot</a>
-          <a href="/docs" class="btn btn-lg">Read the Docs</a>
-        </div>
-      </div>
+  <hr class="divider">
+
+  <!-- Final CTA -->
+  <section class="section">
+    <div class="container" style="text-align: center;">
+      <h2 class="gradient-text cta-heading">Ready to build your game?</h2>
+      <a href="/create" class="btn btn-primary btn-lg" style="margin-top: 24px;">Create a Game — $14.99</a>
     </div>
   </section>
 
 </Layout>
 
 <style>
-  /* ── Animations ─────────────────────────────────── */
-
-  @keyframes fadeSlideUp {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes orbBreathe {
-    0%, 100% {
-      box-shadow:
-        0 0 20px rgba(46, 204, 94, 0.3),
-        0 0 60px rgba(46, 204, 94, 0.1);
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      box-shadow:
-        0 0 30px rgba(46, 204, 94, 0.5),
-        0 0 80px rgba(46, 204, 94, 0.2);
-      transform: translate(-50%, -50%) scale(1.05);
-    }
-  }
-
-  @keyframes ringPulse {
-    0%, 100% {
-      opacity: 0.3;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      opacity: 0.6;
-      transform: translate(-50%, -50%) scale(1.08);
-    }
-  }
-
-  @keyframes ringPulse2 {
-    0%, 100% {
-      opacity: 0.15;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      opacity: 0.35;
-      transform: translate(-50%, -50%) scale(1.12);
-    }
-  }
-
-  @keyframes nodeBreathe {
-    0%, 100% {
-      box-shadow: 0 0 8px var(--node-glow-color, rgba(46, 204, 94, 0.15));
-    }
-    50% {
-      box-shadow: 0 0 18px var(--node-glow-color, rgba(46, 204, 94, 0.35));
-    }
-  }
-
-  @keyframes stepNodePulse {
-    0%, 100% {
-      box-shadow:
-        0 0 10px rgba(46, 204, 94, 0.2),
-        inset 0 0 8px rgba(46, 204, 94, 0.1);
-    }
-    50% {
-      box-shadow:
-        0 0 20px rgba(46, 204, 94, 0.35),
-        inset 0 0 12px rgba(46, 204, 94, 0.15);
-    }
-  }
-
-  /* ── Hero ───────────────────────────────────────── */
-
+  /* ── Hero ──────────────────────────────────── */
   .hero {
-    position: relative;
-    padding: 80px 0 60px;
-    overflow: visible;
-    min-height: auto;
-    display: flex;
-    align-items: center;
+    padding-top: 80px;
+    padding-bottom: 40px;
   }
 
-  .hero-glow {
-    position: absolute;
-    top: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 900px;
-    height: 700px;
-    background: radial-gradient(
-      ellipse,
-      rgba(46, 204, 94, 0.06) 0%,
-      rgba(62, 235, 212, 0.03) 30%,
-      transparent 70%
-    );
-    pointer-events: none;
-  }
-
-  .hero-inner {
-    position: relative;
-    z-index: 1;
+  .hero-content {
     text-align: center;
+    margin-bottom: 48px;
   }
 
-  .hero-badge {
-    margin-bottom: 24px;
-    animation: fadeSlideUp 0.6s ease-out;
-  }
-
-  /* ── Hero Orb (dashboard brain element) ──── */
-
-  .hero-orb-wrapper {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 32px;
-    animation: fadeSlideUp 0.6s ease-out 0.05s both;
-  }
-
-  .hero-orb {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--accent-green), #1a6b35);
-    animation: orbBreathe 3s ease-in-out infinite;
-  }
-
-  .hero-orb-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 1px solid rgba(46, 204, 94, 0.3);
-    animation: ringPulse 3s ease-in-out infinite;
-  }
-
-  .hero-orb-ring.ring-2 {
-    width: 100px;
-    height: 100px;
-    border-color: rgba(62, 235, 212, 0.15);
-    animation: ringPulse2 3s ease-in-out infinite 0.5s;
-  }
-
-  .hero-title {
-    font-family: var(--font-mono);
-    font-size: clamp(28px, 5vw, 56px);
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: clamp(1px, 0.2vw, 2px);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-    color: var(--text-primary);
-    animation: fadeSlideUp 0.6s ease-out 0.1s both;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-
-  .hero-title-glow {
-    color: var(--accent-green);
-    text-shadow:
-      0 0 10px rgba(46, 204, 94, 0.4),
-      0 0 30px rgba(46, 204, 94, 0.15);
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    line-height: 1.2;
+    margin: 20px 0 16px;
+    letter-spacing: 1.5px;
   }
 
   .hero-subtitle {
-    font-family: var(--font-sans);
     font-size: clamp(15px, 2vw, 18px);
     color: var(--text-secondary);
-    max-width: 620px;
-    margin: 0 auto 40px;
+    max-width: 600px;
+    margin: 0 auto 32px;
     line-height: 1.7;
-    animation: fadeSlideUp 0.6s ease-out 0.2s both;
-    padding: 0 8px;
   }
 
-  .hero-ctas {
+  .hero-buttons {
     display: flex;
     gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 56px;
-    animation: fadeSlideUp 0.6s ease-out 0.3s both;
-  }
-
-  .hero-btn-primary {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-btn-primary::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -75%;
-    width: 50%;
-    height: 200%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-    transform: skewX(-20deg);
-    animation: btnShimmer 4s ease-in-out infinite;
-  }
-
-  @keyframes btnShimmer {
-    0%, 100% { left: -75%; }
-    50% { left: 125%; }
-  }
-
-  .hero-glow-secondary {
-    position: absolute;
-    bottom: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 400px;
-    background: radial-gradient(
-      ellipse,
-      rgba(62, 235, 212, 0.03) 0%,
-      transparent 70%
-    );
-    pointer-events: none;
-  }
-
-  .hero-orb-ring.ring-3 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 1px solid rgba(62, 235, 212, 0.08);
-    animation: ringPulse2 4s ease-in-out infinite 1s;
-  }
-
-  .hero-orb-particles {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    border-radius: 50%;
-    background: var(--accent-green);
-    opacity: 0;
-    animation: particleFloat 4s ease-in-out infinite;
-  }
-
-  .p1 { top: 20%; left: 15%; animation-delay: 0s; }
-  .p2 { top: 70%; right: 20%; animation-delay: 1s; }
-  .p3 { bottom: 15%; left: 30%; animation-delay: 2s; }
-  .p4 { top: 30%; right: 10%; animation-delay: 3s; }
-
-  @keyframes particleFloat {
-    0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
-    25% { opacity: 0.6; }
-    50% { opacity: 0.8; transform: translateY(-12px) scale(1.5); }
-    75% { opacity: 0.4; }
   }
 
   .hero-terminal {
     max-width: 680px;
     margin: 0 auto;
-    text-align: left;
-    animation: fadeSlideUp 0.8s ease-out 0.4s both;
-    border-color: var(--border-light);
-    box-shadow:
-      0 0 40px rgba(46, 204, 94, 0.06),
-      var(--shadow-lg);
-    overflow-x: auto;
   }
 
-  /* ── Terminal line animations ────────────────────── */
-
-  .terminal-line {
-    opacity: 1;
+  /* ── Terminal typewriter animation ─────────── */
+  .term-line {
+    opacity: 0;
+    visibility: hidden;
   }
 
-  .fade-in {
-    animation: fadeIn 0.5s ease-out both;
+  .line-1 { animation: appear 0.3s 0.5s forwards; }
+  .line-2 { animation: appear 0.3s 1.8s forwards; }
+  .line-3 { animation: appear 0.3s 2.8s forwards; }
+  .line-4 { animation: appear 0.3s 3.8s forwards; }
+  .line-5 { animation: appear 0.3s 4.8s forwards; }
+  .line-6 { animation: appear 0.4s 5.8s forwards; }
+
+  @keyframes appear {
+    from { opacity: 0; visibility: visible; transform: translateY(4px); }
+    to   { opacity: 1; visibility: visible; transform: translateY(0); }
   }
 
-  .delay-1 { animation-delay: 0.8s; }
-  .delay-2 { animation-delay: 1.4s; }
-  .delay-3 { animation-delay: 2.0s; }
-  .delay-4 { animation-delay: 2.6s; }
-
-  /* ── Social Proof ───────────────────────────────── */
-
-  .social-proof {
-    padding: 40px 0;
+  .typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--accent-green);
+    width: 0;
+    animation:
+      typing 1.0s 0.5s steps(40) forwards,
+      blink 0.6s 0.5s step-end 3;
   }
 
-  .social-proof-inner {
-    text-align: center;
-    padding: 32px 0;
+  @keyframes typing {
+    from { width: 0; }
+    to   { width: 100%; }
   }
 
-  .social-proof-label {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--text-muted);
-    margin-bottom: 8px;
+  @keyframes blink {
+    50% { border-color: transparent; }
   }
 
-  .social-proof-stat {
-    font-family: var(--font-sans);
-    font-size: 17px;
-    color: var(--text-secondary);
-    letter-spacing: 0.3px;
-  }
-
-  /* ── Steps ──────────────────────────────────────── */
-
-  .steps-grid {
-    position: relative;
-  }
-
+  /* ── Step cards ────────────────────────────── */
   .step-card {
     text-align: center;
-    padding: 40px 28px;
-    position: relative;
-  }
-
-  .step-node {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 1px solid var(--accent-green);
-    background: rgba(46, 204, 94, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    animation: stepNodePulse 3s ease-in-out infinite;
-    position: relative;
+    padding: 32px 24px;
   }
 
   .step-number {
+    display: block;
     font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 36px;
     color: var(--accent-green);
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.3);
+    text-shadow: 0 0 20px rgba(46, 204, 94, 0.3);
+    margin-bottom: 16px;
   }
 
-  .step-title {
+  .step-card h3 {
     font-family: var(--font-mono);
-    font-size: 17px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 18px;
     margin-bottom: 12px;
     color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  .steps-connector {
-    position: relative;
-    height: 2px;
-    max-width: 66%;
-    margin: -12px auto 0;
+  .step-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
   }
 
-  .connector-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--accent-green),
-      var(--accent-cyan),
-      var(--accent-green),
-      transparent
-    );
-    opacity: 0.25;
-    box-shadow: 0 0 8px rgba(46, 204, 94, 0.15);
-  }
-
-  /* ── Features ───────────────────────────────────── */
-
-  .features-section {
-    background: var(--bg-secondary);
-  }
-
+  /* ── Feature cards ─────────────────────────── */
   .feature-card {
-    padding: 32px 28px;
+    padding: 28px 24px;
+    border-top: 2px solid transparent;
   }
+
+  .feature-card.accent-green  { border-top-color: var(--accent-green); }
+  .feature-card.accent-cyan   { border-top-color: var(--accent-cyan); }
+  .feature-card.accent-purple { border-top-color: var(--accent-purple); }
 
   .feature-card h3 {
     font-family: var(--font-mono);
-    font-size: 15px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 16px;
     margin-bottom: 10px;
     color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  .feature-node {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 18px;
-    animation: nodeBreathe 3s ease-in-out infinite;
+  .feature-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
   }
 
-  .feature-icon-char {
-    font-family: var(--font-mono);
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  /* Cyan nodes */
-  .node-cyan {
-    border: 1px solid rgba(62, 235, 212, 0.35);
-    background: rgba(62, 235, 212, 0.06);
-    --node-glow-color: rgba(62, 235, 212, 0.25);
-  }
-  .node-cyan .feature-icon-char {
-    color: var(--accent-cyan);
-    text-shadow: 0 0 8px rgba(62, 235, 212, 0.3);
-  }
-
-  /* Green nodes */
-  .node-green {
-    border: 1px solid rgba(46, 204, 94, 0.35);
-    background: rgba(46, 204, 94, 0.06);
-    --node-glow-color: rgba(46, 204, 94, 0.25);
-  }
-  .node-green .feature-icon-char {
-    color: var(--accent-green);
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.3);
-  }
-
-  /* Purple nodes */
-  .node-purple {
-    border: 1px solid rgba(123, 92, 191, 0.35);
-    background: rgba(123, 92, 191, 0.06);
-    --node-glow-color: rgba(123, 92, 191, 0.25);
-  }
-  .node-purple .feature-icon-char {
-    color: var(--accent-purple);
-    text-shadow: 0 0 8px rgba(123, 92, 191, 0.3);
-  }
-
-  /* Stagger breathing animations across feature nodes */
-  .features-grid .feature-card:nth-child(2) .feature-node { animation-delay: 0.5s; }
-  .features-grid .feature-card:nth-child(3) .feature-node { animation-delay: 1.0s; }
-  .features-grid .feature-card:nth-child(4) .feature-node { animation-delay: 1.5s; }
-  .features-grid .feature-card:nth-child(5) .feature-node { animation-delay: 2.0s; }
-  .features-grid .feature-card:nth-child(6) .feature-node { animation-delay: 2.5s; }
-
-  /* ── Demo Terminal ──────────────────────────────── */
-
-  .demo-terminal {
-    max-width: 780px;
-    margin: 0 auto;
-    border-color: var(--border-light);
-    box-shadow:
-      0 0 40px rgba(62, 235, 212, 0.04),
-      var(--shadow-lg);
-  }
-
-  .demo-terminal .terminal-body {
-    font-size: 13px;
-    line-height: 1.9;
-  }
-
-  /* ── Pricing ────────────────────────────────────── */
-
-  .pricing-section {
-    background: var(--bg-secondary);
-  }
-
-  .pricing-card-wrapper {
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
+  /* ── Pricing card ──────────────────────────── */
   .pricing-card {
-    padding: 40px 36px;
+    display: inline-block;
     text-align: center;
-    border-color: rgba(46, 204, 94, 0.3);
-    box-shadow:
-      0 0 40px rgba(46, 204, 94, 0.06),
-      0 0 80px rgba(46, 204, 94, 0.03);
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .pricing-card:hover {
-    border-color: rgba(46, 204, 94, 0.5);
-    box-shadow:
-      0 0 50px rgba(46, 204, 94, 0.1),
-      0 0 100px rgba(46, 204, 94, 0.05);
-  }
-
-  .pricing-header {
-    margin-bottom: 24px;
+    padding: 48px 56px;
+    border-color: var(--accent-green);
+    box-shadow: var(--glow-green);
   }
 
   .pricing-amount {
-    margin-top: 20px;
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 2px;
-  }
-
-  .pricing-dollar {
     font-family: var(--font-mono);
-    font-size: 24px;
-    font-weight: 400;
-    color: var(--text-secondary);
-  }
-
-  .pricing-value {
-    font-family: var(--font-mono);
-    font-size: 64px;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: 2px;
+    font-size: 56px;
     color: var(--accent-green);
-    text-shadow:
-      0 0 15px rgba(46, 204, 94, 0.3),
-      0 0 40px rgba(46, 204, 94, 0.1);
+    text-shadow: 0 0 30px rgba(46, 204, 94, 0.3);
+    line-height: 1;
   }
 
-  .pricing-period {
+  .pricing-label {
     font-family: var(--font-mono);
-    font-size: 18px;
-    color: var(--text-secondary);
-    font-weight: 400;
-    text-transform: uppercase;
-  }
-
-  .pricing-plus {
-    margin-top: 8px;
+    font-size: 16px;
     color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .pricing-card .divider {
-    margin: 24px 0;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
   }
 
   .pricing-features {
     list-style: none;
-    text-align: left;
     margin-bottom: 32px;
   }
 
   .pricing-features li {
-    padding: 8px 0;
-    color: var(--text-secondary);
-    font-family: var(--font-sans);
     font-size: 15px;
-    position: relative;
-    padding-left: 24px;
+    color: var(--text-secondary);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pricing-features li:last-child {
+    border-bottom: none;
   }
 
   .pricing-features li::before {
-    content: "+";
-    position: absolute;
-    left: 0;
+    content: "\2713 ";
     color: var(--accent-green);
-    font-weight: 400;
-    font-family: var(--font-mono);
-    text-shadow: 0 0 6px rgba(46, 204, 94, 0.3);
+    margin-right: 8px;
   }
 
-  .pricing-cta {
-    width: 100%;
-    justify-content: center;
+  /* ── FAQ ────────────────────────────────────── */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  /* ── Final CTA ──────────────────────────────────── */
-
-  .cta-section {
-    position: relative;
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    background: var(--bg-primary);
+    transition: border-color 0.3s;
   }
 
-  .cta-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: 400px;
-    background: radial-gradient(
-      ellipse,
-      rgba(46, 204, 94, 0.05) 0%,
-      transparent 70%
-    );
-    pointer-events: none;
+  .faq-item:hover,
+  .faq-item[open] {
+    border-color: var(--border-bright);
   }
 
-  .cta-inner {
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    padding: 40px 0;
-  }
-
-  .cta-title {
+  .faq-item summary {
+    padding: 18px 24px;
+    cursor: pointer;
     font-family: var(--font-mono);
-    font-size: 38px;
-    font-weight: 400;
-    line-height: 1.25;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    font-size: 15px;
     color: var(--text-primary);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    user-select: none;
   }
 
-  .cta-title-glow {
+  .faq-item summary::-webkit-details-marker { display: none; }
+
+  .faq-item summary::after {
+    content: "+";
+    font-size: 20px;
     color: var(--accent-green);
-    text-shadow:
-      0 0 10px rgba(46, 204, 94, 0.4),
-      0 0 30px rgba(46, 204, 94, 0.15);
+    flex-shrink: 0;
+    transition: transform 0.2s;
   }
 
-  .cta-subtitle {
-    font-family: var(--font-sans);
-    font-size: 17px;
-    max-width: 540px;
-    margin: 0 auto 36px;
+  .faq-item[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  .faq-item p {
+    padding: 0 24px 18px;
+    font-size: 14px;
+    color: var(--text-secondary);
     line-height: 1.7;
   }
 
-  /* ── Responsive ─────────────────────────────────── */
-
-  @media (max-width: 1024px) {
-    .hero {
-      padding: 60px 0 48px;
-    }
+  /* ── Final CTA ─────────────────────────────── */
+  .cta-heading {
+    font-family: var(--font-mono);
+    font-size: clamp(22px, 4vw, 32px);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  @media (max-width: 768px) {
-    .hero {
-      padding: 48px 0 40px;
-      min-height: auto;
-      overflow: visible;
-    }
-
-    .hero-inner {
-      padding: 0 4px;
-    }
-
-    .hero-orb-wrapper {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 24px;
-    }
-
-    .hero-orb {
-      width: 24px;
-      height: 24px;
-    }
-
-    .hero-orb-ring {
-      width: 54px;
-      height: 54px;
-    }
-
-    .hero-orb-ring.ring-2 {
-      width: 80px;
-      height: 80px;
-    }
-
-    .hero-orb-ring.ring-3 {
-      display: none;
-    }
-
-    .hero-ctas {
-      flex-direction: column;
-      align-items: stretch;
-      padding: 0 16px;
-      margin-bottom: 32px;
-    }
-
-    .hero-ctas .btn {
-      justify-content: center;
-      width: 100%;
-      padding: 16px 24px;
-      font-size: 14px;
-    }
-
-    .step-card {
-      padding: 28px 20px;
-    }
-
-    .cta-title {
-      font-size: clamp(22px, 4vw, 26px);
-      letter-spacing: 1px;
-    }
-
-    .pricing-value {
-      font-size: 48px;
-    }
-
-    .demo-terminal .terminal-body {
-      font-size: 11px;
-      overflow-x: auto;
-    }
-
-    .hero-terminal .terminal-body {
-      font-size: 11px;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-
-    .feature-card {
-      padding: 24px 20px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero {
-      padding: 36px 0 32px;
-    }
-
-    .hero-orb-wrapper {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 20px;
-    }
-
-    .hero-orb {
-      width: 20px;
-      height: 20px;
-    }
-
-    .hero-orb-ring {
-      width: 44px;
-      height: 44px;
-    }
-
-    .hero-orb-ring.ring-2 {
-      width: 64px;
-      height: 64px;
-    }
-
-    .hero-subtitle {
-      padding: 0 4px;
-    }
-
-    .hero-ctas {
-      padding: 0 8px;
-    }
-
-    .hero-terminal {
-      margin: 0 -8px;
-      border-radius: 4px;
-    }
-
-    .hero-terminal .terminal-body {
-      padding: 12px;
-      font-size: 10px;
-    }
-
-    .cta-title {
-      font-size: 20px;
-    }
-
-    .pricing-value {
-      font-size: 40px;
-    }
-
-    .pricing-card {
-      padding: 28px 20px;
-    }
-  }
-
-  @media (max-width: 360px) {
-    .hero-ctas .btn {
-      padding: 14px 16px;
-      font-size: 13px;
-    }
+  /* ── Mobile adjustments ────────────────────── */
+  @media (max-width: 600px) {
+    .hero { padding-top: 48px; }
+    .hero h1 { font-size: 24px; }
+    .pricing-card { padding: 32px 24px; }
+    .pricing-amount { font-size: 42px; }
   }
 </style>

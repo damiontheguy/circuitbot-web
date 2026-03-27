@@ -1,0 +1,561 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Game Status — CircuitBot">
+
+  <section class="section status-section">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <h1 class="gradient-text">Game Status</h1>
+      </div>
+
+      <div id="status-container">
+        <!-- Loading -->
+        <div id="status-loading" class="state-msg">
+          <div class="loader-ring"></div>
+          <p>Fetching job status...</p>
+        </div>
+
+        <!-- Error -->
+        <div id="status-error" class="state-msg" style="display:none;">
+          <div class="state-icon" style="color:var(--accent-red);">&#9888;</div>
+          <h2>Could not load status</h2>
+          <p id="status-error-msg"></p>
+          <button class="btn btn-primary" onclick="loadStatus()">Retry</button>
+        </div>
+
+        <!-- In-progress -->
+        <div id="status-progress" class="status-card" style="display:none;">
+          <div class="prompt-block">
+            <span class="prompt-label">Your prompt</span>
+            <p id="prog-prompt" class="prompt-text"></p>
+          </div>
+
+          <div class="progress-wrapper">
+            <div class="progress-track">
+              <div id="prog-bar" class="progress-fill"></div>
+              <div class="progress-scan"></div>
+            </div>
+            <div class="progress-meta">
+              <span id="prog-pct" class="progress-pct">0%</span>
+              <span id="prog-stage" class="progress-stage"></span>
+            </div>
+          </div>
+
+          <div class="terminal-log">
+            <div class="terminal-log-bar">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-log-title">pipeline</span>
+            </div>
+            <div id="prog-log" class="terminal-log-body"></div>
+          </div>
+
+          <div id="prog-working" class="working-indicator">
+            <span class="working-dot"></span>
+            <span class="working-dot d2"></span>
+            <span class="working-dot d3"></span>
+            <span>Working</span>
+          </div>
+        </div>
+
+        <!-- Completed -->
+        <div id="status-complete" class="status-card" style="display:none;">
+          <div class="complete-heading">
+            <span class="complete-check">&#10003;</span>
+            <h2 class="complete-title">Your game is ready!</h2>
+          </div>
+          <p id="comp-prompt" class="prompt-text" style="margin-bottom:1rem;"></p>
+          <p id="comp-size" class="file-size"></p>
+          <a id="comp-download" href="#" class="btn btn-primary btn-lg download-btn">Download Game</a>
+          <a href="/create" class="btn create-another">Create Another Game</a>
+        </div>
+
+        <!-- Failed -->
+        <div id="status-failed" class="status-card" style="display:none;">
+          <div class="failed-heading">
+            <span class="failed-x">&#10007;</span>
+            <h2 class="failed-title">Generation Failed</h2>
+          </div>
+          <p id="fail-prompt" class="prompt-text" style="margin-bottom:0.75rem;"></p>
+          <div id="fail-error" class="fail-error-box"></div>
+          <a id="fail-retry" href="/create" class="btn btn-primary">Try Again</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .status-section {
+    min-height: 75vh;
+    padding-top: 3rem;
+  }
+
+  /* ---------- Shared states ---------- */
+  .state-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: var(--text-muted, #888);
+  }
+
+  .state-icon { font-size: 2.5rem; line-height: 1; }
+
+  .state-msg h2 {
+    color: var(--text-primary, #eee);
+    margin: 0;
+  }
+
+  .loader-ring {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border, #333);
+    border-top-color: var(--accent-green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Status card shell ---------- */
+  .status-card {
+    background: var(--bg-card, #161b22);
+    border: 1px solid var(--border, #30363d);
+    border-radius: 14px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* ---------- Prompt block ---------- */
+  .prompt-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted, #666);
+    font-family: var(--font-mono);
+  }
+
+  .prompt-text {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-primary, #e6edf3);
+    line-height: 1.6;
+    margin: 0.35rem 0 0;
+  }
+
+  /* ---------- Progress bar ---------- */
+  .progress-wrapper { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .progress-track {
+    position: relative;
+    width: 100%;
+    height: 22px;
+    background: var(--bg-secondary, #0d1117);
+    border: 1px solid var(--border, #30363d);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-green), #00e4a0, var(--accent-cyan));
+    border-radius: 5px;
+    transition: width 0.6s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Scanning line effect */
+  .progress-scan {
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 135, 0.25), transparent);
+    z-index: 2;
+    animation: scan 2s ease-in-out infinite;
+  }
+
+  @keyframes scan {
+    0%   { left: -40%; }
+    100% { left: 100%; }
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .progress-pct {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-green);
+  }
+
+  .progress-stage {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted, #888);
+  }
+
+  /* ---------- Terminal log ---------- */
+  .terminal-log {
+    border: 1px solid var(--border, #30363d);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #0a0e14;
+  }
+
+  .terminal-log-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--border, #30363d);
+  }
+
+  .terminal-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .terminal-dot.red    { background: #ff5f57; }
+  .terminal-dot.yellow { background: #febc2e; }
+  .terminal-dot.green  { background: #28c840; }
+
+  .terminal-log-title {
+    margin-left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted, #666);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .terminal-log-body {
+    padding: 0.75rem 1rem;
+    font-family: var(--font-code, var(--font-mono));
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--text-muted, #888);
+    min-height: 100px;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .log-line {
+    opacity: 0;
+    animation: fadeIn 0.4s forwards;
+  }
+
+  .log-line.done { color: var(--accent-green); }
+  .log-line.active { color: var(--accent-cyan); }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* ---------- Working indicator ---------- */
+  .working-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted, #888);
+    justify-content: center;
+  }
+
+  .working-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  .working-dot.d2 { animation-delay: 0.15s; }
+  .working-dot.d3 { animation-delay: 0.3s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40%           { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* ---------- Completed ---------- */
+  .complete-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .complete-check {
+    font-size: 2rem;
+    color: var(--accent-green);
+    text-shadow: 0 0 20px rgba(0, 255, 135, 0.5);
+    line-height: 1;
+  }
+
+  .complete-title {
+    margin: 0;
+    color: var(--accent-green);
+    text-shadow: 0 0 30px rgba(0, 255, 135, 0.3);
+  }
+
+  .file-size {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted, #888);
+    margin: 0;
+  }
+
+  .download-btn {
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .create-another {
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-muted, #888);
+  }
+  .create-another:hover { color: var(--accent-cyan); }
+
+  /* ---------- Failed ---------- */
+  .failed-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .failed-x {
+    font-size: 2rem;
+    color: var(--accent-red);
+    line-height: 1;
+  }
+
+  .failed-title {
+    margin: 0;
+    color: var(--accent-red);
+  }
+
+  .fail-error-box {
+    background: rgba(255, 70, 70, 0.08);
+    border: 1px solid rgba(255, 70, 70, 0.25);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #ff9a9a;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://api.circuitbot.dev';
+
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+  // ── Helpers ─────────────────────────────────
+  function getToken(): string | null {
+    return localStorage.getItem('cb_token');
+  }
+
+  function requireAuth(): string {
+    const token = getToken();
+    if (!token) {
+      window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+      throw new Error('Not authenticated');
+    }
+    return token;
+  }
+
+  function getJobId(): string | null {
+    return new URLSearchParams(window.location.search).get('id');
+  }
+
+  function formatBytes(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  // ── Pipeline stage labels ───────────────────
+  const STAGE_LABELS: Record<string, string> = {
+    planning:   'Planning your game...',
+    art:        'Generating art assets...',
+    logic:      'Implementing game logic...',
+    exporting:  'Exporting executable...',
+  };
+
+  interface GameJob {
+    id: string;
+    prompt: string;
+    status: string;
+    progress?: number;
+    stage?: string;
+    stages_completed?: string[];
+    error_message?: string;
+    file_size?: number;
+    created_at: string;
+  }
+
+  // ── Visibility toggles ─────────────────────
+  function showOnly(id: string): void {
+    ['status-loading', 'status-error', 'status-progress', 'status-complete', 'status-failed']
+      .forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.style.display = s === id ? (s === 'status-loading' || s === 'status-error' ? 'flex' : 'flex') : 'none';
+      });
+  }
+
+  // ── Render: In-progress ─────────────────────
+  function renderProgress(job: GameJob): void {
+    showOnly('status-progress');
+
+    document.getElementById('prog-prompt')!.textContent = job.prompt;
+
+    const pct = job.progress ?? 0;
+    document.getElementById('prog-bar')!.style.width = pct + '%';
+    document.getElementById('prog-pct')!.textContent = pct + '%';
+    document.getElementById('prog-stage')!.textContent = STAGE_LABELS[job.stage ?? ''] ?? job.stage ?? '';
+
+    // Build log lines
+    const logEl = document.getElementById('prog-log')!;
+    logEl.innerHTML = '';
+    const completed = job.stages_completed ?? [];
+    const allStages = Object.keys(STAGE_LABELS);
+
+    for (const key of allStages) {
+      const line = document.createElement('div');
+      line.className = 'log-line';
+
+      if (completed.includes(key)) {
+        line.classList.add('done');
+        line.textContent = '\u2713 ' + STAGE_LABELS[key].replace('...', ' \u2014 done');
+      } else if (job.stage === key) {
+        line.classList.add('active');
+        line.textContent = '\u25B6 ' + STAGE_LABELS[key];
+      } else {
+        line.textContent = '\u25CB ' + STAGE_LABELS[key].replace('...', '');
+      }
+      logEl.appendChild(line);
+    }
+
+    startPolling();
+  }
+
+  // ── Render: Completed ───────────────────────
+  async function renderComplete(job: GameJob): Promise<void> {
+    showOnly('status-complete');
+    stopPolling();
+
+    document.getElementById('comp-prompt')!.textContent = job.prompt;
+
+    if (job.file_size) {
+      document.getElementById('comp-size')!.textContent = 'File size: ' + formatBytes(job.file_size);
+    }
+
+    // Fetch presigned download URL
+    const token = getToken();
+    try {
+      const res = await fetch(`${API_BASE}/api/games/${job.id}/download`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        (document.getElementById('comp-download') as HTMLAnchorElement).href = data.url;
+      }
+    } catch { /* download link will remain # */ }
+  }
+
+  // ── Render: Failed ──────────────────────────
+  function renderFailed(job: GameJob): void {
+    showOnly('status-failed');
+    stopPolling();
+
+    document.getElementById('fail-prompt')!.textContent = job.prompt;
+    document.getElementById('fail-error')!.textContent = job.error_message ?? 'An unknown error occurred during generation.';
+
+    const retryLink = document.getElementById('fail-retry') as HTMLAnchorElement;
+    retryLink.href = '/create?prompt=' + encodeURIComponent(job.prompt);
+  }
+
+  // ── Fetch & dispatch ────────────────────────
+  async function loadStatus(): Promise<void> {
+    const token = requireAuth();
+    const jobId = getJobId();
+
+    if (!jobId) {
+      showOnly('status-error');
+      document.getElementById('status-error-msg')!.textContent = 'No job ID provided. Go to My Games to see your jobs.';
+      return;
+    }
+
+    showOnly('status-loading');
+
+    try {
+      const res = await fetch(`${API_BASE}/api/games/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          localStorage.removeItem('cb_token');
+          window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search);
+          return;
+        }
+        if (res.status === 404) throw new Error('Job not found. It may have been deleted.');
+        throw new Error(`Server returned ${res.status}`);
+      }
+
+      const job: GameJob = await res.json();
+
+      switch (job.status) {
+        case 'completed':
+          await renderComplete(job);
+          break;
+        case 'failed':
+          renderFailed(job);
+          break;
+        default:
+          renderProgress(job);
+          break;
+      }
+    } catch (err: any) {
+      showOnly('status-error');
+      document.getElementById('status-error-msg')!.textContent = err.message || 'Failed to load status.';
+      stopPolling();
+    }
+  }
+
+  // ── Polling ─────────────────────────────────
+  function startPolling(): void {
+    if (pollTimer) return;
+    pollTimer = setInterval(loadStatus, 3_000);
+  }
+
+  function stopPolling(): void {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  // ── Init ────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', loadStatus);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopPolling();
+  });
+</script>

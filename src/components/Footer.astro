@@ -12,21 +12,22 @@ const year = new Date().getFullYear();
         </div>
         <div>
           <div class="footer-name">CircuitBot</div>
-          <div class="footer-tagline">AI-powered game dev assistant</div>
+          <div class="footer-tagline">AI-powered game generator</div>
         </div>
       </div>
 
       <div class="footer-links">
         <div class="footer-col">
           <h4>Product</h4>
+          <a href="/create">Create Game</a>
           <a href="/pricing">Pricing</a>
-          <a href="/download">Download</a>
-          <a href="/docs">Documentation</a>
+          <a href="/my-games">My Games</a>
         </div>
         <div class="footer-col">
-          <h4>Guides</h4>
-          <a href="/docs/setup">Setup Guide</a>
-          <a href="/docs/discord-bot">Discord Bot Setup</a>
+          <h4>Resources</h4>
+          <a href="/download">Desktop App</a>
+          <a href="/#how-it-works">How It Works</a>
+          <a href="/#faq">FAQ</a>
         </div>
         <div class="footer-col">
           <h4>Legal</h4>
@@ -40,7 +41,7 @@ const year = new Date().getFullYear();
       <span>&copy; {year} CircuitBot. All rights reserved.</span>
       <span class="footer-status">
         <span class="status-dot"></span>
-        Built by developers, for developers.
+        Describe it. We build it.
       </span>
     </div>
   </div>
@@ -109,16 +110,9 @@ const year = new Date().getFullYear();
     margin-top: 2px;
   }
 
-  .footer-links {
-    display: flex;
-    gap: 56px;
-  }
+  .footer-links { display: flex; gap: 56px; }
 
-  .footer-col {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+  .footer-col { display: flex; flex-direction: column; gap: 8px; }
 
   .footer-col h4 {
     font-family: var(--font-mono);
@@ -148,11 +142,7 @@ const year = new Date().getFullYear();
     letter-spacing: 0.5px;
   }
 
-  .footer-status {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .footer-status { display: flex; align-items: center; gap: 6px; }
 
   .status-dot {
     width: 6px;
