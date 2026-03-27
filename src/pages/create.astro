@@ -81,6 +81,16 @@ import Layout from '../layouts/Layout.astro';
         <button id="generate-btn" class="btn btn-primary btn-lg generate-btn">
           Generate My Game — $14.99
         </button>
+
+        <!-- Free Trial -->
+        <div id="free-trial-section" class="free-trial-section" style="display: none;">
+          <div class="free-trial-divider"><span>or</span></div>
+          <button id="free-trial-btn" class="btn btn-secondary btn-lg free-trial-btn">
+            Try Free — Verify Phone
+          </button>
+          <p class="free-trial-note">One free game per account. Phone verification required.</p>
+        </div>
+
         <p class="disclaimer">
           By clicking generate, you agree to our <a href="/terms">Terms of Service</a>.
           Generation takes ~15-30 minutes.
@@ -88,6 +98,50 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
   </section>
+
+  <!-- Phone Verification Modal -->
+  <div id="phone-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <h2 class="modal-title">Verify Phone Number</h2>
+      <p class="modal-sub">We'll text you a 6-digit code to verify your identity.</p>
+
+      <!-- Step 1: Enter phone -->
+      <div id="phone-step-1">
+        <div class="form-group">
+          <label for="phone-input" class="form-label">Phone Number</label>
+          <input
+            type="tel"
+            id="phone-input"
+            class="form-input"
+            placeholder="+1 (555) 123-4567"
+          />
+        </div>
+        <button id="send-code-btn" class="btn btn-primary modal-btn">Send Code</button>
+      </div>
+
+      <!-- Step 2: Enter code -->
+      <div id="phone-step-2" style="display: none;">
+        <p class="modal-phone-display">Code sent to <span id="modal-phone-display"></span></p>
+        <div class="form-group">
+          <label for="code-input" class="form-label">Verification Code</label>
+          <input
+            type="text"
+            id="code-input"
+            class="form-input code-input"
+            placeholder="000000"
+            maxlength="6"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+        </div>
+        <button id="verify-code-btn" class="btn btn-primary modal-btn">Verify</button>
+        <button id="resend-btn" class="btn-link">Resend code</button>
+      </div>
+
+      <p id="modal-error" class="modal-error" style="display: none;"></p>
+    </div>
+  </div>
 
   <!-- Error display -->
   <div id="error-toast" class="error-toast" style="display: none;"></div>
@@ -98,6 +152,36 @@ import Layout from '../layouts/Layout.astro';
   var API_BASE = window.location.hostname === 'localhost'
     ? 'http://localhost:8000'
     : 'https://circuitbot-api-production.up.railway.app';
+
+  var _freeTrialEligible = false;
+  var _phoneVerified = false;
+  var _pendingPhone = '';
+
+  // On load: check free trial eligibility
+  (function checkTrialEligibility() {
+    var token = localStorage.getItem('token');
+    if (!token) return;
+
+    fetch(API_BASE + '/api/auth/phone/status', {
+      headers: { 'Authorization': 'Bearer ' + token },
+    })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (!data) return;
+      _phoneVerified = data.phone_verified;
+      _freeTrialEligible = data.free_trial_eligible;
+
+      var section = document.getElementById('free-trial-section');
+      var btn = document.getElementById('free-trial-btn');
+      if (section && (_freeTrialEligible || !_phoneVerified)) {
+        section.style.display = 'block';
+      }
+      if (btn && _freeTrialEligible) {
+        btn.textContent = 'Generate Free';
+      }
+    })
+    .catch(function() {});
+  })();
 
   // Chip click -> fill textarea
   document.querySelectorAll('.chip').forEach(function(chip) {
@@ -112,41 +196,82 @@ import Layout from '../layouts/Layout.astro';
     });
   });
 
-  // Generate button
+  // --- Paid Generate ---
   var genBtn = document.getElementById('generate-btn');
   if (genBtn) {
     genBtn.addEventListener('click', function() {
-      var textarea = document.getElementById('game-prompt');
-      var prompt = textarea ? textarea.value.trim() : '';
+      startGeneration(false);
+    });
+  }
 
-      if (!prompt) {
-        showError('Please describe the game you want to create.');
-        if (textarea) textarea.focus();
-        return;
-      }
-
+  // --- Free Trial ---
+  var freeTrialBtn = document.getElementById('free-trial-btn');
+  if (freeTrialBtn) {
+    freeTrialBtn.addEventListener('click', function() {
       var token = localStorage.getItem('token');
       if (!token) {
         window.location.href = '/login?redirect=' + encodeURIComponent('/create');
         return;
       }
+      if (!_phoneVerified) {
+        openPhoneModal();
+        return;
+      }
+      startGeneration(true);
+    });
+  }
 
-      genBtn.disabled = true;
-      genBtn.textContent = 'Creating job...';
+  function startGeneration(isFreeTrial) {
+    var textarea = document.getElementById('game-prompt');
+    var prompt = textarea ? textarea.value.trim() : '';
 
-      fetch(API_BASE + '/api/games', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-        body: JSON.stringify({ prompt: prompt }),
-      })
-      .then(function(jobRes) {
-        if (!jobRes.ok) return jobRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create game job'); });
-        return jobRes.json();
-      })
-      .then(function(job) {
+    if (!prompt) {
+      showError('Please describe the game you want to create.');
+      if (textarea) textarea.focus();
+      return;
+    }
+
+    var token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/login?redirect=' + encodeURIComponent('/create');
+      return;
+    }
+
+    var activeBtn = isFreeTrial ? freeTrialBtn : genBtn;
+    activeBtn.disabled = true;
+    activeBtn.textContent = 'Creating job...';
+
+    // Step 1: Create game job
+    fetch(API_BASE + '/api/games', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({ prompt: prompt }),
+    })
+    .then(function(jobRes) {
+      if (!jobRes.ok) return jobRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create game job'); });
+      return jobRes.json();
+    })
+    .then(function(job) {
+      if (isFreeTrial) {
+        // Step 2a: Claim free trial
+        return fetch(API_BASE + '/api/billing/free-trial', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({ game_job_id: job.id }),
+        }).then(function(r) {
+          if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Free trial failed'); });
+          return r.json();
+        }).then(function(result) {
+          window.location.href = '/status?id=' + result.job_id;
+        });
+      } else {
+        // Step 2b: Stripe checkout
         return fetch(API_BASE + '/api/billing/checkout', {
           method: 'POST',
           headers: {
@@ -154,26 +279,145 @@ import Layout from '../layouts/Layout.astro';
             'Authorization': 'Bearer ' + token,
           },
           body: JSON.stringify({ game_job_id: job.id }),
+        }).then(function(checkoutRes) {
+          if (!checkoutRes.ok) return checkoutRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create checkout'); });
+          return checkoutRes.json();
+        }).then(function(checkout) {
+          if (checkout.checkout_url) {
+            window.location.href = checkout.checkout_url;
+          } else {
+            throw new Error('No checkout URL returned');
+          }
         });
-      })
-      .then(function(checkoutRes) {
-        if (!checkoutRes.ok) return checkoutRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create checkout'); });
-        return checkoutRes.json();
-      })
-      .then(function(checkout) {
-        if (checkout.checkout_url) {
-          window.location.href = checkout.checkout_url;
-        } else {
-          throw new Error('No checkout URL returned');
-        }
-      })
-      .catch(function(err) {
-        showError(err.message || 'Something went wrong. Please try again.');
-        genBtn.disabled = false;
-        genBtn.textContent = 'Generate My Game — $14.99';
-      });
+      }
+    })
+    .catch(function(err) {
+      showError(err.message || 'Something went wrong. Please try again.');
+      activeBtn.disabled = false;
+      activeBtn.textContent = isFreeTrial ? 'Generate Free' : 'Generate My Game — $14.99';
     });
   }
+
+  // --- Phone Verification Modal ---
+  function openPhoneModal() {
+    document.getElementById('phone-modal').style.display = 'flex';
+    document.getElementById('phone-step-1').style.display = 'block';
+    document.getElementById('phone-step-2').style.display = 'none';
+    document.getElementById('modal-error').style.display = 'none';
+  }
+
+  function closePhoneModal() {
+    document.getElementById('phone-modal').style.display = 'none';
+  }
+
+  document.getElementById('modal-close').addEventListener('click', closePhoneModal);
+  document.getElementById('phone-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePhoneModal();
+  });
+
+  function showModalError(msg) {
+    var el = document.getElementById('modal-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function normalizePhone(raw) {
+    var digits = raw.replace(/[^0-9+]/g, '');
+    if (digits.length === 10) digits = '+1' + digits;
+    if (!digits.startsWith('+')) digits = '+' + digits;
+    return digits;
+  }
+
+  // Send code
+  document.getElementById('send-code-btn').addEventListener('click', function() {
+    var phoneRaw = document.getElementById('phone-input').value.trim();
+    if (!phoneRaw) { showModalError('Enter your phone number.'); return; }
+    var phone = normalizePhone(phoneRaw);
+    _pendingPhone = phone;
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    document.getElementById('modal-error').style.display = 'none';
+
+    var token = localStorage.getItem('token');
+    fetch(API_BASE + '/api/auth/phone/send-code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({ phone_number: phone }),
+    })
+    .then(function(r) {
+      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Failed to send code'); });
+      return r.json();
+    })
+    .then(function() {
+      // Show step 2
+      document.getElementById('phone-step-1').style.display = 'none';
+      document.getElementById('phone-step-2').style.display = 'block';
+      document.getElementById('modal-phone-display').textContent = phone;
+      document.getElementById('code-input').focus();
+    })
+    .catch(function(err) {
+      showModalError(err.message);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'Send Code';
+    });
+  });
+
+  // Verify code
+  document.getElementById('verify-code-btn').addEventListener('click', function() {
+    var code = document.getElementById('code-input').value.trim();
+    if (code.length !== 6) { showModalError('Enter the 6-digit code.'); return; }
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    document.getElementById('modal-error').style.display = 'none';
+
+    var token = localStorage.getItem('token');
+    fetch(API_BASE + '/api/auth/phone/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({ phone_number: _pendingPhone, code: code }),
+    })
+    .then(function(r) {
+      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Verification failed'); });
+      return r.json();
+    })
+    .then(function(data) {
+      _phoneVerified = true;
+      _freeTrialEligible = data.free_trial_eligible;
+      closePhoneModal();
+      // Update button state
+      if (_freeTrialEligible && freeTrialBtn) {
+        freeTrialBtn.textContent = 'Generate Free';
+      }
+      // Auto-trigger free generation
+      startGeneration(true);
+    })
+    .catch(function(err) {
+      showModalError(err.message);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'Verify';
+    });
+  });
+
+  // Resend
+  document.getElementById('resend-btn').addEventListener('click', function() {
+    document.getElementById('phone-step-2').style.display = 'none';
+    document.getElementById('phone-step-1').style.display = 'block';
+    document.getElementById('modal-error').style.display = 'none';
+  });
 
   function showError(msg) {
     var toast = document.getElementById('error-toast');
@@ -376,6 +620,183 @@ import Layout from '../layouts/Layout.astro';
   .disclaimer a {
     color: var(--text-secondary);
     text-decoration: underline;
+  }
+
+  /* ── Free Trial ──────────────────── */
+  .free-trial-section {
+    margin-top: 20px;
+  }
+
+  .free-trial-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .free-trial-divider::before,
+  .free-trial-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .free-trial-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 16px;
+    padding: 16px 28px;
+    background: transparent;
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+  }
+
+  .free-trial-btn:hover {
+    background: rgba(62, 235, 212, 0.08);
+    box-shadow: 0 0 20px rgba(62, 235, 212, 0.15);
+  }
+
+  .free-trial-btn:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+
+  .free-trial-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Phone Modal ────────────────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+  }
+
+  .modal-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    position: relative;
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(62, 235, 212, 0.1);
+  }
+
+  .modal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-green), transparent);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  }
+
+  .modal-close:hover {
+    color: var(--text-primary);
+  }
+
+  .modal-title {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent-cyan);
+    margin-bottom: 8px;
+  }
+
+  .modal-sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .modal-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+    padding: 14px 24px;
+  }
+
+  .modal-btn:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+
+  .modal-phone-display {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  .code-input {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 8px;
+    font-family: var(--font-mono);
+  }
+
+  .btn-link {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 12px;
+    text-decoration: underline;
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
+  .btn-link:hover {
+    color: var(--accent-cyan);
+  }
+
+  .modal-error {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: rgba(239, 83, 80, 0.1);
+    border: 1px solid rgba(239, 83, 80, 0.3);
+    border-radius: var(--radius);
+    color: var(--accent-red);
+    font-family: var(--font-mono);
+    font-size: 12px;
   }
 
   /* ── Error Toast ────────────────── */
