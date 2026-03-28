@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Pricing — CircuitBot" description="One price. One game. No subscriptions. $14.99 per game, fully generated.">
+<Layout title="Pricing — CircuitBot" description="First game free. Then $14.99 per game, fully generated. No subscriptions.">
 
   <!-- Hero -->
   <section class="section pricing-hero">
@@ -10,21 +10,52 @@ import Layout from '../layouts/Layout.astro';
       <div class="section-header">
         <span class="badge badge-green">Pricing</span>
         <h1 class="pricing-title">Simple <span class="gradient-text">Pricing</span></h1>
-        <p class="pricing-subtitle-text">One price. One game. No subscriptions.</p>
+        <p class="pricing-subtitle-text">First game free. No credit card required.</p>
       </div>
     </div>
   </section>
 
   <hr class="divider" />
 
-  <!-- Pricing Card -->
+  <!-- Pricing Cards -->
   <section class="section">
     <div class="container">
-      <div class="pricing-card-wrapper">
+      <div class="pricing-card-grid">
+        <!-- Free Tier -->
+        <div class="pricing-card pricing-card-free">
+          <div class="pricing-card-glow pricing-card-glow-cyan"></div>
+          <div class="pricing-card-header">
+            <span class="badge badge-cyan">First Game Free</span>
+            <div class="pricing-amount">
+              <span class="pricing-dollar pricing-dollar-cyan">$</span>
+              <span class="pricing-value pricing-value-cyan">0</span>
+            </div>
+            <p class="pricing-label">your first game</p>
+          </div>
+
+          <div class="pricing-divider"></div>
+
+          <div class="pricing-includes">
+            <p class="pricing-includes-label">// everything included</p>
+            <ul class="pricing-features">
+              <li><span class="feature-check feature-check-cyan">&#10003;</span> Complete Godot 4 project</li>
+              <li><span class="feature-check feature-check-cyan">&#10003;</span> AI-generated 2D &amp; 3D art</li>
+              <li><span class="feature-check feature-check-cyan">&#10003;</span> Full GDScript game code</li>
+              <li><span class="feature-check feature-check-cyan">&#10003;</span> Compiled Windows executable</li>
+              <li><span class="feature-check feature-check-cyan">&#10003;</span> Source code included — edit freely</li>
+              <li><span class="feature-check feature-check-cyan">&#10003;</span> Just verify your phone number</li>
+            </ul>
+          </div>
+
+          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Try It Free</a>
+          <p class="pricing-note">No credit card required</p>
+        </div>
+
+        <!-- Paid Tier -->
         <div class="pricing-card">
           <div class="pricing-card-glow"></div>
           <div class="pricing-card-header">
-            <span class="badge badge-cyan">Pay Per Game</span>
+            <span class="badge badge-green">Pay Per Game</span>
             <div class="pricing-amount">
               <span class="pricing-dollar">$</span>
               <span class="pricing-value">14.99</span>
@@ -37,17 +68,17 @@ import Layout from '../layouts/Layout.astro';
           <div class="pricing-includes">
             <p class="pricing-includes-label">// everything included</p>
             <ul class="pricing-features">
-              <li><span class="feature-check">&#10003;</span> Complete Godot 4 project</li>
-              <li><span class="feature-check">&#10003;</span> AI-generated 2D &amp; 3D art</li>
-              <li><span class="feature-check">&#10003;</span> Full GDScript game code</li>
-              <li><span class="feature-check">&#10003;</span> Compiled Windows executable</li>
+              <li><span class="feature-check">&#10003;</span> Everything in the free tier</li>
+              <li><span class="feature-check">&#10003;</span> Unlimited game generation</li>
+              <li><span class="feature-check">&#10003;</span> No restrictions on output</li>
               <li><span class="feature-check">&#10003;</span> Delivered in ~15-30 minutes</li>
-              <li><span class="feature-check">&#10003;</span> Source code included — edit freely</li>
+              <li><span class="feature-check">&#10003;</span> Full commercial ownership</li>
+              <li><span class="feature-check">&#10003;</span> Refund if generation fails</li>
             </ul>
           </div>
 
-          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Create Your Game</a>
-          <p class="pricing-note">No account needed until you generate</p>
+          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Create a Game</a>
+          <p class="pricing-note">One-time payment, no subscription</p>
         </div>
       </div>
     </div>
@@ -105,11 +136,20 @@ import Layout from '../layouts/Layout.astro';
 
       <div class="faq-list">
         <details class="faq-item">
+          <summary class="faq-question">Is the first game really free?</summary>
+          <p class="faq-answer">
+            Yes, completely free. Create an account, verify your phone number, and
+            generate one full game at no cost. No credit card needed. Same quality
+            and features as paid games.
+          </p>
+        </details>
+
+        <details class="faq-item">
           <summary class="faq-question">Is it a subscription?</summary>
           <p class="faq-answer">
-            No. You pay once per game. There are no recurring charges, no monthly
-            fees, and no hidden costs. Each game generation is a one-time purchase
-            of $14.99.
+            No. After your free game, you pay once per game. There are no recurring
+            charges, no monthly fees, and no hidden costs. Each additional game is
+            a one-time purchase of $14.99.
           </p>
         </details>
 
@@ -164,8 +204,8 @@ import Layout from '../layouts/Layout.astro';
     <div class="container">
       <div class="section-header">
         <h2>Ready to <span class="gradient-text">Build</span>?</h2>
-        <p>Describe your game idea and have a playable build in minutes.</p>
-        <a href="/create" class="btn btn-primary btn-lg cta-btn">Create Your Game — $14.99</a>
+        <p>Your first game is free. Describe your idea and have a playable build in minutes.</p>
+        <a href="/create" class="btn btn-primary btn-lg cta-btn">Create Your Free Game</a>
       </div>
     </div>
   </section>
@@ -194,10 +234,13 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text-secondary);
   }
 
-  /* ── Pricing Card ───────────────── */
-  .pricing-card-wrapper {
-    display: flex;
-    justify-content: center;
+  /* ── Pricing Cards ──────────────── */
+  .pricing-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 860px;
+    margin: 0 auto;
   }
 
   .pricing-card {
@@ -206,11 +249,15 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid var(--border-light);
     border-radius: var(--radius-xl);
     padding: 48px 40px;
-    max-width: 420px;
     width: 100%;
     text-align: center;
     box-shadow: var(--shadow-lg);
     overflow: hidden;
+  }
+
+  .pricing-card-free {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 30px rgba(62, 235, 212, 0.08);
   }
 
   .pricing-card-glow {
@@ -222,6 +269,10 @@ import Layout from '../layouts/Layout.astro';
     height: 120px;
     background: radial-gradient(ellipse, rgba(46, 204, 94, 0.12), transparent 70%);
     pointer-events: none;
+  }
+
+  .pricing-card-glow-cyan {
+    background: radial-gradient(ellipse, rgba(62, 235, 212, 0.12), transparent 70%);
   }
 
   .pricing-card-header {
@@ -251,6 +302,22 @@ import Layout from '../layouts/Layout.astro';
     -webkit-text-fill-color: transparent;
     background-clip: text;
     line-height: 1;
+  }
+
+  .pricing-value-cyan {
+    background: linear-gradient(135deg, var(--accent-cyan), #7df9e7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .pricing-dollar-cyan {
+    color: var(--accent-cyan);
+  }
+
+  .feature-check-cyan {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 6px rgba(62, 235, 212, 0.4);
   }
 
   .pricing-label {
@@ -417,6 +484,10 @@ import Layout from '../layouts/Layout.astro';
 
   /* ── Responsive ─────────────────── */
   @media (max-width: 600px) {
+    .pricing-card-grid {
+      grid-template-columns: 1fr;
+    }
+
     .pricing-card {
       padding: 32px 24px;
     }

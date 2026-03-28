@@ -17,9 +17,10 @@ import Layout from '../layouts/Layout.astro';
           — complete with art, code, and a compiled executable.
         </p>
         <div class="hero-buttons">
-          <a href="/create" class="btn btn-primary btn-lg">Create a Game — $14.99</a>
+          <a href="/create" class="btn btn-primary btn-lg">Create Your First Game Free</a>
           <a href="#how-it-works" class="btn btn-lg">See How It Works</a>
         </div>
+        <p class="hero-free-note">No credit card required. Your first game is on us.</p>
       </div>
 
       <div class="terminal hero-terminal">
@@ -123,17 +124,31 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- Pricing -->
   <section class="section">
-    <div class="container-narrow" style="text-align: center;">
-      <div class="card pricing-card">
-        <div class="pricing-amount">$14.99</div>
-        <div class="pricing-label">per game</div>
-        <ul class="pricing-features">
-          <li>Full Godot 4 project</li>
-          <li>AI-generated art assets</li>
-          <li>Compiled Windows executable</li>
-          <li>Delivered in ~15-30 minutes</li>
-        </ul>
-        <a href="/create" class="btn btn-primary btn-lg">Create Your Game</a>
+    <div class="container" style="text-align: center;">
+      <div class="pricing-grid">
+        <div class="card pricing-card pricing-free">
+          <span class="pricing-badge">Free</span>
+          <div class="pricing-amount">$0</div>
+          <div class="pricing-label">first game</div>
+          <ul class="pricing-features">
+            <li>Full Godot 4 project</li>
+            <li>AI-generated art assets</li>
+            <li>Compiled Windows executable</li>
+            <li>Just verify your phone number</li>
+          </ul>
+          <a href="/create" class="btn btn-primary btn-lg">Try It Free</a>
+        </div>
+        <div class="card pricing-card">
+          <div class="pricing-amount">$14.99</div>
+          <div class="pricing-label">per game after</div>
+          <ul class="pricing-features">
+            <li>Everything in free tier</li>
+            <li>Unlimited games</li>
+            <li>No restrictions on output</li>
+            <li>Delivered in ~15-30 minutes</li>
+          </ul>
+          <a href="/create" class="btn btn-lg">Create a Game</a>
+        </div>
       </div>
     </div>
   </section>
@@ -148,6 +163,14 @@ import Layout from '../layouts/Layout.astro';
       </div>
       <div class="faq-list">
         <details class="faq-item">
+          <summary>Is the first game really free?</summary>
+          <p>Yes. Verify your phone number and generate one complete game at no cost. No credit card required. The free game includes everything — same quality, same output as paid games.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why do I need to verify my phone?</summary>
+          <p>Phone verification ensures one free game per person. It takes 30 seconds — we send a code, you enter it, and you're generating.</p>
+        </details>
+        <details class="faq-item">
           <summary>How long does generation take?</summary>
           <p>Most games are ready in 15-30 minutes, depending on complexity.</p>
         </details>
@@ -158,10 +181,6 @@ import Layout from '../layouts/Layout.astro';
         <details class="faq-item">
           <summary>Can I edit the game after?</summary>
           <p>Yes! You receive the complete Godot project. Open it in Godot and modify anything.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What platforms can the game run on?</summary>
-          <p>We currently export Windows executables. Mac and Linux exports are coming soon.</p>
         </details>
         <details class="faq-item">
           <summary>What if generation fails?</summary>
@@ -177,7 +196,8 @@ import Layout from '../layouts/Layout.astro';
   <section class="section">
     <div class="container" style="text-align: center;">
       <h2 class="gradient-text cta-heading">Ready to build your game?</h2>
-      <a href="/create" class="btn btn-primary btn-lg" style="margin-top: 24px;">Create a Game — $14.99</a>
+      <p class="cta-sub">Your first one's free. No credit card needed.</p>
+      <a href="/create" class="btn btn-primary btn-lg" style="margin-top: 24px;">Create Your Free Game</a>
     </div>
   </section>
 
@@ -215,6 +235,14 @@ import Layout from '../layouts/Layout.astro';
     gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .hero-free-note {
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent-cyan);
+    letter-spacing: 0.3px;
   }
 
   .hero-terminal {
@@ -315,52 +343,90 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.7;
   }
 
-  /* ── Pricing card ──────────────────────────── */
+  /* ── Pricing cards ─────────────────────────── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
   .pricing-card {
-    display: inline-block;
     text-align: center;
-    padding: 48px 56px;
-    border-color: var(--accent-green);
-    box-shadow: var(--glow-green);
+    padding: 40px 32px;
+    position: relative;
+  }
+
+  .pricing-free {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 30px rgba(62, 235, 212, 0.1);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-cyan);
+    color: var(--bg-primary);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 20px;
+    border-radius: 0 0 var(--radius) var(--radius);
   }
 
   .pricing-amount {
     font-family: var(--font-mono);
-    font-size: 56px;
+    font-size: 48px;
     color: var(--accent-green);
     text-shadow: 0 0 30px rgba(46, 204, 94, 0.3);
     line-height: 1;
+    margin-top: 8px;
+  }
+
+  .pricing-free .pricing-amount {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 30px rgba(62, 235, 212, 0.3);
   }
 
   .pricing-label {
     font-family: var(--font-mono);
-    font-size: 16px;
+    font-size: 14px;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .pricing-features {
     list-style: none;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
+    text-align: left;
   }
 
   .pricing-features li {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--text-secondary);
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .pricing-features li:last-child {
-    border-bottom: none;
+    padding: 6px 0;
   }
 
   .pricing-features li::before {
     content: "\2713 ";
     color: var(--accent-green);
     margin-right: 8px;
+  }
+
+  .pricing-free .pricing-features li::before {
+    color: var(--accent-cyan);
+  }
+
+  .pricing-card .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   /* ── FAQ ────────────────────────────────────── */
@@ -426,10 +492,19 @@ import Layout from '../layouts/Layout.astro';
     letter-spacing: 1px;
   }
 
+  .cta-sub {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--accent-cyan);
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+  }
+
   /* ── Mobile adjustments ────────────────────── */
   @media (max-width: 600px) {
     .hero { padding-top: 48px; }
     .hero h1 { font-size: 24px; }
+    .pricing-grid { grid-template-columns: 1fr; }
     .pricing-card { padding: 32px 24px; }
     .pricing-amount { font-size: 42px; }
   }
