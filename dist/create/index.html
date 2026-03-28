@@ -1,0 +1,320 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Describe a game in plain language and get a playable executable in minutes."><meta property="og:title" content="Create Your Game — CircuitBot"><meta property="og:description" content="Describe a game in plain language and get a playable executable in minutes."><meta property="og:type" content="website"><meta property="og:site_name" content="CircuitBot"><meta name="twitter:card" content="summary_large_image"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>Create Your Game — CircuitBot</title><link rel="stylesheet" href="/_astro/create.jvJuQXd8.css">
+<link rel="stylesheet" href="/_astro/create.B87uhENc.css"></head> <body> <div class="top-accent"></div> <nav class="nav" data-astro-cid-dmqpwcec> <div class="container nav-inner" data-astro-cid-dmqpwcec> <a href="/" class="nav-brand" data-astro-cid-dmqpwcec> <span class="nav-logo-ring" data-astro-cid-dmqpwcec> <span class="nav-logo" data-astro-cid-dmqpwcec>CB</span> </span> <span class="nav-name" data-astro-cid-dmqpwcec>CircuitBot</span> </a> <div class="nav-links hide-mobile" data-astro-cid-dmqpwcec> <a href="/" class="nav-link" data-astro-cid-dmqpwcec> Home </a><a href="/create" class="nav-link active" data-astro-cid-dmqpwcec> Create Game </a><a href="/pricing" class="nav-link" data-astro-cid-dmqpwcec> Pricing </a><a href="/my-games" class="nav-link" data-astro-cid-dmqpwcec> My Games </a><a href="/download" class="nav-link" data-astro-cid-dmqpwcec> Desktop App </a> </div> <div class="nav-actions" data-astro-cid-dmqpwcec> <a href="/login" class="btn btn-ghost nav-login hide-mobile" id="nav-login-btn" data-astro-cid-dmqpwcec>Log in</a> <a href="#" class="btn btn-ghost nav-login hide-mobile" id="nav-logout-btn" style="display:none;" data-astro-cid-dmqpwcec>Log out</a> <a href="/create" class="btn btn-primary nav-cta" data-astro-cid-dmqpwcec>Create a Game</a> </div> <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" data-astro-cid-dmqpwcec> <span data-astro-cid-dmqpwcec></span><span data-astro-cid-dmqpwcec></span><span data-astro-cid-dmqpwcec></span> </button> </div> <div class="nav-mobile" id="nav-mobile" data-astro-cid-dmqpwcec> <a href="/" class="nav-mobile-link" data-astro-cid-dmqpwcec>Home</a><a href="/create" class="nav-mobile-link" data-astro-cid-dmqpwcec>Create Game</a><a href="/pricing" class="nav-mobile-link" data-astro-cid-dmqpwcec>Pricing</a><a href="/my-games" class="nav-mobile-link" data-astro-cid-dmqpwcec>My Games</a><a href="/download" class="nav-mobile-link" data-astro-cid-dmqpwcec>Desktop App</a> <a href="/login" class="nav-mobile-link" data-astro-cid-dmqpwcec>Log in</a> </div> </nav>  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('nav-toggle');
+    var mobile = document.getElementById('nav-mobile');
+    if (toggle && mobile) {
+      toggle.addEventListener('click', function() { mobile.classList.toggle('open'); });
+    }
+
+    // Auth state
+    var token = localStorage.getItem('token');
+    var loginBtn = document.getElementById('nav-login-btn');
+    var logoutBtn = document.getElementById('nav-logout-btn');
+    if (token) {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = '';
+      logoutBtn && logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      });
+    }
+  });
+</script> <main style="padding-top: var(--nav-height); overflow-x: hidden; max-width: 100vw;">   <section class="section create-hero" data-astro-cid-lmopy5a2> <div class="container" data-astro-cid-lmopy5a2> <div class="bg-grid" data-astro-cid-lmopy5a2></div> <div class="section-header" data-astro-cid-lmopy5a2> <span class="badge badge-green" data-astro-cid-lmopy5a2>New Game</span> <h1 class="create-title" data-astro-cid-lmopy5a2>Create Your <span class="gradient-text" data-astro-cid-lmopy5a2>Game</span></h1> <p data-astro-cid-lmopy5a2>Describe what you want to build. We handle the rest.</p> </div> </div> </section> <hr class="divider" data-astro-cid-lmopy5a2>  <section class="section" data-astro-cid-lmopy5a2> <div class="container-narrow" data-astro-cid-lmopy5a2> <div class="prompt-wrapper" data-astro-cid-lmopy5a2> <div class="terminal" data-astro-cid-lmopy5a2> <div class="terminal-bar" data-astro-cid-lmopy5a2> <span class="terminal-dot red" data-astro-cid-lmopy5a2></span> <span class="terminal-dot yellow" data-astro-cid-lmopy5a2></span> <span class="terminal-dot green" data-astro-cid-lmopy5a2></span> <span class="terminal-title" data-astro-cid-lmopy5a2>game prompt</span> </div> <div class="terminal-body prompt-body" data-astro-cid-lmopy5a2> <label for="game-prompt" class="prompt-label" data-astro-cid-lmopy5a2>// describe your game</label> <textarea id="game-prompt" class="prompt-textarea" placeholder="Describe the game you want to create. Be as specific as you'd like — genre, mechanics, art style, story..." rows="8" data-astro-cid-lmopy5a2></textarea> </div> </div> <!-- Example Chips --> <div class="chips-section" data-astro-cid-lmopy5a2> <p class="chips-label" data-astro-cid-lmopy5a2>Try an example:</p> <div class="chips-row" data-astro-cid-lmopy5a2> <button class="chip" data-prompt="A retro pixel-art roguelike dungeon crawler with procedural levels, permadeath, and loot drops" data-astro-cid-lmopy5a2>
+A retro pixel-art roguelike dungeon crawler
+</button> <button class="chip" data-prompt="A 2D platformer with a cute cat protagonist who collects fish and avoids dogs across colorful levels" data-astro-cid-lmopy5a2>
+A 2D platformer with a cute cat protagonist
+</button> <button class="chip" data-prompt="A tower defense game with medieval theme, upgradeable towers, and wave-based enemy progression" data-astro-cid-lmopy5a2>
+A tower defense game with medieval theme
+</button> <button class="chip" data-prompt="A space shooter with procedural enemy waves, power-ups, and a boss fight every 5 waves" data-astro-cid-lmopy5a2>
+A space shooter with procedural enemy waves
+</button> </div> </div> </div> </div> </section> <hr class="divider" data-astro-cid-lmopy5a2>  <section class="section" data-astro-cid-lmopy5a2> <div class="container-narrow" data-astro-cid-lmopy5a2> <div class="price-card" data-astro-cid-lmopy5a2> <div class="price-amount" data-astro-cid-lmopy5a2> <span class="price-dollar" data-astro-cid-lmopy5a2>$</span> <span class="price-value" data-astro-cid-lmopy5a2>14.99</span> </div> <p class="price-subtitle" data-astro-cid-lmopy5a2>One game, fully generated</p> <ul class="price-includes" data-astro-cid-lmopy5a2> <li data-astro-cid-lmopy5a2><span class="check" data-astro-cid-lmopy5a2>+</span> Complete Godot 4 project</li> <li data-astro-cid-lmopy5a2><span class="check" data-astro-cid-lmopy5a2>+</span> AI-generated art assets</li> <li data-astro-cid-lmopy5a2><span class="check" data-astro-cid-lmopy5a2>+</span> Compiled Windows executable</li> <li data-astro-cid-lmopy5a2><span class="check" data-astro-cid-lmopy5a2>+</span> Source code included</li> </ul> <button id="generate-btn" class="btn btn-primary btn-lg generate-btn" data-astro-cid-lmopy5a2>
+Generate My Game — $14.99
+</button> <!-- Free Trial --> <div id="free-trial-section" class="free-trial-section" style="display: none;" data-astro-cid-lmopy5a2> <div class="free-trial-divider" data-astro-cid-lmopy5a2><span data-astro-cid-lmopy5a2>or</span></div> <button id="free-trial-btn" class="btn btn-secondary btn-lg free-trial-btn" data-astro-cid-lmopy5a2>
+Try Free — Verify Phone
+</button> <p class="free-trial-note" data-astro-cid-lmopy5a2>One free game per account. Phone verification required.</p> </div> <p class="disclaimer" data-astro-cid-lmopy5a2>
+By clicking generate, you agree to our <a href="/terms" data-astro-cid-lmopy5a2>Terms of Service</a>.
+          Generation takes ~15-30 minutes.
+</p> </div> </div> </section>  <div id="phone-modal" class="modal-overlay" style="display: none;" data-astro-cid-lmopy5a2> <div class="modal-card" data-astro-cid-lmopy5a2> <button class="modal-close" id="modal-close" data-astro-cid-lmopy5a2>&times;</button> <h2 class="modal-title" data-astro-cid-lmopy5a2>Verify Phone Number</h2> <p class="modal-sub" data-astro-cid-lmopy5a2>We'll text you a 6-digit code to verify your identity.</p> <!-- Step 1: Enter phone --> <div id="phone-step-1" data-astro-cid-lmopy5a2> <div class="form-group" data-astro-cid-lmopy5a2> <label for="phone-input" class="form-label" data-astro-cid-lmopy5a2>Phone Number</label> <input type="tel" id="phone-input" class="form-input" placeholder="+1 (555) 123-4567" data-astro-cid-lmopy5a2> </div> <button id="send-code-btn" class="btn btn-primary modal-btn" data-astro-cid-lmopy5a2>Send Code</button> </div> <!-- Step 2: Enter code --> <div id="phone-step-2" style="display: none;" data-astro-cid-lmopy5a2> <p class="modal-phone-display" data-astro-cid-lmopy5a2>Code sent to <span id="modal-phone-display" data-astro-cid-lmopy5a2></span></p> <div class="form-group" data-astro-cid-lmopy5a2> <label for="code-input" class="form-label" data-astro-cid-lmopy5a2>Verification Code</label> <input type="text" id="code-input" class="form-input code-input" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*" data-astro-cid-lmopy5a2> </div> <button id="verify-code-btn" class="btn btn-primary modal-btn" data-astro-cid-lmopy5a2>Verify</button> <button id="resend-btn" class="btn-link" data-astro-cid-lmopy5a2>Resend code</button> </div> <p id="modal-error" class="modal-error" style="display: none;" data-astro-cid-lmopy5a2></p> </div> </div>  <div id="error-toast" class="error-toast" style="display: none;" data-astro-cid-lmopy5a2></div>  </main> <footer class="footer" data-astro-cid-sz7xmlte> <div class="container" data-astro-cid-sz7xmlte> <div class="divider" data-astro-cid-sz7xmlte></div> <div class="footer-inner" data-astro-cid-sz7xmlte> <div class="footer-brand" data-astro-cid-sz7xmlte> <div class="footer-logo-ring" data-astro-cid-sz7xmlte> <span class="footer-logo" data-astro-cid-sz7xmlte>CB</span> </div> <div data-astro-cid-sz7xmlte> <div class="footer-name" data-astro-cid-sz7xmlte>CircuitBot</div> <div class="footer-tagline" data-astro-cid-sz7xmlte>AI-powered game generator</div> </div> </div> <div class="footer-links" data-astro-cid-sz7xmlte> <div class="footer-col" data-astro-cid-sz7xmlte> <h4 data-astro-cid-sz7xmlte>Product</h4> <a href="/create" data-astro-cid-sz7xmlte>Create Game</a> <a href="/pricing" data-astro-cid-sz7xmlte>Pricing</a> <a href="/my-games" data-astro-cid-sz7xmlte>My Games</a> </div> <div class="footer-col" data-astro-cid-sz7xmlte> <h4 data-astro-cid-sz7xmlte>Resources</h4> <a href="/download" data-astro-cid-sz7xmlte>Desktop App</a> <a href="/#how-it-works" data-astro-cid-sz7xmlte>How It Works</a> <a href="/#faq" data-astro-cid-sz7xmlte>FAQ</a> </div> <div class="footer-col" data-astro-cid-sz7xmlte> <h4 data-astro-cid-sz7xmlte>Legal</h4> <a href="/privacy" data-astro-cid-sz7xmlte>Privacy Policy</a> <a href="/terms" data-astro-cid-sz7xmlte>Terms of Service</a> </div> </div> </div> <div class="footer-bottom" data-astro-cid-sz7xmlte> <span data-astro-cid-sz7xmlte>&copy; 2026 CircuitBot. All rights reserved.</span> <span class="footer-status" data-astro-cid-sz7xmlte> <span class="status-dot" data-astro-cid-sz7xmlte></span>
+Describe it. We build it.
+</span> </div> </div> </footer>  </body></html> <script>
+  var API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://circuitbot-api-production.up.railway.app';
+
+  var _freeTrialEligible = false;
+  var _phoneVerified = false;
+  var _pendingPhone = '';
+
+  // On load: check free trial eligibility
+  (function checkTrialEligibility() {
+    var token = localStorage.getItem('token');
+    if (!token) return;
+
+    fetch(API_BASE + '/api/auth/phone/status', {
+      headers: { 'Authorization': 'Bearer ' + token },
+    })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (!data) return;
+      _phoneVerified = data.phone_verified;
+      _freeTrialEligible = data.free_trial_eligible;
+
+      var section = document.getElementById('free-trial-section');
+      var btn = document.getElementById('free-trial-btn');
+      if (section && (_freeTrialEligible || !_phoneVerified)) {
+        section.style.display = 'block';
+      }
+      if (btn && _freeTrialEligible) {
+        btn.textContent = 'Generate Free';
+      }
+    })
+    .catch(function() {});
+  })();
+
+  // Chip click -> fill textarea
+  document.querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      var textarea = document.getElementById('game-prompt');
+      if (textarea) {
+        textarea.value = chip.getAttribute('data-prompt') || chip.textContent.trim() || '';
+        textarea.focus();
+      }
+      document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('chip-active'); });
+      chip.classList.add('chip-active');
+    });
+  });
+
+  // --- Paid Generate ---
+  var genBtn = document.getElementById('generate-btn');
+  if (genBtn) {
+    genBtn.addEventListener('click', function() {
+      startGeneration(false);
+    });
+  }
+
+  // --- Free Trial ---
+  var freeTrialBtn = document.getElementById('free-trial-btn');
+  if (freeTrialBtn) {
+    freeTrialBtn.addEventListener('click', function() {
+      var token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login?redirect=' + encodeURIComponent('/create');
+        return;
+      }
+      if (!_phoneVerified) {
+        openPhoneModal();
+        return;
+      }
+      startGeneration(true);
+    });
+  }
+
+  function startGeneration(isFreeTrial) {
+    var textarea = document.getElementById('game-prompt');
+    var prompt = textarea ? textarea.value.trim() : '';
+
+    if (!prompt) {
+      showError('Please describe the game you want to create.');
+      if (textarea) textarea.focus();
+      return;
+    }
+
+    var token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/login?redirect=' + encodeURIComponent('/create');
+      return;
+    }
+
+    var activeBtn = isFreeTrial ? freeTrialBtn : genBtn;
+    activeBtn.disabled = true;
+    activeBtn.textContent = 'Creating job...';
+
+    // Step 1: Create game job
+    fetch(API_BASE + '/api/games', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({ prompt: prompt }),
+    })
+    .then(function(jobRes) {
+      if (!jobRes.ok) return jobRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create game job'); });
+      return jobRes.json();
+    })
+    .then(function(job) {
+      if (isFreeTrial) {
+        // Step 2a: Claim free trial
+        return fetch(API_BASE + '/api/billing/free-trial', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({ game_job_id: job.id }),
+        }).then(function(r) {
+          if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Free trial failed'); });
+          return r.json();
+        }).then(function(result) {
+          window.location.href = '/status?id=' + result.job_id;
+        });
+      } else {
+        // Step 2b: Stripe checkout
+        return fetch(API_BASE + '/api/billing/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({ game_job_id: job.id }),
+        }).then(function(checkoutRes) {
+          if (!checkoutRes.ok) return checkoutRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create checkout'); });
+          return checkoutRes.json();
+        }).then(function(checkout) {
+          if (checkout.checkout_url) {
+            window.location.href = checkout.checkout_url;
+          } else {
+            throw new Error('No checkout URL returned');
+          }
+        });
+      }
+    })
+    .catch(function(err) {
+      showError(err.message || 'Something went wrong. Please try again.');
+      activeBtn.disabled = false;
+      activeBtn.textContent = isFreeTrial ? 'Generate Free' : 'Generate My Game — $14.99';
+    });
+  }
+
+  // --- Phone Verification Modal ---
+  function openPhoneModal() {
+    document.getElementById('phone-modal').style.display = 'flex';
+    document.getElementById('phone-step-1').style.display = 'block';
+    document.getElementById('phone-step-2').style.display = 'none';
+    document.getElementById('modal-error').style.display = 'none';
+  }
+
+  function closePhoneModal() {
+    document.getElementById('phone-modal').style.display = 'none';
+  }
+
+  document.getElementById('modal-close').addEventListener('click', closePhoneModal);
+  document.getElementById('phone-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePhoneModal();
+  });
+
+  function showModalError(msg) {
+    var el = document.getElementById('modal-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function normalizePhone(raw) {
+    var digits = raw.replace(/[^0-9+]/g, '');
+    if (digits.length === 10) digits = '+1' + digits;
+    if (!digits.startsWith('+')) digits = '+' + digits;
+    return digits;
+  }
+
+  // Send code
+  document.getElementById('send-code-btn').addEventListener('click', function() {
+    var phoneRaw = document.getElementById('phone-input').value.trim();
+    if (!phoneRaw) { showModalError('Enter your phone number.'); return; }
+    var phone = normalizePhone(phoneRaw);
+    _pendingPhone = phone;
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    document.getElementById('modal-error').style.display = 'none';
+
+    var token = localStorage.getItem('token');
+    fetch(API_BASE + '/api/auth/phone/send-code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({ phone_number: phone }),
+    })
+    .then(function(r) {
+      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Failed to send code'); });
+      return r.json();
+    })
+    .then(function() {
+      // Show step 2
+      document.getElementById('phone-step-1').style.display = 'none';
+      document.getElementById('phone-step-2').style.display = 'block';
+      document.getElementById('modal-phone-display').textContent = phone;
+      document.getElementById('code-input').focus();
+    })
+    .catch(function(err) {
+      showModalError(err.message);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'Send Code';
+    });
+  });
+
+  // Verify code
+  document.getElementById('verify-code-btn').addEventListener('click', function() {
+    var code = document.getElementById('code-input').value.trim();
+    if (code.length !== 6) { showModalError('Enter the 6-digit code.'); return; }
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    document.getElementById('modal-error').style.display = 'none';
+
+    var token = localStorage.getItem('token');
+    fetch(API_BASE + '/api/auth/phone/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify({ phone_number: _pendingPhone, code: code }),
+    })
+    .then(function(r) {
+      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Verification failed'); });
+      return r.json();
+    })
+    .then(function(data) {
+      _phoneVerified = true;
+      _freeTrialEligible = data.free_trial_eligible;
+      closePhoneModal();
+      // Update button state
+      if (_freeTrialEligible && freeTrialBtn) {
+        freeTrialBtn.textContent = 'Generate Free';
+      }
+      // Auto-trigger free generation
+      startGeneration(true);
+    })
+    .catch(function(err) {
+      showModalError(err.message);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'Verify';
+    });
+  });
+
+  // Resend
+  document.getElementById('resend-btn').addEventListener('click', function() {
+    document.getElementById('phone-step-2').style.display = 'none';
+    document.getElementById('phone-step-1').style.display = 'block';
+    document.getElementById('modal-error').style.display = 'none';
+  });
+
+  function showError(msg) {
+    var toast = document.getElementById('error-toast');
+    if (toast) {
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(function() { toast.style.display = 'none'; }, 5000);
+    }
+  }
+</script> 
