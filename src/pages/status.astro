@@ -403,11 +403,10 @@ import Layout from '../layouts/Layout.astro';
     id: string;
     prompt: string;
     status: string;
-    progress?: number;
-    stage?: string;
-    stages_completed?: string[];
+    progress_pct: number;
+    progress_message?: string;
     error_message?: string;
-    file_size?: number;
+    artifact_size_bytes?: number;
     created_at: string;
   }
 
@@ -426,31 +425,25 @@ import Layout from '../layouts/Layout.astro';
 
     document.getElementById('prog-prompt')!.textContent = job.prompt;
 
-    const pct = job.progress ?? 0;
+    const pct = job.progress_pct ?? 0;
     document.getElementById('prog-bar')!.style.width = pct + '%';
     document.getElementById('prog-pct')!.textContent = pct + '%';
-    document.getElementById('prog-stage')!.textContent = STAGE_LABELS[job.stage ?? ''] ?? job.stage ?? '';
 
-    // Build log lines
+    const msg = job.progress_message ?? '';
+    document.getElementById('prog-stage')!.textContent = msg;
+
+    // Build log lines from progress message
     const logEl = document.getElementById('prog-log')!;
-    logEl.innerHTML = '';
-    const completed = job.stages_completed ?? [];
-    const allStages = Object.keys(STAGE_LABELS);
-
-    for (const key of allStages) {
+    if (msg) {
       const line = document.createElement('div');
-      line.className = 'log-line';
-
-      if (completed.includes(key)) {
-        line.classList.add('done');
-        line.textContent = '\u2713 ' + STAGE_LABELS[key].replace('...', ' \u2014 done');
-      } else if (job.stage === key) {
-        line.classList.add('active');
-        line.textContent = '\u25B6 ' + STAGE_LABELS[key];
-      } else {
-        line.textContent = '\u25CB ' + STAGE_LABELS[key].replace('...', '');
+      line.className = 'log-line active';
+      line.textContent = '\u25B6 ' + msg;
+      // Only append if not duplicate of last line
+      const lastLine = logEl.lastElementChild;
+      if (!lastLine || lastLine.textContent !== line.textContent) {
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
       }
-      logEl.appendChild(line);
     }
 
     startPolling();
@@ -463,8 +456,8 @@ import Layout from '../layouts/Layout.astro';
 
     document.getElementById('comp-prompt')!.textContent = job.prompt;
 
-    if (job.file_size) {
-      document.getElementById('comp-size')!.textContent = 'File size: ' + formatBytes(job.file_size);
+    if (job.artifact_size_bytes) {
+      document.getElementById('comp-size')!.textContent = 'File size: ' + formatBytes(job.artifact_size_bytes);
     }
 
     // Fetch presigned download URL
@@ -475,7 +468,7 @@ import Layout from '../layouts/Layout.astro';
       });
       if (res.ok) {
         const data = await res.json();
-        (document.getElementById('comp-download') as HTMLAnchorElement).href = data.url;
+        (document.getElementById('comp-download') as HTMLAnchorElement).href = data.download_url;
       }
     } catch { /* download link will remain # */ }
   }
