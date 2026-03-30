@@ -57,6 +57,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="working-dot d2"></span>
             <span class="working-dot d3"></span>
             <span>Working</span>
+            <span id="elapsed-timer" class="elapsed-timer"></span>
           </div>
         </div>
 
@@ -68,7 +69,51 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <p id="comp-prompt" class="prompt-text" style="margin-bottom:1rem;"></p>
           <p id="comp-size" class="file-size"></p>
-          <a id="comp-download" href="#" class="btn btn-primary btn-lg download-btn">Download Game</a>
+          <a id="comp-download" href="#" class="btn btn-yellow btn-lg download-btn" onclick="onDownloadClick(event)">Download Your Game</a>
+
+          <!-- Learning guide container — appears when download starts -->
+          <div id="learn-container" class="learn-container" style="display:none;">
+            <div class="learn-header">
+              <span class="learn-icon">&#128218;</span>
+              <div>
+                <h3 class="learn-title">How Your Game Works</h3>
+                <p class="learn-subtitle">A beginner-friendly breakdown of every script and mechanic</p>
+              </div>
+            </div>
+            <div class="learn-loading" id="learn-loading">
+              <div class="loader-ring"></div>
+              <p>Loading your personalized learning guide...</p>
+            </div>
+            <iframe id="learn-frame" class="learn-frame" style="display:none;" sandbox="allow-same-origin"></iframe>
+          </div>
+
+          <div class="your-turn-block">
+            <img src="/circuitbot.png" alt="CircuitBot" class="your-turn-mini-mascot" />
+            <h3 class="your-turn-mini-title">Learn Godot By Building</h3>
+            <p class="your-turn-mini-text">
+              This is a real <span style="color: #4582c7;">Godot 4</span> project with a personalized guide that explains
+              every line of code. Open it up, read the guide, change things — that is how you learn game dev.
+            </p>
+            <div class="your-turn-mini-links">
+              <a href="https://godotengine.org/download/" target="_blank" rel="noopener" class="btn btn-primary">Get Godot Engine</a>
+              <a href="https://docs.godotengine.org/en/stable/getting_started/introduction/index.html" target="_blank" rel="noopener" class="btn">Learn Godot</a>
+            </div>
+          </div>
+
+          <!-- Edit / Request Changes (admin only) -->
+          <div id="edit-section" class="edit-section" style="display:none;">
+            <div class="edit-header">
+              <span class="edit-icon">&#9998;</span>
+              <div>
+                <h3 class="edit-title">Request Changes</h3>
+                <p class="edit-subtitle">Describe bugs, improvements, or changes you want applied</p>
+              </div>
+            </div>
+            <textarea id="edit-instructions" class="edit-textarea" rows="5" placeholder="e.g. The player can walk through walls. Also make the jump higher and add a score counter in the top-right corner."></textarea>
+            <button id="edit-submit" class="btn btn-primary edit-submit" onclick="submitEdit()">Apply Changes</button>
+            <p id="edit-error" class="edit-error" style="display:none;"></p>
+          </div>
+
           <a href="/create" class="btn create-another">Create Another Game</a>
         </div>
 
@@ -116,7 +161,7 @@ import Layout from '../layouts/Layout.astro';
     width: 40px;
     height: 40px;
     border: 3px solid var(--border, #333);
-    border-top-color: var(--accent-green);
+    border-top-color: var(--accent-blue);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -125,8 +170,8 @@ import Layout from '../layouts/Layout.astro';
 
   /* ---------- Status card shell ---------- */
   .status-card {
-    background: var(--bg-card, #161b22);
-    border: 1px solid var(--border, #30363d);
+    background: var(--bg-card, #2c2e2d);
+    border: 1px solid var(--border, #353738);
     border-radius: 14px;
     padding: 2rem;
     display: flex;
@@ -146,7 +191,7 @@ import Layout from '../layouts/Layout.astro';
   .prompt-text {
     font-family: var(--font-mono);
     font-size: 0.9rem;
-    color: var(--text-primary, #e6edf3);
+    color: var(--text-primary, #e0e0e0);
     line-height: 1.6;
     margin: 0.35rem 0 0;
   }
@@ -158,8 +203,8 @@ import Layout from '../layouts/Layout.astro';
     position: relative;
     width: 100%;
     height: 22px;
-    background: var(--bg-secondary, #0d1117);
-    border: 1px solid var(--border, #30363d);
+    background: var(--bg-secondary, #202125);
+    border: 1px solid var(--border, #353738);
     border-radius: 6px;
     overflow: hidden;
   }
@@ -167,11 +212,17 @@ import Layout from '../layouts/Layout.astro';
   .progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--accent-green), #00e4a0, var(--accent-cyan));
+    background: linear-gradient(90deg, var(--accent-blue), #5ea8e0, var(--accent-yellow));
     border-radius: 5px;
     transition: width 0.6s ease;
     position: relative;
     z-index: 1;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: 0.85; filter: brightness(1.3); }
   }
 
   /* Scanning line effect */
@@ -181,7 +232,7 @@ import Layout from '../layouts/Layout.astro';
     left: -40%;
     width: 40%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 135, 0.25), transparent);
+    background: linear-gradient(90deg, transparent, rgba(69, 130, 199, 0.25), transparent);
     z-index: 2;
     animation: scan 2s ease-in-out infinite;
   }
@@ -201,7 +252,7 @@ import Layout from '../layouts/Layout.astro';
     font-family: var(--font-mono);
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--accent-green);
+    color: var(--accent-blue);
   }
 
   .progress-stage {
@@ -212,10 +263,10 @@ import Layout from '../layouts/Layout.astro';
 
   /* ---------- Terminal log ---------- */
   .terminal-log {
-    border: 1px solid var(--border, #30363d);
+    border: 1px solid var(--border, #353738);
     border-radius: 10px;
     overflow: hidden;
-    background: #0a0e14;
+    background: #181a1c;
   }
 
   .terminal-log-bar {
@@ -224,7 +275,7 @@ import Layout from '../layouts/Layout.astro';
     gap: 6px;
     padding: 0.5rem 0.75rem;
     background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--border, #30363d);
+    border-bottom: 1px solid var(--border, #353738);
   }
 
   .terminal-dot {
@@ -232,7 +283,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .terminal-dot.red    { background: #ff5f57; }
   .terminal-dot.yellow { background: #febc2e; }
-  .terminal-dot.green  { background: #28c840; }
+  .terminal-dot.green  { background: #4582c7; }
 
   .terminal-log-title {
     margin-left: 0.5rem;
@@ -259,8 +310,8 @@ import Layout from '../layouts/Layout.astro';
     animation: fadeIn 0.4s forwards;
   }
 
-  .log-line.done { color: var(--accent-green); }
-  .log-line.active { color: var(--accent-cyan); }
+  .log-line.done { color: var(--accent-blue); }
+  .log-line.active { color: var(--accent-yellow); }
 
   @keyframes fadeIn {
     to { opacity: 1; }
@@ -280,11 +331,17 @@ import Layout from '../layouts/Layout.astro';
   .working-dot {
     width: 5px; height: 5px;
     border-radius: 50%;
-    background: var(--accent-green);
+    background: var(--accent-blue);
     animation: bounce 1.2s ease-in-out infinite;
   }
   .working-dot.d2 { animation-delay: 0.15s; }
   .working-dot.d3 { animation-delay: 0.3s; }
+
+  .elapsed-timer {
+    margin-left: 0.5rem;
+    color: var(--text-muted, #666);
+    font-variant-numeric: tabular-nums;
+  }
 
   @keyframes bounce {
     0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
@@ -300,15 +357,13 @@ import Layout from '../layouts/Layout.astro';
 
   .complete-check {
     font-size: 2rem;
-    color: var(--accent-green);
-    text-shadow: 0 0 20px rgba(0, 255, 135, 0.5);
+    color: var(--accent-yellow);
     line-height: 1;
   }
 
   .complete-title {
     margin: 0;
-    color: var(--accent-green);
-    text-shadow: 0 0 30px rgba(0, 255, 135, 0.3);
+    color: var(--text-primary);
   }
 
   .file-size {
@@ -328,7 +383,173 @@ import Layout from '../layouts/Layout.astro';
     text-decoration: none;
     color: var(--text-muted, #888);
   }
-  .create-another:hover { color: var(--accent-cyan); }
+  .create-another:hover { color: var(--accent-yellow); }
+
+  /* ---------- Learning Guide ---------- */
+  .learn-container {
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #181a1c;
+    animation: slideDown 0.4s ease-out;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .learn-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(69, 130, 199, 0.08);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .learn-icon { font-size: 1.5rem; }
+
+  .learn-title {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--accent-blue);
+  }
+
+  .learn-subtitle {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .learn-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .learn-frame {
+    width: 100%;
+    min-height: 600px;
+    border: none;
+    background: #1a1a2e;
+  }
+
+  /* ---------- Your Turn block ---------- */
+  .your-turn-block {
+    text-align: center;
+    padding: 28px 24px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .your-turn-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-yellow), #ff9f43, var(--accent-yellow));
+  }
+
+  .your-turn-mini-mascot {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    margin: 0 auto 12px;
+  }
+
+  .your-turn-mini-title {
+    font-family: var(--font-display, inherit);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-yellow);
+    margin-bottom: 8px;
+  }
+
+  .your-turn-mini-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    max-width: 420px;
+    margin: 0 auto 18px;
+    line-height: 1.6;
+  }
+
+  .your-turn-mini-links {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Edit Section ---------- */
+  .edit-section {
+    border: 1px solid var(--border, #353738);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-secondary, #202125);
+  }
+
+  .edit-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(69, 130, 199, 0.06);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .edit-icon { font-size: 1.4rem; color: var(--accent-blue); }
+
+  .edit-title {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--accent-blue);
+  }
+
+  .edit-subtitle {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .edit-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 20px;
+    background: var(--bg-card, #2c2e2d);
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary, #e0e0e0);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .edit-textarea::placeholder { color: var(--text-muted, #555); }
+  .edit-textarea:focus { outline: none; border-color: var(--accent-blue); }
+
+  .edit-submit {
+    margin: 14px 20px;
+    width: calc(100% - 40px);
+  }
+
+  .edit-error {
+    margin: 0 20px 14px;
+    font-size: 0.8rem;
+    color: var(--accent-red, #ff5f57);
+    font-family: var(--font-mono);
+  }
 
   /* ---------- Failed ---------- */
   .failed-heading {
@@ -366,6 +587,11 @@ import Layout from '../layouts/Layout.astro';
     : 'https://circuitbot-api-production.up.railway.app';
 
   let pollTimer: ReturnType<typeof setInterval> | null = null;
+  let elapsedTimer: ReturnType<typeof setInterval> | null = null;
+  let jobStartTime: number | null = null;
+  let firstLoad = true;
+  let isAdmin = false;
+  let currentJobId: string | null = null;
 
   // ── Helpers ─────────────────────────────────
   function getToken(): string | null {
@@ -419,6 +645,26 @@ import Layout from '../layouts/Layout.astro';
       });
   }
 
+  // ── Elapsed timer ───────────────────────────
+  function startElapsedTimer(startedAt?: string): void {
+    if (!jobStartTime) {
+      jobStartTime = startedAt ? new Date(startedAt).getTime() : Date.now();
+    }
+    if (elapsedTimer) return;
+    const timerEl = document.getElementById('elapsed-timer');
+    elapsedTimer = setInterval(() => {
+      if (!timerEl || !jobStartTime) return;
+      const sec = Math.floor((Date.now() - jobStartTime) / 1000);
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      timerEl.textContent = m > 0 ? `${m}m ${s.toString().padStart(2, '0')}s` : `${s}s`;
+    }, 1000);
+  }
+
+  function stopElapsedTimer(): void {
+    if (elapsedTimer) { clearInterval(elapsedTimer); elapsedTimer = null; }
+  }
+
   // ── Render: In-progress ─────────────────────
   function renderProgress(job: GameJob): void {
     showOnly('status-progress');
@@ -431,6 +677,8 @@ import Layout from '../layouts/Layout.astro';
 
     const msg = job.progress_message ?? '';
     document.getElementById('prog-stage')!.textContent = msg;
+
+    startElapsedTimer((job as any).started_at);
 
     // Build log lines from progress message
     const logEl = document.getElementById('prog-log')!;
@@ -453,6 +701,7 @@ import Layout from '../layouts/Layout.astro';
   async function renderComplete(job: GameJob): Promise<void> {
     showOnly('status-complete');
     stopPolling();
+    currentJobId = job.id;
 
     document.getElementById('comp-prompt')!.textContent = job.prompt;
 
@@ -471,6 +720,65 @@ import Layout from '../layouts/Layout.astro';
         (document.getElementById('comp-download') as HTMLAnchorElement).href = data.download_url;
       }
     } catch { /* download link will remain # */ }
+
+    // Check admin status — show edit section if admin
+    try {
+      const statusRes = await fetch(`${API_BASE}/api/auth/phone/status`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (statusRes.ok) {
+        const statusData = await statusRes.json();
+        isAdmin = statusData.is_admin;
+        if (isAdmin) {
+          document.getElementById('edit-section')!.style.display = 'block';
+        }
+      }
+    } catch { /* non-critical */ }
+  }
+
+  async function submitEdit(): Promise<void> {
+    const token = getToken();
+    if (!token || !currentJobId) return;
+
+    const textarea = document.getElementById('edit-instructions') as HTMLTextAreaElement;
+    const btn = document.getElementById('edit-submit') as HTMLButtonElement;
+    const errEl = document.getElementById('edit-error')!;
+    const instructions = textarea.value.trim();
+
+    if (!instructions || instructions.length < 5) {
+      errEl.textContent = 'Please describe your changes (at least 5 characters).';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    errEl.style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/games/${currentJobId}/edit`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ instructions }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ detail: 'Request failed' }));
+        throw new Error(data.detail || `Server returned ${res.status}`);
+      }
+
+      const editJob = await res.json();
+      // Redirect to the new edit job's status page
+      window.location.href = `/status?id=${editJob.id}`;
+    } catch (err: any) {
+      errEl.textContent = err.message || 'Failed to submit changes.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Apply Changes';
+    }
   }
 
   // ── Render: Failed ──────────────────────────
@@ -496,7 +804,7 @@ import Layout from '../layouts/Layout.astro';
       return;
     }
 
-    showOnly('status-loading');
+    if (firstLoad) showOnly('status-loading');
 
     try {
       const res = await fetch(`${API_BASE}/api/games/${jobId}`, {
@@ -514,6 +822,7 @@ import Layout from '../layouts/Layout.astro';
       }
 
       const job: GameJob = await res.json();
+      firstLoad = false;
 
       switch (job.status) {
         case 'completed':
@@ -527,9 +836,12 @@ import Layout from '../layouts/Layout.astro';
           break;
       }
     } catch (err: any) {
-      showOnly('status-error');
-      document.getElementById('status-error-msg')!.textContent = err.message || 'Failed to load status.';
-      stopPolling();
+      if (firstLoad) {
+        showOnly('status-error');
+        document.getElementById('status-error-msg')!.textContent = err.message || 'Failed to load status.';
+        stopPolling();
+      }
+      // During polling, silently skip — next tick will retry
     }
   }
 
@@ -540,15 +852,67 @@ import Layout from '../layouts/Layout.astro';
   }
 
   function stopPolling(): void {
-    if (pollTimer) {
-      clearInterval(pollTimer);
-      pollTimer = null;
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    stopElapsedTimer();
+  }
+
+  // ── Download + Learning Guide ───────────────
+  async function onDownloadClick(e: Event): Promise<void> {
+    // Let the download proceed normally (href is already set)
+    // Then show the learning guide
+    const jobId = getJobId();
+    const token = getToken();
+    if (!jobId || !token) return;
+
+    const container = document.getElementById('learn-container')!;
+    const loading = document.getElementById('learn-loading')!;
+    const frame = document.getElementById('learn-frame') as HTMLIFrameElement;
+
+    container.style.display = 'block';
+    loading.style.display = 'flex';
+    frame.style.display = 'none';
+
+    // Scroll to the guide
+    setTimeout(() => container.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/games/${jobId}/learn`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        loading.innerHTML = '<p style="color:var(--text-muted);">Learning guide not available for this game.</p>';
+        return;
+      }
+
+      const data = await res.json();
+      // Fetch the HTML content and inject into iframe
+      const htmlRes = await fetch(data.learn_url);
+      const html = await htmlRes.text();
+
+      loading.style.display = 'none';
+      frame.style.display = 'block';
+      frame.srcdoc = html;
+
+      // Auto-resize iframe to content
+      frame.onload = () => {
+        try {
+          const h = frame.contentDocument?.documentElement?.scrollHeight;
+          if (h) frame.style.minHeight = Math.min(h + 20, 2000) + 'px';
+        } catch { /* cross-origin, keep default height */ }
+      };
+    } catch {
+      loading.innerHTML = '<p style="color:var(--text-muted);">Could not load learning guide.</p>';
     }
   }
 
   // ── Init ────────────────────────────────────
   document.addEventListener('DOMContentLoaded', loadStatus);
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stopPolling();
+    if (document.hidden) {
+      stopPolling();
+    } else {
+      loadStatus();
+    }
   });
 </script>
