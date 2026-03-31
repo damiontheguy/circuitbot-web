@@ -1,19 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Log In — CircuitBot" description="Log in to your CircuitBot account.">
+<Layout title="Log In — CircuitBot" description="Log in to your CircuitBot account to create and manage AI-generated games." noindex={true}>
 
   <section class="login-section">
     <div class="login-wrapper">
       <div class="login-card">
         <!-- Logo -->
         <div class="login-logo">
-          <div class="logo-ring">
-            <div class="logo-ring-inner">
-              <span class="logo-mark">&gt;_</span>
-            </div>
-          </div>
-          <span class="logo-text">CircuitBot</span>
+          <img src="/circuitbot.png" alt="CircuitBot" class="login-logo-img" />
+          <span class="logo-text"><span style="color: #4582c7;">CircuitBot</span></span>
         </div>
 
         <h1 class="login-heading">Log In</h1>
@@ -56,7 +52,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <p class="signup-prompt">
-          Don't have an account? <a href="#" id="signup-toggle">Sign up</a>
+          Do not have an account? <a href="#" id="signup-toggle">Sign up</a>
         </p>
 
         <p class="desktop-note">
@@ -101,7 +97,7 @@ import Layout from '../layouts/Layout.astro';
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-green), var(--accent-cyan), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-yellow), transparent);
   }
 
   /* ── Logo ────────────────────────────────── */
@@ -113,41 +109,11 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 28px;
   }
 
-  .logo-ring {
+  .login-logo-img {
     width: 64px;
     height: 64px;
-    border-radius: 50%;
-    border: 2px solid var(--accent-green);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow:
-      0 0 15px rgba(46, 204, 94, 0.2),
-      inset 0 0 15px rgba(46, 204, 94, 0.05);
-    animation: ring-pulse 3s ease-in-out infinite;
-  }
-
-  @keyframes ring-pulse {
-    0%, 100% { box-shadow: 0 0 15px rgba(46, 204, 94, 0.2), inset 0 0 15px rgba(46, 204, 94, 0.05); }
-    50% { box-shadow: 0 0 25px rgba(46, 204, 94, 0.35), inset 0 0 20px rgba(46, 204, 94, 0.08); }
-  }
-
-  .logo-ring-inner {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 1px solid rgba(46, 204, 94, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(46, 204, 94, 0.04);
-  }
-
-  .logo-mark {
-    font-family: var(--font-mono);
-    font-size: 18px;
-    color: var(--accent-green);
-    text-shadow: 0 0 8px rgba(46, 204, 94, 0.5);
+    object-fit: contain;
+    border-radius: 6px;
   }
 
   .logo-text {
@@ -166,8 +132,8 @@ import Layout from '../layouts/Layout.astro';
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 6px;
-    color: var(--accent-green);
-    text-shadow: 0 0 10px rgba(46, 204, 94, 0.3);
+    color: var(--accent-blue);
+    text-shadow: 0 0 10px rgba(69, 130, 199, 0.3);
   }
 
   .login-sub {
@@ -214,8 +180,8 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .form-input:focus {
-    border-color: var(--accent-green);
-    box-shadow: 0 0 0 3px rgba(46, 204, 94, 0.1), 0 0 12px rgba(46, 204, 94, 0.08);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(69, 130, 199, 0.1), 0 0 12px rgba(69, 130, 199, 0.08);
   }
 
   .login-btn {
@@ -241,7 +207,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .forgot-link:hover {
-    color: var(--accent-cyan);
+    color: var(--accent-yellow);
   }
 
   /* ── Divider ─────────────────────────────── */
@@ -274,7 +240,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .signup-prompt a {
-    color: var(--accent-green);
+    color: var(--accent-blue);
     font-weight: 600;
   }
 
@@ -285,7 +251,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .desktop-note a {
-    color: var(--accent-cyan);
+    color: var(--accent-yellow);
   }
 
   /* ── Responsive ──────────────────────────── */
@@ -298,14 +264,9 @@ import Layout from '../layouts/Layout.astro';
       font-size: 22px;
     }
 
-    .logo-ring {
-      width: 56px;
-      height: 56px;
-    }
-
-    .logo-ring-inner {
-      width: 40px;
-      height: 40px;
+    .login-logo-img {
+      width: 48px;
+      height: 48px;
     }
   }
 </style>

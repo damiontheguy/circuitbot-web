@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Desktop App — CircuitBot" description="CircuitBot desktop app — coming soon.">
+<Layout title="Desktop App — CircuitBot | Local Game Generation" description="CircuitBot desktop app — generate games locally with custom templates, a built-in Godot editor, and cross-platform support. Coming soon.">
 
   <section class="coming-soon-section">
     <div class="container">
@@ -12,12 +12,12 @@ import Layout from '../layouts/Layout.astro';
           </span>
         </div>
 
-        <span class="badge badge-purple">Coming Soon</span>
+        <span class="badge badge-deepblue">Coming Soon</span>
 
         <h1 class="coming-soon-title">Desktop App</h1>
 
         <p class="coming-soon-desc">
-          We're building a desktop app that lets you generate games locally
+          We are building a desktop app that lets you generate games locally
           with more control, custom templates, and offline project editing.
         </p>
 
@@ -32,7 +32,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div class="feature-item">
             <span class="feature-check">+</span>
-            <span>Built-in Godot project editor</span>
+            <span>Built-in <span style="color: #4582c7;">Godot</span> project editor</span>
           </div>
           <div class="feature-item">
             <span class="feature-check">+</span>
@@ -42,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
 
         <p class="coming-soon-cta-text">In the meantime, generate games right from the browser:</p>
 
-        <a href="/create" class="btn btn-primary btn-lg coming-soon-btn">Create a Game — $14.99</a>
+        <a href="/create" class="btn btn-primary btn-lg coming-soon-btn">Create a Game — $6.99</a>
       </div>
     </div>
   </section>
@@ -77,7 +77,7 @@ import Layout from '../layouts/Layout.astro';
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-purple), var(--accent-cyan), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-deepblue), var(--accent-blue), transparent);
   }
 
   .coming-soon-icon {
@@ -91,14 +91,14 @@ import Layout from '../layouts/Layout.astro';
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    border: 2px solid var(--accent-purple);
-    box-shadow: 0 0 20px rgba(123, 92, 191, 0.2);
+    border: 2px solid var(--accent-deepblue);
+    box-shadow: 0 0 20px rgba(60, 83, 206, 0.2);
     animation: ring-pulse 3s ease-in-out infinite;
   }
 
   @keyframes ring-pulse {
-    0%, 100% { box-shadow: 0 0 15px rgba(123, 92, 191, 0.15); }
-    50% { box-shadow: 0 0 25px rgba(123, 92, 191, 0.3); }
+    0%, 100% { box-shadow: 0 0 15px rgba(60, 83, 206, 0.15); }
+    50% { box-shadow: 0 0 25px rgba(60, 83, 206, 0.3); }
   }
 
   .icon-inner {
@@ -108,12 +108,12 @@ import Layout from '../layouts/Layout.astro';
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 1px solid rgba(123, 92, 191, 0.3);
-    background: rgba(123, 92, 191, 0.05);
+    border: 1px solid rgba(60, 83, 206, 0.3);
+    background: rgba(60, 83, 206, 0.05);
     font-family: var(--font-mono);
     font-size: 18px;
-    color: var(--accent-purple);
-    text-shadow: 0 0 8px rgba(123, 92, 191, 0.5);
+    color: var(--accent-deepblue);
+    text-shadow: 0 0 8px rgba(60, 83, 206, 0.5);
   }
 
   .coming-soon-title {
@@ -123,10 +123,7 @@ import Layout from '../layouts/Layout.astro';
     text-transform: uppercase;
     letter-spacing: 2px;
     margin: 16px 0 12px;
-    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-yellow);
   }
 
   .coming-soon-desc {
@@ -156,9 +153,9 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .feature-check {
-    color: var(--accent-purple);
+    color: var(--accent-deepblue);
     font-weight: 700;
-    text-shadow: 0 0 4px rgba(123, 92, 191, 0.4);
+    text-shadow: 0 0 4px rgba(60, 83, 206, 0.4);
   }
 
   .coming-soon-cta-text {

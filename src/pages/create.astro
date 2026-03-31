@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Create Your Game — CircuitBot" description="Describe a game in plain language and get a playable executable in minutes.">
+<Layout title="Create Your Game — CircuitBot | AI Game Generator" description="Describe a game in plain language and get a playable Godot 4 executable in 15-30 minutes. First game free, then $6.99 per game.">
 
   <!-- Hero -->
   <section class="section create-hero">
     <div class="container">
       <div class="bg-grid"></div>
       <div class="section-header">
-        <span class="badge badge-green">New Game</span>
+        <span class="badge badge-blue">New Game</span>
         <h1 class="create-title">Create Your <span class="gradient-text">Game</span></h1>
         <p>Describe what you want to build. We handle the rest.</p>
       </div>
@@ -69,17 +69,17 @@ import Layout from '../layouts/Layout.astro';
       <div class="price-card">
         <div class="price-amount">
           <span class="price-dollar">$</span>
-          <span class="price-value">14.99</span>
+          <span class="price-value">6.99</span>
         </div>
         <p class="price-subtitle">One game, fully generated</p>
         <ul class="price-includes">
-          <li><span class="check">+</span> Complete Godot 4 project</li>
+          <li><span class="check">+</span> Complete <span style="color: #4582c7;">Godot 4</span> project</li>
           <li><span class="check">+</span> AI-generated art assets</li>
           <li><span class="check">+</span> Compiled Windows executable</li>
           <li><span class="check">+</span> Source code included</li>
         </ul>
         <button id="generate-btn" class="btn btn-primary btn-lg generate-btn">
-          Generate My Game — $14.99
+          Generate My Game — $6.99
         </button>
 
         <!-- Free Trial -->
@@ -104,7 +104,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="modal-card">
       <button class="modal-close" id="modal-close">&times;</button>
       <h2 class="modal-title">Verify Phone Number</h2>
-      <p class="modal-sub">We'll text you a 6-digit code to verify your identity.</p>
+      <p class="modal-sub">We will text you a 6-digit code to verify your identity.</p>
 
       <!-- Step 1: Enter phone -->
       <div id="phone-step-1">
@@ -294,7 +294,7 @@ import Layout from '../layouts/Layout.astro';
     .catch(function(err) {
       showError(err.message || 'Something went wrong. Please try again.');
       activeBtn.disabled = false;
-      activeBtn.textContent = isFreeTrial ? 'Generate Free' : 'Generate My Game — $14.99';
+      activeBtn.textContent = isFreeTrial ? 'Generate Free' : 'Generate My Game — $6.99';
     });
   }
 
@@ -442,7 +442,7 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 400;
     letter-spacing: 1px;
     text-transform: uppercase;
-    text-shadow: 0 0 30px rgba(46, 204, 94, 0.2);
+    text-shadow: 0 0 30px rgba(69, 130, 199, 0.2);
     margin-bottom: 12px;
   }
 
@@ -485,7 +485,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .prompt-textarea:focus {
-    background: rgba(46, 204, 94, 0.02);
+    background: rgba(69, 130, 199, 0.02);
   }
 
   /* ── Example Chips ──────────────── */
@@ -521,15 +521,15 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .chip:hover {
-    border-color: var(--accent-green);
-    color: var(--accent-green);
-    box-shadow: var(--glow-green);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    box-shadow: var(--glow-blue);
   }
 
   .chip-active {
-    border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
-    background: rgba(62, 235, 212, 0.06);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+    background: rgba(255, 211, 64, 0.06);
   }
 
   /* ── Price Card ─────────────────── */
@@ -562,10 +562,7 @@ import Layout from '../layouts/Layout.astro';
     font-family: var(--font-mono);
     font-size: 56px;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--accent-yellow);
     line-height: 1;
   }
 
@@ -593,7 +590,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .price-includes .check {
-    color: var(--accent-green);
+    color: var(--accent-blue);
     margin-right: 8px;
     font-weight: 700;
   }
@@ -653,13 +650,13 @@ import Layout from '../layouts/Layout.astro';
     font-size: 16px;
     padding: 16px 28px;
     background: transparent;
-    border: 1px solid var(--accent-cyan);
-    color: var(--accent-cyan);
+    border: 1px solid var(--accent-yellow);
+    color: var(--accent-yellow);
   }
 
   .free-trial-btn:hover {
-    background: rgba(62, 235, 212, 0.08);
-    box-shadow: 0 0 20px rgba(62, 235, 212, 0.15);
+    background: rgba(255, 211, 64, 0.08);
+    box-shadow: 0 0 20px rgba(255, 211, 64, 0.15);
   }
 
   .free-trial-btn:disabled {
@@ -696,7 +693,7 @@ import Layout from '../layouts/Layout.astro';
     border-radius: var(--radius-lg);
     padding: 36px 28px;
     position: relative;
-    box-shadow: var(--shadow-lg), 0 0 40px rgba(62, 235, 212, 0.1);
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(69, 130, 199, 0.1);
   }
 
   .modal-card::before {
@@ -706,7 +703,7 @@ import Layout from '../layouts/Layout.astro';
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-green), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-yellow), transparent);
   }
 
   .modal-close {
@@ -732,7 +729,7 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--accent-cyan);
+    color: var(--accent-blue);
     margin-bottom: 8px;
   }
 
@@ -785,7 +782,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .btn-link:hover {
-    color: var(--accent-cyan);
+    color: var(--accent-yellow);
   }
 
   .modal-error {

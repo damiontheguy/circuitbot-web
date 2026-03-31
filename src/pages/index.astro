@@ -1,26 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="CircuitBot — AI Game Generator">
+<Layout title="CircuitBot — AI Game Generator | Turn Ideas into Playable Games" description="Describe a game in plain language and get a playable Godot 4 executable with AI-generated art, code, and full source. First game free.">
 
   <!-- Hero -->
   <section class="hero section">
     <div class="container">
       <div class="hero-content">
-        <span class="badge badge-green">AI Game Generator</span>
+        <img src="/circuitbot.png" alt="CircuitBot AI game generator mascot" class="hero-mascot" />
+        <span class="badge badge-yellow">CircuitBot - Workshop Assistant</span>
         <h1>
-          <span class="gradient-text">Describe a Game.</span><br>
-          <span class="gradient-text">Download an Executable.</span>
+          Imagine a Game.<br>
+          <span style="color: var(--accent-yellow);">We Will Build It Together.</span>
         </h1>
         <p class="hero-subtitle">
-          Tell us what game you want in plain language. Our AI builds it with Godot 4
-          — complete with art, code, and a compiled executable.
+          Describe the game you have always wanted to make. <span style="color: #4582c7;">CircuitBot</span> builds it with
+          <span style="color: #4582c7;">Godot 4</span> — complete with art, code, and a playable build. The perfect starting
+          point for your game dev journey.
         </p>
         <div class="hero-buttons">
-          <a href="/create" class="btn btn-primary btn-lg">Create Your First Game Free</a>
+          <a href="/create" class="btn btn-yellow btn-lg">Build Your First Game Free</a>
           <a href="#how-it-works" class="btn btn-lg">See How It Works</a>
         </div>
-        <p class="hero-free-note">No credit card required. Your first game is on us.</p>
+        <p class="hero-free-note">No credit card required. First game on us.</p>
       </div>
 
       <div class="terminal hero-terminal">
@@ -28,13 +30,10 @@ import Layout from '../layouts/Layout.astro';
           <span class="terminal-dot red"></span>
           <span class="terminal-dot yellow"></span>
           <span class="terminal-dot green"></span>
-          <span class="terminal-title">circuitbot — game generation</span>
+          <span class="terminal-title"><span style="color: #4582c7;">CircuitBot</span> &mdash; Building Your Game</span>
         </div>
         <div class="terminal-body">
-          <div class="term-line line-1">
-            <span class="prompt">&gt; </span>
-            <span class="cmd typewriter">A retro pixel-art roguelike dungeon crawler with procedural levels</span>
-          </div>
+          <div class="term-line line-1"><span class="prompt">&gt; </span><span class="cmd typewriter">A retro pixel-art roguelike dungeon crawler with procedural levels</span></div>
           <div class="term-line line-2">
             <span class="output">Planning your game...</span>
           </div>
@@ -48,7 +47,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="output">Exporting executable...</span>
           </div>
           <div class="term-line line-6">
-            <span class="success">&#10004; Your game is ready! Download now.</span>
+            <span class="success">&#10004; Your game is ready! Time to make it your own.</span>
           </div>
         </div>
       </div>
@@ -61,23 +60,24 @@ import Layout from '../layouts/Layout.astro';
   <section class="section" id="how-it-works">
     <div class="container">
       <div class="section-header">
-        <h2 class="gradient-text">How It Works</h2>
+        <h2>How It <span class="gradient-text">Works</span></h2>
+        <p>Three steps from idea to playable game.</p>
       </div>
       <div class="grid grid-3">
         <div class="card step-card">
-          <span class="step-number">01</span>
-          <h3>Describe Your Game</h3>
+          <span class="step-number">1</span>
+          <h3>&#9997;&#65039; Describe Your Game</h3>
           <p>Write a few sentences about the game you want. Genre, mechanics, art style — whatever you imagine.</p>
         </div>
         <div class="card step-card">
-          <span class="step-number">02</span>
-          <h3>We Build It</h3>
-          <p>Our AI pipeline plans the architecture, generates art, writes GDScript, and compiles everything in Godot 4.</p>
+          <span class="step-number">2</span>
+          <h3>&#9889; We Build It</h3>
+          <p>Our AI plans the architecture, generates art, writes <span style="color: #4582c7;">GDScript</span>, and compiles everything in <span style="color: #4582c7;">Godot 4</span>.</p>
         </div>
         <div class="card step-card">
-          <span class="step-number">03</span>
-          <h3>Download &amp; Play</h3>
-          <p>Get a compiled Windows executable. Share it with friends, publish it, or use the Godot source to keep building.</p>
+          <span class="step-number">3</span>
+          <h3>&#127918; Play &amp; Learn</h3>
+          <p>Get a compiled executable and the full <span style="color: #4582c7;">Godot</span> source. Play it, study the code, then make it even better.</p>
         </div>
       </div>
     </div>
@@ -85,36 +85,37 @@ import Layout from '../layouts/Layout.astro';
 
   <hr class="divider">
 
-  <!-- What You Get -->
+  <!-- What's Inside Your Game -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <h2 class="gradient-text">What You Get</h2>
+        <h2>What Is Inside <span class="gradient-text">Your Game</span></h2>
+        <p>Every generated game comes with real, editable source code you can learn from.</p>
       </div>
       <div class="grid grid-3">
-        <div class="card feature-card accent-green">
-          <h3>2D &amp; 3D Art</h3>
-          <p>AI-generated sprites, textures, and 3D models that match your game's visual style.</p>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#127912;</span> Custom Art Assets</h3>
+          <p>AI-generated sprites, textures, and backgrounds that match your game's visual style.</p>
         </div>
-        <div class="card feature-card accent-cyan">
-          <h3>Game Logic</h3>
-          <p>Complete GDScript code — player movement, enemies, scoring, physics, and more.</p>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#128187;</span> Real Game Code</h3>
+          <p>Complete <span style="color: #4582c7;">GDScript</span> you can read and learn from — player movement, enemies, scoring, and more.</p>
         </div>
-        <div class="card feature-card accent-purple">
-          <h3>UI Systems</h3>
-          <p>Menus, HUD, health bars, score displays, and title screens.</p>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#127760;</span> UI &amp; Menus</h3>
+          <p>Title screens, HUD, health bars, and score displays — all properly structured in <span style="color: #4582c7;">Godot</span> scenes.</p>
         </div>
-        <div class="card feature-card accent-green">
-          <h3>Scene Architecture</h3>
-          <p>Properly structured Godot scenes with correct node hierarchies.</p>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#128736;</span> Scene Architecture</h3>
+          <p>Properly organized <span style="color: #4582c7;">Godot</span> project with correct node hierarchies you can study and extend.</p>
         </div>
-        <div class="card feature-card accent-cyan">
-          <h3>Input Handling</h3>
-          <p>Keyboard and controller mappings configured for your game's mechanics.</p>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#127916;</span> Input Handling</h3>
+          <p>Keyboard and controller mappings pre-configured for your game's mechanics.</p>
         </div>
-        <div class="card feature-card accent-purple">
-          <h3>Compiled Executable</h3>
-          <p>A ready-to-run Windows .exe. No Godot installation required to play.</p>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#128640;</span> Playable Build</h3>
+          <p>A compiled Windows .exe ready to share with friends — no engine installation needed to play.</p>
         </div>
       </div>
     </div>
@@ -125,29 +126,46 @@ import Layout from '../layouts/Layout.astro';
   <!-- Pricing -->
   <section class="section">
     <div class="container" style="text-align: center;">
-      <div class="pricing-grid">
+      <div class="section-header">
+        <h2>Simple <span class="gradient-text">Pricing</span></h2>
+      </div>
+      <div class="pricing-grid pricing-grid-3">
         <div class="card pricing-card pricing-free">
           <span class="pricing-badge">Free</span>
           <div class="pricing-amount">$0</div>
           <div class="pricing-label">first game</div>
           <ul class="pricing-features">
-            <li>Full Godot 4 project</li>
+            <li>Full <span style="color: #4582c7;">Godot 4</span> project</li>
             <li>AI-generated art assets</li>
             <li>Compiled Windows executable</li>
             <li>Just verify your phone number</li>
           </ul>
-          <a href="/create" class="btn btn-primary btn-lg">Try It Free</a>
+          <a href="/create" class="btn btn-yellow btn-lg">Build Free</a>
         </div>
-        <div class="card pricing-card">
-          <div class="pricing-amount">$14.99</div>
-          <div class="pricing-label">per game after</div>
+        <div class="card pricing-card pricing-promo">
+          <span class="pricing-badge pricing-badge-promo">Limited Promo</span>
+          <div class="pricing-original"><s>$12.99</s></div>
+          <div class="pricing-amount pricing-paid">$6.99</div>
+          <div class="pricing-label">per game</div>
           <ul class="pricing-features">
             <li>Everything in free tier</li>
             <li>Unlimited games</li>
             <li>No restrictions on output</li>
             <li>Delivered in ~15-30 minutes</li>
           </ul>
-          <a href="/create" class="btn btn-lg">Create a Game</a>
+          <a href="/create" class="btn btn-primary btn-lg">Create a Game</a>
+        </div>
+        <div class="card pricing-card">
+          <span class="pricing-save">Save 10% + 1 free game</span>
+          <div class="pricing-amount pricing-paid">$59.99</div>
+          <div class="pricing-label">10-pack bundle</div>
+          <ul class="pricing-features">
+            <li>11 games for the price of 9</li>
+            <li>Everything in per-game tier</li>
+            <li>Use them any time</li>
+            <li>Best value for builders</li>
+          </ul>
+          <a href="/create" class="btn btn-primary btn-lg">Get the Bundle</a>
         </div>
       </div>
     </div>
@@ -159,16 +177,16 @@ import Layout from '../layouts/Layout.astro';
   <section class="section" id="faq">
     <div class="container-narrow">
       <div class="section-header">
-        <h2 class="gradient-text">Frequently Asked Questions</h2>
+        <h2>Common <span class="gradient-text">Questions</span></h2>
       </div>
       <div class="faq-list">
         <details class="faq-item">
           <summary>Is the first game really free?</summary>
-          <p>Yes. Verify your phone number and generate one complete game at no cost. No credit card required. The free game includes everything — same quality, same output as paid games.</p>
+          <p>Yes. Verify your phone number and generate one complete game at no cost. No credit card required. Same quality, same output as paid games.</p>
         </details>
         <details class="faq-item">
-          <summary>Why do I need to verify my phone?</summary>
-          <p>Phone verification ensures one free game per person. It takes 30 seconds — we send a code, you enter it, and you're generating.</p>
+          <summary>Can I edit the game after?</summary>
+          <p>Absolutely! You receive the complete <span style="color: #4582c7;">Godot</span> project. Open it in the <span style="color: #4582c7;">Godot</span> editor and modify anything — that is the whole idea. Build on what <span style="color: #4582c7;">CircuitBot</span> gives you.</p>
         </details>
         <details class="faq-item">
           <summary>How long does generation take?</summary>
@@ -176,15 +194,15 @@ import Layout from '../layouts/Layout.astro';
         </details>
         <details class="faq-item">
           <summary>What engine is used?</summary>
-          <p>Godot 4 — open source, no license fees. You get the full source project.</p>
+          <p><span style="color: #4582c7;">Godot 4</span> — open source, no license fees, huge learning community. You get the full source project to learn from.</p>
         </details>
         <details class="faq-item">
-          <summary>Can I edit the game after?</summary>
-          <p>Yes! You receive the complete Godot project. Open it in Godot and modify anything.</p>
+          <summary>Do I need to know how to code?</summary>
+          <p>Not at all! <span style="color: #4582c7;">CircuitBot</span> generates the game for you. But if you want to learn, you will have real working code to study and experiment with.</p>
         </details>
         <details class="faq-item">
           <summary>What if generation fails?</summary>
-          <p>If we can't produce a working game, you'll receive a full refund.</p>
+          <p>If we cannot produce a working game, you will receive a full refund. No questions asked.</p>
         </details>
       </div>
     </div>
@@ -192,21 +210,103 @@ import Layout from '../layouts/Layout.astro';
 
   <hr class="divider">
 
-  <!-- Final CTA -->
-  <section class="section">
-    <div class="container" style="text-align: center;">
-      <h2 class="gradient-text cta-heading">Ready to build your game?</h2>
-      <p class="cta-sub">Your first one's free. No credit card needed.</p>
-      <a href="/create" class="btn btn-primary btn-lg" style="margin-top: 24px;">Create Your Free Game</a>
+  <!-- Now It's Your Turn! -->
+  <section class="section your-turn-section">
+    <div class="container">
+      <div class="your-turn-inner">
+        <div class="your-turn-glow"></div>
+        <img src="/circuitbot.png" alt="CircuitBot" class="your-turn-mascot" />
+        <h2 class="your-turn-heading">Now It Is <span class="gradient-text-warm">Your Turn!</span></h2>
+        <p class="your-turn-text">
+          Your generated game is a real <span style="color: #4582c7;">Godot 4</span> project — not a black box.
+          Open it up, explore the code, tweak things, break things, and learn by doing.
+          That is how every great game developer starts.
+        </p>
+
+        <div class="your-turn-cards">
+          <a href="/create" class="your-turn-card">
+            <div class="ytc-icon">&#9889;</div>
+            <div class="ytc-label">Start Here</div>
+            <div class="ytc-desc">Generate your first game for free</div>
+          </a>
+          <a href="https://godotengine.org/download/" target="_blank" rel="noopener" class="your-turn-card">
+            <div class="ytc-icon">&#128230;</div>
+            <div class="ytc-label">Get <span style="color: #4582c7;">Godot</span> Engine</div>
+            <div class="ytc-desc">Free &amp; open source game engine</div>
+          </a>
+          <a href="https://docs.godotengine.org/en/stable/getting_started/introduction/index.html" target="_blank" rel="noopener" class="your-turn-card">
+            <div class="ytc-icon">&#128218;</div>
+            <div class="ytc-label">Learn <span style="color: #4582c7;">Godot</span></div>
+            <div class="ytc-desc">Official tutorials &amp; documentation</div>
+          </a>
+        </div>
+
+        <p class="your-turn-quote">
+          "The best way to learn game dev is to start with something that works — then make it your own."
+        </p>
+      </div>
     </div>
   </section>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CircuitBot",
+    "url": "https://circuit-bot.com",
+    "logo": "https://circuit-bot.com/circuitbot.png",
+    "description": "AI-powered game generator that turns text descriptions into playable Godot 4 games with art, code, and compiled builds.",
+    "sameAs": ["https://discord.gg/circuitbot"]
+  })} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CircuitBot",
+    "url": "https://circuit-bot.com"
+  })} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is the first game really free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Verify your phone number and generate one complete game at no cost. No credit card required. Same quality, same output as paid games." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I edit the game after?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Absolutely! You receive the complete Godot project. Open it in the Godot editor and modify anything — that is the whole idea. Build on what CircuitBot gives you." }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does generation take?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Most games are ready in 15-30 minutes, depending on complexity." }
+      },
+      {
+        "@type": "Question",
+        "name": "What engine is used?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Godot 4 — open source, no license fees, huge learning community. You get the full source project to learn from." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to know how to code?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Not at all! CircuitBot generates the game for you. But if you want to learn, you will have real working code to study and experiment with." }
+      },
+      {
+        "@type": "Question",
+        "name": "What if generation fails?",
+        "acceptedAnswer": { "@type": "Answer", "text": "If we cannot produce a working game, you will receive a full refund. No questions asked." }
+      }
+    ]
+  })} />
 
 </Layout>
 
 <style>
   /* ── Hero ──────────────────────────────────── */
   .hero {
-    padding-top: 80px;
+    padding-top: 48px;
     padding-bottom: 40px;
   }
 
@@ -215,34 +315,51 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 48px;
   }
 
+  .hero-mascot {
+    width: 104px;
+    height: 104px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: 0 auto 20px;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
   .hero h1 {
-    font-size: clamp(28px, 5vw, 48px);
-    line-height: 1.2;
-    margin: 20px 0 16px;
-    letter-spacing: 1.5px;
+    font-size: clamp(30px, 5.5vw, 52px);
+    line-height: 1.15;
+    margin: 16px 0;
+    color: var(--text-primary);
   }
 
   .hero-subtitle {
     font-size: clamp(15px, 2vw, 18px);
     color: var(--text-secondary);
-    max-width: 600px;
+    max-width: 580px;
     margin: 0 auto 32px;
     line-height: 1.7;
   }
 
   .hero-buttons {
     display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .hero-buttons .btn:first-child {
+    font-size: 18px;
+    padding: 16px 36px;
   }
 
   .hero-free-note {
-    margin-top: 16px;
-    font-family: var(--font-mono);
+    margin-top: 14px;
     font-size: 13px;
-    color: var(--accent-cyan);
-    letter-spacing: 0.3px;
+    color: var(--text-muted);
   }
 
   .hero-terminal {
@@ -254,6 +371,7 @@ import Layout from '../layouts/Layout.astro';
   .term-line {
     opacity: 0;
     visibility: hidden;
+    white-space: nowrap;
   }
 
   .line-1 { animation: appear 0.3s 0.5s forwards; }
@@ -272,7 +390,8 @@ import Layout from '../layouts/Layout.astro';
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
-    border-right: 2px solid var(--accent-green);
+    vertical-align: bottom;
+    border-right: 2px solid var(--accent-blue);
     width: 0;
     animation:
       typing 1.0s 0.5s steps(40) forwards,
@@ -291,25 +410,36 @@ import Layout from '../layouts/Layout.astro';
   /* ── Step cards ────────────────────────────── */
   .step-card {
     text-align: center;
-    padding: 32px 24px;
+    padding: 36px 24px;
+    position: relative;
+  }
+
+  .step-icon {
+    display: block;
+    font-size: 36px;
+    margin-bottom: 8px;
+    line-height: 1;
   }
 
   .step-number {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 36px;
-    color: var(--accent-green);
-    text-shadow: 0 0 20px rgba(46, 204, 94, 0.3);
-    margin-bottom: 16px;
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: rgba(69, 130, 199, 0.1);
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    margin-bottom: 14px;
   }
 
   .step-card h3 {
-    font-family: var(--font-mono);
     font-size: 18px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
   .step-card p {
@@ -321,20 +451,18 @@ import Layout from '../layouts/Layout.astro';
   /* ── Feature cards ─────────────────────────── */
   .feature-card {
     padding: 28px 24px;
-    border-top: 2px solid transparent;
   }
 
-  .feature-card.accent-green  { border-top-color: var(--accent-green); }
-  .feature-card.accent-cyan   { border-top-color: var(--accent-cyan); }
-  .feature-card.accent-purple { border-top-color: var(--accent-purple); }
+  .feature-icon {
+    font-size: 22px;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
 
   .feature-card h3 {
-    font-family: var(--font-mono);
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
   .feature-card p {
@@ -352,15 +480,32 @@ import Layout from '../layouts/Layout.astro';
     margin: 0 auto;
   }
 
+  .pricing-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 960px;
+  }
+
   .pricing-card {
     text-align: center;
-    padding: 40px 32px;
+    padding: 40px 24px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pricing-card .pricing-features {
+    flex: 1;
+  }
+
+  .pricing-card .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: auto;
   }
 
   .pricing-free {
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 30px rgba(62, 235, 212, 0.1);
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 40px rgba(255, 211, 64, 0.06);
   }
 
   .pricing-badge {
@@ -368,37 +513,67 @@ import Layout from '../layouts/Layout.astro';
     top: -1px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--accent-cyan);
+    background: var(--accent-yellow);
     color: var(--bg-primary);
-    font-family: var(--font-mono);
-    font-size: 11px;
+    font-family: var(--font-display);
+    font-size: 12px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.5px;
     padding: 4px 20px;
     border-radius: 0 0 var(--radius) var(--radius);
   }
 
   .pricing-amount {
-    font-family: var(--font-mono);
-    font-size: 48px;
-    color: var(--accent-green);
-    text-shadow: 0 0 30px rgba(46, 204, 94, 0.3);
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--accent-yellow);
     line-height: 1;
     margin-top: 8px;
   }
 
-  .pricing-free .pricing-amount {
-    color: var(--accent-cyan);
-    text-shadow: 0 0 30px rgba(62, 235, 212, 0.3);
+  .pricing-paid {
+    color: var(--accent-blue);
+  }
+
+  .pricing-promo {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 40px rgba(69, 130, 199, 0.06);
+  }
+
+  .pricing-badge-promo {
+    background: var(--accent-blue);
+  }
+
+  .pricing-original {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1;
+  }
+
+  .pricing-promo .pricing-amount {
+    margin-top: 4px;
+  }
+
+  .pricing-save {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-yellow);
+    margin-top: 8px;
+    margin-bottom: 0;
+    line-height: 1;
+  }
+
+  /* Bundle card gets a visible border */
+  .pricing-card:last-child {
+    border-color: var(--border-bright);
   }
 
   .pricing-label {
-    font-family: var(--font-mono);
     font-size: 14px;
     color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
     margin-bottom: 24px;
   }
 
@@ -411,17 +586,18 @@ import Layout from '../layouts/Layout.astro';
   .pricing-features li {
     font-size: 14px;
     color: var(--text-secondary);
-    padding: 6px 0;
+    padding: 5px 0;
   }
 
   .pricing-features li::before {
     content: "\2713 ";
-    color: var(--accent-green);
+    color: var(--accent-blue);
     margin-right: 8px;
+    font-weight: 700;
   }
 
   .pricing-free .pricing-features li::before {
-    color: var(--accent-cyan);
+    color: var(--accent-yellow);
   }
 
   .pricing-card .btn {
@@ -433,7 +609,7 @@ import Layout from '../layouts/Layout.astro';
   .faq-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .faq-item {
@@ -452,8 +628,9 @@ import Layout from '../layouts/Layout.astro';
   .faq-item summary {
     padding: 18px 24px;
     cursor: pointer;
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
     font-size: 15px;
+    font-weight: 600;
     color: var(--text-primary);
     list-style: none;
     display: flex;
@@ -468,9 +645,10 @@ import Layout from '../layouts/Layout.astro';
   .faq-item summary::after {
     content: "+";
     font-size: 20px;
-    color: var(--accent-green);
+    color: var(--accent-blue);
     flex-shrink: 0;
     transition: transform 0.2s;
+    font-weight: 400;
   }
 
   .faq-item[open] summary::after {
@@ -484,28 +662,123 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.7;
   }
 
-  /* ── Final CTA ─────────────────────────────── */
-  .cta-heading {
-    font-family: var(--font-mono);
-    font-size: clamp(22px, 4vw, 32px);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  /* ── Now It's Your Turn ─────────────────────── */
+  .your-turn-section {
+    padding-bottom: 96px;
   }
 
-  .cta-sub {
-    font-family: var(--font-mono);
+  .your-turn-inner {
+    position: relative;
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .your-turn-glow {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(255, 211, 64, 0.08), transparent 70%);
+    pointer-events: none;
+  }
+
+  .your-turn-mascot {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+
+  .your-turn-heading {
+    font-size: clamp(28px, 5vw, 40px);
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .your-turn-text {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .your-turn-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .your-turn-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 24px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .your-turn-card:hover {
+    border-color: var(--accent-yellow);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(255, 211, 64, 0.1);
+  }
+
+  .ytc-icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .ytc-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-primary);
+  }
+
+  .ytc-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .your-turn-quote {
+    font-style: italic;
     font-size: 14px;
-    color: var(--accent-cyan);
-    margin-top: 8px;
-    letter-spacing: 0.3px;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    line-height: 1.6;
   }
 
   /* ── Mobile adjustments ────────────────────── */
   @media (max-width: 600px) {
     .hero { padding-top: 48px; }
-    .hero h1 { font-size: 24px; }
+    .hero h1 { font-size: 26px; }
+    .hero-mascot { width: 64px; height: 64px; }
     .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-grid-3 { grid-template-columns: 1fr; }
     .pricing-card { padding: 32px 24px; }
-    .pricing-amount { font-size: 42px; }
+    .pricing-amount { font-size: 44px; }
+    .your-turn-inner { padding: 40px 20px; }
+    .your-turn-cards { grid-template-columns: 1fr; }
   }
 </style>

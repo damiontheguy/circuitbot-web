@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /status
+Disallow: /my-games
+Disallow: /login
+
+Sitemap: https://circuit-bot.com/sitemap.xml
