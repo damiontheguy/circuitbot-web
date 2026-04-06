@@ -1,0 +1,602 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Play Game — CircuitBot" description="Play an AI-generated game right in your browser." noindex={true}>
+
+  <section class="section play-section">
+    <div class="container">
+
+      <!-- Loading -->
+      <div id="play-loading" class="state-msg">
+        <div class="loader-ring"></div>
+        <p>Loading game...</p>
+      </div>
+
+      <!-- Error -->
+      <div id="play-error" class="state-msg" style="display:none;">
+        <div class="state-icon">&#9888;</div>
+        <h2>Game not found</h2>
+        <p id="play-error-msg">This game may be private or doesn't exist.</p>
+        <a href="/my-games" class="btn btn-primary">My Games</a>
+      </div>
+
+      <!-- Game view -->
+      <div id="play-view" style="display:none;">
+
+        <!-- Game header -->
+        <div class="game-header">
+          <div class="game-header-left">
+            <img id="game-thumb" class="game-thumb" src="" alt="Game thumbnail" style="display:none;" />
+            <div class="game-info">
+              <h1 id="game-title" class="game-title"></h1>
+              <p id="game-prompt" class="game-prompt"></p>
+            </div>
+          </div>
+          <div class="game-header-actions">
+            <a id="game-download" href="#" class="btn" style="display:none;">Download</a>
+            <a href="/my-games" class="btn btn-ghost">Back to Games</a>
+          </div>
+        </div>
+
+        <!-- Game container — this is what goes fullscreen -->
+        <div id="game-container" class="game-container">
+          <iframe
+            id="game-frame"
+            class="game-frame"
+            allow="fullscreen; autoplay; gamepad"
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-popups"
+          ></iframe>
+
+          <!-- Fullscreen button overlay -->
+          <button id="fullscreen-btn" class="fullscreen-btn" title="Toggle fullscreen">
+            <svg id="fs-expand-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <svg id="fs-compress-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M4 14h6v6m10-10h-6V4m0 6 7-7M3 21l7-7"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .play-section {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  /* ---------- States ---------- */
+  .state-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: var(--text-muted, #888);
+  }
+  .state-icon { font-size: 2.5rem; line-height: 1; color: var(--accent-red); }
+  .state-msg h2 { color: var(--text-primary); margin: 0; }
+
+  .loader-ring {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border, #333);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Game header ---------- */
+  .game-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .game-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .game-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .game-info {
+    min-width: 0;
+  }
+
+  .game-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game-prompt {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 2px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
+  }
+
+  .game-header-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Game container ---------- */
+  .game-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .game-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ---------- Fullscreen button ---------- */
+  .fullscreen-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+
+  .fullscreen-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+    transform: scale(1.08);
+  }
+
+  .fullscreen-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* ---------- Fullscreen state ---------- */
+  .game-container:fullscreen,
+  .game-container:-webkit-full-screen {
+    border-radius: 0;
+    border: none;
+    aspect-ratio: auto;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .game-container:fullscreen .game-frame,
+  .game-container:-webkit-full-screen .game-frame {
+    width: 100%;
+    height: 100%;
+  }
+
+  .game-container:fullscreen .fullscreen-btn,
+  .game-container:-webkit-full-screen .fullscreen-btn {
+    bottom: 16px;
+    right: 16px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .game-container:fullscreen:hover .fullscreen-btn,
+  .game-container:-webkit-full-screen:hover .fullscreen-btn,
+  .game-container:fullscreen .fullscreen-btn:focus,
+  .game-container:-webkit-full-screen .fullscreen-btn:focus {
+    opacity: 1;
+  }
+
+  /* Mobile: always show fullscreen button in fullscreen (no hover) */
+  @media (hover: none) {
+    .game-container:fullscreen .fullscreen-btn,
+    .game-container:-webkit-full-screen .fullscreen-btn {
+      opacity: 0.7;
+    }
+  }
+
+  /* ---------- CSS fallback for landscape lock on iOS ----------
+     When we can't use screen.orientation.lock(), we rotate
+     the container via CSS when a class is added by JS */
+  .game-container.ios-landscape-lock {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vh !important;
+    height: 100vw !important;
+    transform: rotate(90deg) translateY(-100%);
+    transform-origin: top left;
+    z-index: 99999;
+    border-radius: 0;
+    border: none;
+    aspect-ratio: auto;
+  }
+
+  .game-container.ios-landscape-lock .game-frame {
+    width: 100%;
+    height: 100%;
+  }
+
+  .game-container.ios-landscape-lock .fullscreen-btn {
+    opacity: 0.7;
+    bottom: 16px;
+    right: 16px;
+  }
+
+  /* iOS landscape lock backdrop */
+  #ios-fs-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 99998;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 600px) {
+    .play-section { padding-top: 1rem; }
+
+    .game-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .game-header-actions {
+      width: 100%;
+    }
+
+    .game-header-actions .btn {
+      flex: 1;
+      justify-content: center;
+      font-size: 13px;
+      padding: 8px 12px;
+    }
+
+    .game-thumb {
+      width: 44px;
+      height: 44px;
+    }
+
+    .game-title { font-size: 0.95rem; }
+    .game-prompt { font-size: 0.7rem; }
+
+    .game-container {
+      border-radius: var(--radius);
+    }
+
+    .fullscreen-btn {
+      bottom: 8px;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+    }
+  }
+</style>
+
+<!-- iOS fullscreen backdrop (behind the rotated container) -->
+<div id="ios-fs-backdrop"></div>
+
+<script is:inline>
+  var API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://circuitbot-api-production.up.railway.app';
+
+  var gameContainer = null;
+  var gameFrame = null;
+  var fullscreenBtn = null;
+  var expandIcon = null;
+  var compressIcon = null;
+  var iosBackdrop = null;
+  var isIosFullscreen = false;
+
+  // ── Detect iOS (no orientation lock or Fullscreen API support) ──
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  function isMobile() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 1;
+  }
+
+  // ── Fullscreen helpers ──────────────────────
+  function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  function requestFS(el) {
+    if (el.requestFullscreen) return el.requestFullscreen();
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+    return Promise.reject(new Error('Fullscreen not supported'));
+  }
+
+  function exitFS() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    return Promise.reject(new Error('Exit fullscreen not supported'));
+  }
+
+  // ── Orientation lock ────────────────────────
+  function lockLandscape() {
+    if (screen.orientation && screen.orientation.lock) {
+      return screen.orientation.lock('landscape').catch(function() {});
+    }
+    return Promise.resolve();
+  }
+
+  function unlockOrientation() {
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch(e) {}
+    }
+  }
+
+  // ── iOS fallback fullscreen (CSS rotation) ──
+  function enterIosFullscreen() {
+    isIosFullscreen = true;
+    gameContainer.classList.add('ios-landscape-lock');
+    iosBackdrop.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    updateFsIcons(true);
+  }
+
+  function exitIosFullscreen() {
+    isIosFullscreen = false;
+    gameContainer.classList.remove('ios-landscape-lock');
+    iosBackdrop.style.display = 'none';
+    document.body.style.overflow = '';
+    updateFsIcons(false);
+  }
+
+  // ── Toggle fullscreen ──────────────────────
+  function toggleFullscreen() {
+    // iOS path: no real Fullscreen API
+    if (isIOS() && isMobile()) {
+      if (isIosFullscreen) {
+        exitIosFullscreen();
+      } else {
+        enterIosFullscreen();
+      }
+      return;
+    }
+
+    // Standard Fullscreen API path
+    if (getFullscreenElement()) {
+      exitFS();
+    } else {
+      requestFS(gameContainer).then(function() {
+        if (isMobile()) lockLandscape();
+      }).catch(function() {
+        // Fallback to iOS-style if requestFullscreen fails on some browsers
+        if (isMobile()) enterIosFullscreen();
+      });
+    }
+  }
+
+  function updateFsIcons(isFullscreen) {
+    if (!expandIcon || !compressIcon) return;
+    expandIcon.style.display = isFullscreen ? 'none' : '';
+    compressIcon.style.display = isFullscreen ? '' : 'none';
+  }
+
+  // ── Fullscreen change listener ─────────────
+  function onFullscreenChange() {
+    var isFs = !!getFullscreenElement();
+    updateFsIcons(isFs);
+    if (!isFs) {
+      unlockOrientation();
+    }
+  }
+
+  // ── API helpers ─────────────────────────────
+  function getToken() {
+    return localStorage.getItem('token');
+  }
+
+  function getJobId() {
+    return new URLSearchParams(window.location.search).get('id');
+  }
+
+  function showView(id) {
+    ['play-loading', 'play-error', 'play-view'].forEach(function(s) {
+      var el = document.getElementById(s);
+      if (el) el.style.display = s === id ? (s === 'play-view' ? 'block' : 'flex') : 'none';
+    });
+  }
+
+  // ── Load game ───────────────────────────────
+  function loadGame() {
+    var jobId = getJobId();
+    if (!jobId) {
+      showView('play-error');
+      document.getElementById('play-error-msg').textContent = 'No game ID provided.';
+      return;
+    }
+
+    var token = getToken();
+    var headers = {};
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+
+    // Try authenticated endpoint first, fall back to public browse
+    var tryAuth = token
+      ? fetch(API_BASE + '/api/games/' + jobId, { headers: headers })
+      : Promise.reject('no token');
+
+    tryAuth
+      .then(function(res) {
+        if (!res.ok) throw new Error('not owner');
+        return res.json().then(function(game) { return { game: game, isOwner: true }; });
+      })
+      .catch(function() {
+        // Fall back to public browse endpoint
+        return fetch(API_BASE + '/api/browse/' + jobId)
+          .then(function(res) {
+            if (!res.ok) throw new Error('Game not found');
+            return res.json().then(function(game) { return { game: game, isOwner: false }; });
+          });
+      })
+      .then(function(result) {
+        var game = result.game;
+        var isOwner = result.isOwner;
+
+        if (game.status !== 'completed') {
+          showView('play-error');
+          document.getElementById('play-error-msg').textContent =
+            'This game is still being generated. Check back soon!';
+          return;
+        }
+
+        if (!game.web_build_key) {
+          showView('play-error');
+          document.getElementById('play-error-msg').textContent =
+            'No web build available for this game.';
+          return;
+        }
+
+        renderGame(game, isOwner);
+      })
+      .catch(function(err) {
+        showView('play-error');
+      });
+  }
+
+  // ── Render game ─────────────────────────────
+  function renderGame(game, isOwner) {
+    showView('play-view');
+
+    // Title & prompt
+    var title = game.game_title || game.prompt || 'Untitled Game';
+    document.getElementById('game-title').textContent = title;
+    document.getElementById('game-prompt').textContent = game.prompt || '';
+    document.title = title + ' — CircuitBot';
+
+    // Thumbnail
+    loadThumbnail(game, isOwner);
+
+    // Download button
+    var dlBtn = document.getElementById('game-download');
+    if (isOwner) {
+      var token = getToken();
+      fetch(API_BASE + '/api/games/' + game.id + '/download', {
+        headers: { Authorization: 'Bearer ' + token },
+      })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (data && data.download_url) {
+            dlBtn.href = data.download_url;
+            dlBtn.style.display = '';
+          }
+        })
+        .catch(function() {});
+    }
+
+    // Embed the web build
+    var webBase = isOwner
+      ? API_BASE + '/api/games/' + game.id + '/web/'
+      : API_BASE + '/api/browse/' + game.id + '/web/';
+
+    gameFrame.src = webBase + 'index.html';
+  }
+
+  // ── Load thumbnail ──────────────────────────
+  function loadThumbnail(game, isOwner) {
+    var thumbEl = document.getElementById('game-thumb');
+    if (!game.thumbnail_key) return;
+
+    var thumbEndpoint = isOwner
+      ? API_BASE + '/api/games/' + game.id + '/thumbnail-url'
+      : API_BASE + '/api/browse/' + game.id + '/thumbnail';
+
+    var headers = {};
+    var token = getToken();
+    if (isOwner && token) headers['Authorization'] = 'Bearer ' + token;
+
+    fetch(thumbEndpoint, { headers: headers })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.thumbnail_url) {
+          thumbEl.src = data.thumbnail_url;
+          thumbEl.style.display = '';
+        }
+      })
+      .catch(function() {});
+  }
+
+  // ── Init ────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    gameContainer = document.getElementById('game-container');
+    gameFrame = document.getElementById('game-frame');
+    fullscreenBtn = document.getElementById('fullscreen-btn');
+    expandIcon = document.getElementById('fs-expand-icon');
+    compressIcon = document.getElementById('fs-compress-icon');
+    iosBackdrop = document.getElementById('ios-fs-backdrop');
+
+    // Fullscreen button
+    fullscreenBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFullscreen();
+    });
+
+    // iOS backdrop click exits fullscreen
+    iosBackdrop.addEventListener('click', function() {
+      if (isIosFullscreen) exitIosFullscreen();
+    });
+
+    // Listen for standard fullscreen changes
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+    // Escape key exits iOS fullscreen
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isIosFullscreen) {
+        exitIosFullscreen();
+      }
+    });
+
+    loadGame();
+  });
+</script>

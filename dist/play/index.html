@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Play Game — CircuitBot</title><meta name="description" content="Play an AI-generated game right in your browser."><meta name="robots" content="noindex, nofollow"><link rel="canonical" href="https://circuit-bot.com/play/"><link rel="icon" type="image/png" href="/circuitbot.png"><!-- Open Graph --><meta property="og:title" content="Play Game — CircuitBot"><meta property="og:description" content="Play an AI-generated game right in your browser."><meta property="og:type" content="website"><meta property="og:url" content="https://circuit-bot.com/play/"><meta property="og:site_name" content="CircuitBot"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://circuit-bot.com/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Play Game — CircuitBot"><meta name="twitter:description" content="Play an AI-generated game right in your browser."><meta name="twitter:image" content="https://circuit-bot.com/og-image.png"><!-- Fonts (preloaded) --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/play.CTOyl6Md.css">
+<link rel="stylesheet" href="/_astro/create.BJq0Q_dF.css"></head> <body> <div class="top-accent"></div> <div class="nav-wrapper" data-astro-cid-dmqpwcec> <nav class="nav" data-astro-cid-dmqpwcec> <div class="container nav-inner" data-astro-cid-dmqpwcec> <a href="/" class="nav-brand" data-astro-cid-dmqpwcec> <img src="/circuitbot.png" alt="CircuitBot" class="nav-logo-img" data-astro-cid-dmqpwcec> <span class="nav-name" data-astro-cid-dmqpwcec>CircuitBot</span> </a> <div class="nav-links" data-astro-cid-dmqpwcec> <a href="/create" class="nav-link" data-astro-cid-dmqpwcec> Create a Game </a><a href="/pricing" class="nav-link" data-astro-cid-dmqpwcec> Pricing </a><a href="/my-games" class="nav-link" data-astro-cid-dmqpwcec> My Games </a><a href="/download" class="nav-link" data-astro-cid-dmqpwcec> Desktop App </a><a href="https://discord.gg/circuitbot" class="nav-link" target="_blank" rel="noopener noreferrer" data-astro-cid-dmqpwcec> Support </a> </div> <div class="nav-actions" data-astro-cid-dmqpwcec> <a href="/login" class="btn btn-ghost nav-login" id="nav-login-btn" data-astro-cid-dmqpwcec>Log in</a> <a href="#" class="btn btn-ghost nav-login" id="nav-logout-btn" style="display:none;" data-astro-cid-dmqpwcec>Log out</a> <a href="/create" class="btn btn-yellow nav-cta" data-astro-cid-dmqpwcec>BUILD</a> </div> <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" data-astro-cid-dmqpwcec> <span data-astro-cid-dmqpwcec></span><span data-astro-cid-dmqpwcec></span><span data-astro-cid-dmqpwcec></span> </button> </div> </nav> <div class="nav-mobile" id="nav-mobile" data-astro-cid-dmqpwcec> <a href="/create" class="nav-mobile-link" data-astro-cid-dmqpwcec>Create a Game</a><a href="/pricing" class="nav-mobile-link" data-astro-cid-dmqpwcec>Pricing</a><a href="/my-games" class="nav-mobile-link" data-astro-cid-dmqpwcec>My Games</a><a href="/download" class="nav-mobile-link" data-astro-cid-dmqpwcec>Desktop App</a><a href="https://discord.gg/circuitbot" class="nav-mobile-link" data-astro-cid-dmqpwcec>Support</a> <a href="/login" class="nav-mobile-link" id="nav-mobile-login" data-astro-cid-dmqpwcec>Log in</a> <a href="/create" class="btn btn-yellow nav-mobile-cta" data-astro-cid-dmqpwcec>BUILD</a> </div> </div>  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('nav-toggle');
+    var mobile = document.getElementById('nav-mobile');
+    if (toggle && mobile) {
+      toggle.addEventListener('click', function() { mobile.classList.toggle('open'); });
+    }
+
+    var token = localStorage.getItem('token');
+    var loginBtn = document.getElementById('nav-login-btn');
+    var logoutBtn = document.getElementById('nav-logout-btn');
+    if (token) {
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = '';
+      logoutBtn && logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      });
+    }
+  });
+</script> <div class="checker-wrap"> <main class="content-bar">  <section class="section play-section" data-astro-cid-pnebxxf4> <div class="container" data-astro-cid-pnebxxf4> <!-- Loading --> <div id="play-loading" class="state-msg" data-astro-cid-pnebxxf4> <div class="loader-ring" data-astro-cid-pnebxxf4></div> <p data-astro-cid-pnebxxf4>Loading game...</p> </div> <!-- Error --> <div id="play-error" class="state-msg" style="display:none;" data-astro-cid-pnebxxf4> <div class="state-icon" data-astro-cid-pnebxxf4>&#9888;</div> <h2 data-astro-cid-pnebxxf4>Game not found</h2> <p id="play-error-msg" data-astro-cid-pnebxxf4>This game may be private or doesn't exist.</p> <a href="/my-games" class="btn btn-primary" data-astro-cid-pnebxxf4>My Games</a> </div> <!-- Game view --> <div id="play-view" style="display:none;" data-astro-cid-pnebxxf4> <!-- Game header --> <div class="game-header" data-astro-cid-pnebxxf4> <div class="game-header-left" data-astro-cid-pnebxxf4> <img id="game-thumb" class="game-thumb" src="" alt="Game thumbnail" style="display:none;" data-astro-cid-pnebxxf4> <div class="game-info" data-astro-cid-pnebxxf4> <h1 id="game-title" class="game-title" data-astro-cid-pnebxxf4></h1> <p id="game-prompt" class="game-prompt" data-astro-cid-pnebxxf4></p> </div> </div> <div class="game-header-actions" data-astro-cid-pnebxxf4> <a id="game-download" href="#" class="btn" style="display:none;" data-astro-cid-pnebxxf4>Download</a> <a href="/my-games" class="btn btn-ghost" data-astro-cid-pnebxxf4>Back to Games</a> </div> </div> <!-- Game container — this is what goes fullscreen --> <div id="game-container" class="game-container" data-astro-cid-pnebxxf4> <iframe id="game-frame" class="game-frame" allow="fullscreen; autoplay; gamepad" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups" data-astro-cid-pnebxxf4></iframe> <!-- Fullscreen button overlay --> <button id="fullscreen-btn" class="fullscreen-btn" title="Toggle fullscreen" data-astro-cid-pnebxxf4> <svg id="fs-expand-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-pnebxxf4> <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" data-astro-cid-pnebxxf4></path> </svg> <svg id="fs-compress-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" data-astro-cid-pnebxxf4> <path d="M4 14h6v6m10-10h-6V4m0 6 7-7M3 21l7-7" data-astro-cid-pnebxxf4></path> </svg> </button> </div> </div> </div> </section>  </main> </div> <footer class="footer" data-astro-cid-sz7xmlte> <div class="container" data-astro-cid-sz7xmlte> <div class="divider" data-astro-cid-sz7xmlte></div> <div class="footer-inner" data-astro-cid-sz7xmlte> <div class="footer-brand" data-astro-cid-sz7xmlte> <img src="/circuitbot.png" alt="CircuitBot" class="footer-logo-img" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte> <div class="footer-name" data-astro-cid-sz7xmlte>CircuitBot</div> <div class="footer-tagline" data-astro-cid-sz7xmlte>Your game dev starting line.</div> </div> </div> <div class="footer-links" data-astro-cid-sz7xmlte> <div class="footer-col" data-astro-cid-sz7xmlte> <h4 data-astro-cid-sz7xmlte>Product</h4> <a href="/create" data-astro-cid-sz7xmlte>Create Game</a> <a href="/pricing" data-astro-cid-sz7xmlte>Pricing</a> <a href="/my-games" data-astro-cid-sz7xmlte>My Games</a> </div> <div class="footer-col" data-astro-cid-sz7xmlte> <h4 data-astro-cid-sz7xmlte>Learn</h4> <a href="https://godotengine.org/download/" target="_blank" rel="noopener" data-astro-cid-sz7xmlte>Download Godot</a> <a href="https://docs.godotengine.org/en/stable/getting_started/introduction/index.html" target="_blank" rel="noopener" data-astro-cid-sz7xmlte>Godot Tutorials</a> <a href="/#how-it-works" data-astro-cid-sz7xmlte>How It Works</a> </div> <div class="footer-col" data-astro-cid-sz7xmlte> <h4 data-astro-cid-sz7xmlte>Legal</h4> <a href="/privacy" data-astro-cid-sz7xmlte>Privacy Policy</a> <a href="/terms" data-astro-cid-sz7xmlte>Terms of Service</a> </div> </div> </div> <div class="footer-bottom" data-astro-cid-sz7xmlte> <span data-astro-cid-sz7xmlte>&copy; 2026 CircuitBot. All rights reserved.</span> <span class="footer-status" data-astro-cid-sz7xmlte> <span class="status-dot" data-astro-cid-sz7xmlte></span>
+Describe it. Build on it. Make it yours.
+</span> </div> </div> </footer>  </body></html>  <!-- iOS fullscreen backdrop (behind the rotated container) --> <div id="ios-fs-backdrop" data-astro-cid-pnebxxf4></div> <script>
+  var API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://circuitbot-api-production.up.railway.app';
+
+  var gameContainer = null;
+  var gameFrame = null;
+  var fullscreenBtn = null;
+  var expandIcon = null;
+  var compressIcon = null;
+  var iosBackdrop = null;
+  var isIosFullscreen = false;
+
+  // ── Detect iOS (no orientation lock or Fullscreen API support) ──
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  function isMobile() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 1;
+  }
+
+  // ── Fullscreen helpers ──────────────────────
+  function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  function requestFS(el) {
+    if (el.requestFullscreen) return el.requestFullscreen();
+    if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+    return Promise.reject(new Error('Fullscreen not supported'));
+  }
+
+  function exitFS() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    return Promise.reject(new Error('Exit fullscreen not supported'));
+  }
+
+  // ── Orientation lock ────────────────────────
+  function lockLandscape() {
+    if (screen.orientation && screen.orientation.lock) {
+      return screen.orientation.lock('landscape').catch(function() {});
+    }
+    return Promise.resolve();
+  }
+
+  function unlockOrientation() {
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch(e) {}
+    }
+  }
+
+  // ── iOS fallback fullscreen (CSS rotation) ──
+  function enterIosFullscreen() {
+    isIosFullscreen = true;
+    gameContainer.classList.add('ios-landscape-lock');
+    iosBackdrop.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    updateFsIcons(true);
+  }
+
+  function exitIosFullscreen() {
+    isIosFullscreen = false;
+    gameContainer.classList.remove('ios-landscape-lock');
+    iosBackdrop.style.display = 'none';
+    document.body.style.overflow = '';
+    updateFsIcons(false);
+  }
+
+  // ── Toggle fullscreen ──────────────────────
+  function toggleFullscreen() {
+    // iOS path: no real Fullscreen API
+    if (isIOS() && isMobile()) {
+      if (isIosFullscreen) {
+        exitIosFullscreen();
+      } else {
+        enterIosFullscreen();
+      }
+      return;
+    }
+
+    // Standard Fullscreen API path
+    if (getFullscreenElement()) {
+      exitFS();
+    } else {
+      requestFS(gameContainer).then(function() {
+        if (isMobile()) lockLandscape();
+      }).catch(function() {
+        // Fallback to iOS-style if requestFullscreen fails on some browsers
+        if (isMobile()) enterIosFullscreen();
+      });
+    }
+  }
+
+  function updateFsIcons(isFullscreen) {
+    if (!expandIcon || !compressIcon) return;
+    expandIcon.style.display = isFullscreen ? 'none' : '';
+    compressIcon.style.display = isFullscreen ? '' : 'none';
+  }
+
+  // ── Fullscreen change listener ─────────────
+  function onFullscreenChange() {
+    var isFs = !!getFullscreenElement();
+    updateFsIcons(isFs);
+    if (!isFs) {
+      unlockOrientation();
+    }
+  }
+
+  // ── API helpers ─────────────────────────────
+  function getToken() {
+    return localStorage.getItem('token');
+  }
+
+  function getJobId() {
+    return new URLSearchParams(window.location.search).get('id');
+  }
+
+  function showView(id) {
+    ['play-loading', 'play-error', 'play-view'].forEach(function(s) {
+      var el = document.getElementById(s);
+      if (el) el.style.display = s === id ? (s === 'play-view' ? 'block' : 'flex') : 'none';
+    });
+  }
+
+  // ── Load game ───────────────────────────────
+  function loadGame() {
+    var jobId = getJobId();
+    if (!jobId) {
+      showView('play-error');
+      document.getElementById('play-error-msg').textContent = 'No game ID provided.';
+      return;
+    }
+
+    var token = getToken();
+    var headers = {};
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+
+    // Try authenticated endpoint first, fall back to public browse
+    var tryAuth = token
+      ? fetch(API_BASE + '/api/games/' + jobId, { headers: headers })
+      : Promise.reject('no token');
+
+    tryAuth
+      .then(function(res) {
+        if (!res.ok) throw new Error('not owner');
+        return res.json().then(function(game) { return { game: game, isOwner: true }; });
+      })
+      .catch(function() {
+        // Fall back to public browse endpoint
+        return fetch(API_BASE + '/api/browse/' + jobId)
+          .then(function(res) {
+            if (!res.ok) throw new Error('Game not found');
+            return res.json().then(function(game) { return { game: game, isOwner: false }; });
+          });
+      })
+      .then(function(result) {
+        var game = result.game;
+        var isOwner = result.isOwner;
+
+        if (game.status !== 'completed') {
+          showView('play-error');
+          document.getElementById('play-error-msg').textContent =
+            'This game is still being generated. Check back soon!';
+          return;
+        }
+
+        if (!game.web_build_key) {
+          showView('play-error');
+          document.getElementById('play-error-msg').textContent =
+            'No web build available for this game.';
+          return;
+        }
+
+        renderGame(game, isOwner);
+      })
+      .catch(function(err) {
+        showView('play-error');
+      });
+  }
+
+  // ── Render game ─────────────────────────────
+  function renderGame(game, isOwner) {
+    showView('play-view');
+
+    // Title & prompt
+    var title = game.game_title || game.prompt || 'Untitled Game';
+    document.getElementById('game-title').textContent = title;
+    document.getElementById('game-prompt').textContent = game.prompt || '';
+    document.title = title + ' — CircuitBot';
+
+    // Thumbnail
+    loadThumbnail(game, isOwner);
+
+    // Download button
+    var dlBtn = document.getElementById('game-download');
+    if (isOwner) {
+      var token = getToken();
+      fetch(API_BASE + '/api/games/' + game.id + '/download', {
+        headers: { Authorization: 'Bearer ' + token },
+      })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (data && data.download_url) {
+            dlBtn.href = data.download_url;
+            dlBtn.style.display = '';
+          }
+        })
+        .catch(function() {});
+    }
+
+    // Embed the web build
+    var webBase = isOwner
+      ? API_BASE + '/api/games/' + game.id + '/web/'
+      : API_BASE + '/api/browse/' + game.id + '/web/';
+
+    gameFrame.src = webBase + 'index.html';
+  }
+
+  // ── Load thumbnail ──────────────────────────
+  function loadThumbnail(game, isOwner) {
+    var thumbEl = document.getElementById('game-thumb');
+    if (!game.thumbnail_key) return;
+
+    var thumbEndpoint = isOwner
+      ? API_BASE + '/api/games/' + game.id + '/thumbnail-url'
+      : API_BASE + '/api/browse/' + game.id + '/thumbnail';
+
+    var headers = {};
+    var token = getToken();
+    if (isOwner && token) headers['Authorization'] = 'Bearer ' + token;
+
+    fetch(thumbEndpoint, { headers: headers })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.thumbnail_url) {
+          thumbEl.src = data.thumbnail_url;
+          thumbEl.style.display = '';
+        }
+      })
+      .catch(function() {});
+  }
+
+  // ── Init ────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    gameContainer = document.getElementById('game-container');
+    gameFrame = document.getElementById('game-frame');
+    fullscreenBtn = document.getElementById('fullscreen-btn');
+    expandIcon = document.getElementById('fs-expand-icon');
+    compressIcon = document.getElementById('fs-compress-icon');
+    iosBackdrop = document.getElementById('ios-fs-backdrop');
+
+    // Fullscreen button
+    fullscreenBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFullscreen();
+    });
+
+    // iOS backdrop click exits fullscreen
+    iosBackdrop.addEventListener('click', function() {
+      if (isIosFullscreen) exitIosFullscreen();
+    });
+
+    // Listen for standard fullscreen changes
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
+    // Escape key exits iOS fullscreen
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isIosFullscreen) {
+        exitIosFullscreen();
+      }
+    });
+
+    loadGame();
+  });
+</script>
