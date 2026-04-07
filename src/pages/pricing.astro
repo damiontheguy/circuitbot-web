@@ -20,35 +20,7 @@ import Layout from '../layouts/Layout.astro';
   <!-- Pricing Cards -->
   <section class="section">
     <div class="container">
-      <div class="pricing-card-grid pricing-card-grid-4">
-        <!-- Free Tier -->
-        <div class="pricing-card pricing-card-free">
-          <div class="pricing-card-glow pricing-card-glow-yellow"></div>
-          <div class="pricing-card-header">
-            <span class="badge badge-yellow">Free Trial</span>
-            <div class="pricing-amount">
-              <span class="pricing-dollar pricing-dollar-yellow">$</span>
-              <span class="pricing-value pricing-value-yellow">0</span>
-            </div>
-            <p class="pricing-label">first game</p>
-          </div>
-
-          <div class="pricing-divider"></div>
-
-          <div class="pricing-includes">
-            <p class="pricing-includes-label">// included</p>
-            <ul class="pricing-features">
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> 1 full game generation</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> Complete <span style="color: #4582c7;">Godot 4</span> project</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> AI art + code + build</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> Phone verification only</li>
-            </ul>
-          </div>
-
-          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Try Free</a>
-          <p class="pricing-note">No credit card required</p>
-        </div>
-
+      <div class="pricing-card-grid">
         <!-- Starter Pack -->
         <div class="pricing-card">
           <div class="pricing-card-glow"></div>
@@ -365,9 +337,9 @@ import Layout from '../layouts/Layout.astro';
     margin: 0 auto;
   }
 
-  .pricing-card-grid-4 {
-    grid-template-columns: repeat(4, 1fr);
-    max-width: 1100px;
+  .pricing-card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 960px;
   }
 
   .pricing-card-popular {
@@ -619,15 +591,15 @@ import Layout from '../layouts/Layout.astro';
   }
 
   /* ── Responsive ─────────────────── */
-  @media (max-width: 900px) {
-    .pricing-card-grid-4 {
-      grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 768px) {
+    .pricing-card-grid {
+      grid-template-columns: 1fr;
+      max-width: 400px;
     }
   }
 
   @media (max-width: 600px) {
-    .pricing-card-grid,
-    .pricing-card-grid-4 {
+    .pricing-card-grid {
       grid-template-columns: 1fr;
     }
 
