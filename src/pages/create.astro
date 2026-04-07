@@ -39,6 +39,17 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
+        <!-- Generate Button (between textarea and chips) -->
+        <div class="generate-row">
+          <button id="generate-btn" class="btn btn-yellow generate-btn">
+            Generate Game
+          </button>
+          <span class="generate-cost" id="generate-cost">~750 credits</span>
+          <button id="free-trial-btn" class="btn btn-ghost generate-free-btn" style="display:none;">
+            or Try Free
+          </button>
+        </div>
+
         <!-- Example Chips -->
         <div class="chips-section">
           <p class="chips-label">Try an example:</p>
@@ -57,44 +68,6 @@ import Layout from '../layouts/Layout.astro';
             </button>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider" />
-
-  <!-- Price + CTA -->
-  <section class="section">
-    <div class="container-narrow">
-      <div class="price-card">
-        <div class="price-amount">
-          <span class="price-dollar">$</span>
-          <span class="price-value">6.99</span>
-        </div>
-        <p class="price-subtitle">One game, fully generated</p>
-        <ul class="price-includes">
-          <li><span class="check">+</span> Complete <span style="color: #4582c7;">Godot 4</span> project</li>
-          <li><span class="check">+</span> AI-generated art assets</li>
-          <li><span class="check">+</span> Compiled Windows executable</li>
-          <li><span class="check">+</span> Source code included</li>
-        </ul>
-        <button id="generate-btn" class="btn btn-primary btn-lg generate-btn">
-          Generate My Game — $6.99
-        </button>
-
-        <!-- Free Trial -->
-        <div id="free-trial-section" class="free-trial-section" style="display: none;">
-          <div class="free-trial-divider"><span>or</span></div>
-          <button id="free-trial-btn" class="btn btn-secondary btn-lg free-trial-btn">
-            Try Free — Verify Phone
-          </button>
-          <p class="free-trial-note">One free game per account. Phone verification required.</p>
-        </div>
-
-        <p class="disclaimer">
-          By clicking generate, you agree to our <a href="/terms">Terms of Service</a>.
-          Generation takes ~15-30 minutes.
-        </p>
       </div>
     </div>
   </section>
@@ -171,13 +144,12 @@ import Layout from '../layouts/Layout.astro';
       _phoneVerified = data.phone_verified;
       _freeTrialEligible = data.free_trial_eligible;
 
-      var section = document.getElementById('free-trial-section');
       var btn = document.getElementById('free-trial-btn');
-      if (section && (_freeTrialEligible || !_phoneVerified)) {
-        section.style.display = 'block';
+      if (btn && (_freeTrialEligible || !_phoneVerified)) {
+        btn.style.display = '';
       }
       if (btn && _freeTrialEligible) {
-        btn.textContent = 'Generate Free';
+        btn.textContent = 'or Generate Free';
       }
     })
     .catch(function() {});
@@ -294,7 +266,7 @@ import Layout from '../layouts/Layout.astro';
     .catch(function(err) {
       showError(err.message || 'Something went wrong. Please try again.');
       activeBtn.disabled = false;
-      activeBtn.textContent = isFreeTrial ? 'Generate Free' : 'Generate My Game — $6.99';
+      activeBtn.textContent = isFreeTrial ? 'or Try Free' : 'Generate Game';
     });
   }
 
@@ -532,75 +504,17 @@ import Layout from '../layouts/Layout.astro';
     background: rgba(255, 211, 64, 0.06);
   }
 
-  /* ── Price Card ─────────────────── */
-  .price-card {
-    max-width: 480px;
-    margin: 0 auto;
-    text-align: center;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 40px 32px;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .price-amount {
+  /* ── Generate Row ────────────────── */
+  .generate-row {
     display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 4px;
-    margin-bottom: 4px;
-  }
-
-  .price-dollar {
-    font-family: var(--font-mono);
-    font-size: 24px;
-    color: var(--text-muted);
-  }
-
-  .price-value {
-    font-family: var(--font-mono);
-    font-size: 56px;
-    font-weight: 700;
-    color: var(--accent-yellow);
-    line-height: 1;
-  }
-
-  .price-subtitle {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 24px;
-  }
-
-  .price-includes {
-    list-style: none;
-    text-align: left;
-    max-width: 300px;
-    margin: 0 auto 28px;
-  }
-
-  .price-includes li {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-secondary);
-    padding: 4px 0;
-  }
-
-  .price-includes .check {
-    color: var(--accent-blue);
-    margin-right: 8px;
-    font-weight: 700;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
   }
 
   .generate-btn {
-    width: 100%;
-    justify-content: center;
-    font-size: 16px;
-    padding: 16px 28px;
-    margin-bottom: 16px;
+    padding: 10px 24px;
+    font-size: 14px;
   }
 
   .generate-btn:disabled {
@@ -608,68 +522,23 @@ import Layout from '../layouts/Layout.astro';
     cursor: wait;
   }
 
-  .disclaimer {
+  .generate-cost {
+    font-family: var(--font-mono);
     font-size: 12px;
     color: var(--text-muted);
-    line-height: 1.5;
   }
 
-  .disclaimer a {
-    color: var(--text-secondary);
-    text-decoration: underline;
-  }
-
-  /* ── Free Trial ──────────────────── */
-  .free-trial-section {
-    margin-top: 20px;
-  }
-
-  .free-trial-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .free-trial-divider::before,
-  .free-trial-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .free-trial-btn {
-    width: 100%;
-    justify-content: center;
-    font-size: 16px;
-    padding: 16px 28px;
-    background: transparent;
-    border: 1px solid var(--accent-yellow);
+  .generate-free-btn {
+    font-size: 13px;
+    padding: 8px 14px;
     color: var(--accent-yellow);
   }
-
-  .free-trial-btn:hover {
+  .generate-free-btn:hover {
     background: rgba(255, 211, 64, 0.08);
-    box-shadow: 0 0 20px rgba(255, 211, 64, 0.15);
   }
-
-  .free-trial-btn:disabled {
+  .generate-free-btn:disabled {
     opacity: 0.5;
     cursor: wait;
-  }
-
-  .free-trial-note {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 8px;
-    font-family: var(--font-mono);
-    letter-spacing: 0.3px;
   }
 
   /* ── Phone Modal ────────────────── */
@@ -815,12 +684,8 @@ import Layout from '../layouts/Layout.astro';
 
   /* ── Responsive ─────────────────── */
   @media (max-width: 600px) {
-    .price-card {
-      padding: 28px 20px;
-    }
-
-    .price-value {
-      font-size: 44px;
+    .generate-row {
+      flex-wrap: wrap;
     }
 
     .chip {
