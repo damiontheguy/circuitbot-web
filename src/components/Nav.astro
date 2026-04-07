@@ -1,12 +1,9 @@
 ---
 const currentPath = Astro.url.pathname;
 const links = [
-  { href: '/create', label: 'Create a Game' },
   { href: '/browse', label: 'Browse' },
   { href: '/#how-it-works', label: 'How It Works' },
   { href: '/pricing', label: 'Pricing' },
-  { href: '/my-games', label: 'My Games' },
-  { href: '/download', label: 'Desktop App' },
   { href: 'https://discord.gg/circuitbot', label: 'Support', external: true },
 ];
 ---
@@ -47,6 +44,7 @@ const links = [
             <div class="nav-dropdown" id="nav-dropdown">
               <a href="/my-games" class="nav-dd-item">My Games</a>
               <a href="/pricing" class="nav-dd-item">Buy Credits</a>
+              <a href="/download" class="nav-dd-item">Desktop App</a>
               <hr class="nav-dd-sep" />
               <button class="nav-dd-item nav-dd-logout" id="nav-dd-logout" type="button">Log out</button>
             </div>
