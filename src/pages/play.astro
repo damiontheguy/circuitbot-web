@@ -793,6 +793,9 @@ import Layout from '../layouts/Layout.astro';
 
     gameFrame.src = webBase + 'index.html';
 
+    // Record play
+    fetch(API_BASE + '/api/browse/' + game.id + '/play', { method: 'POST' }).catch(function() {});
+
     // Fork button (non-owners)
     var forkBtn = document.getElementById('game-fork');
     if (!isOwner && getToken()) {

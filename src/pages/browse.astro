@@ -14,6 +14,13 @@ import Layout from '../layouts/Layout.astro';
         <input type="text" id="search-input" class="search-input" placeholder="Search games or users..." autocomplete="off" />
       </div>
 
+      <div class="sort-bar">
+        <span class="sort-label">Sort by</span>
+        <button class="sort-btn sort-active" data-sort="recent">Recent</button>
+        <button class="sort-btn" data-sort="rating">Top Rated</button>
+        <button class="sort-btn" data-sort="plays">Most Played</button>
+      </div>
+
       <div id="browse-loading" class="state-msg">
         <div class="loader-ring"></div>
         <p>Loading games...</p>
@@ -110,6 +117,48 @@ import Layout from '../layouts/Layout.astro';
   }
   .search-input:focus {
     border-color: var(--accent-blue);
+  }
+
+  .sort-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+  .sort-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+  }
+  .sort-btn {
+    padding: 6px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sort-btn:hover {
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+  }
+  .sort-btn.sort-active {
+    background: rgba(69, 130, 199, 0.12);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
+  :global(.bc-play-count) {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
   }
 
   .browse-grid {
@@ -253,6 +302,7 @@ import Layout from '../layouts/Layout.astro';
     var offset = 0;
     var allLoaded = false;
     var currentQuery = '';
+    var currentSort = 'recent';
     var searchTimer = null;
 
     var loading = document.getElementById('browse-loading');
@@ -288,10 +338,29 @@ import Layout from '../layouts/Layout.astro';
       }, 300);
     });
 
+    // Sort buttons
+    document.querySelectorAll('.sort-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var s = btn.dataset.sort;
+        if (s === currentSort) return;
+        currentSort = s;
+        document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('sort-active'); });
+        btn.classList.add('sort-active');
+        offset = 0;
+        allLoaded = false;
+        grid.innerHTML = '';
+        grid.style.display = 'none';
+        empty.style.display = 'none';
+        loadMoreWrap.style.display = 'none';
+        loading.style.display = 'flex';
+        loadGames();
+      });
+    });
+
     function loadGames() {
       if (allLoaded) return;
 
-      var url = API_BASE + '/api/browse?limit=' + LIMIT + '&offset=' + offset;
+      var url = API_BASE + '/api/browse?limit=' + LIMIT + '&offset=' + offset + '&sort=' + currentSort;
       if (currentQuery) url += '&q=' + encodeURIComponent(currentQuery);
       fetch(url)
         .then(function(r) { return r.json(); })
@@ -352,6 +421,10 @@ import Layout from '../layouts/Layout.astro';
               var statusHtml = isInProgress ? '<span class="bc-status-badge">Building...</span>'
                 : game.has_active_edit ? '<span class="bc-status-badge bc-updating">Updating...</span>' : '';
 
+              var playCountHtml = !isInProgress && game.play_count > 0
+                ? '<span class="bc-play-count">' + game.play_count + ' play' + (game.play_count !== 1 ? 's' : '') + '</span>'
+                : '';
+
               card.innerHTML = thumbHtml +
                 '<div class="bc-info">' +
                   '<div class="bc-title">' + title.replace(/</g, '&lt;') + '</div>' +
@@ -359,6 +432,7 @@ import Layout from '../layouts/Layout.astro';
                     (creator ? '<span class="bc-creator">' + creator.replace(/</g, '&lt;') + '</span>' : '<span></span>') +
                     (ratingHtml || statusHtml) +
                   '</div>' +
+                  (playCountHtml ? '<div class="bc-meta" style="margin-top:2px;justify-content:flex-end;">' + playCountHtml + '</div>' : '') +
                 '</div>';
 
               grid.appendChild(card);
