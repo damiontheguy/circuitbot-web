@@ -212,9 +212,16 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 4px;
-    white-space: nowrap;
+  }
+  :global(.bc-prompt) {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+    margin-bottom: 6px;
   }
   :global(.bc-meta) {
     display: flex;
@@ -425,9 +432,13 @@ import Layout from '../layouts/Layout.astro';
                 ? '<span class="bc-play-count">' + game.play_count + ' play' + (game.play_count !== 1 ? 's' : '') + '</span>'
                 : '';
 
+              var promptText = game.prompt || '';
+              var displayTitle = game.game_title || '';
+
               card.innerHTML = thumbHtml +
                 '<div class="bc-info">' +
-                  '<div class="bc-title">' + title.replace(/</g, '&lt;') + '</div>' +
+                  (displayTitle ? '<div class="bc-title">' + displayTitle.replace(/</g, '&lt;') + '</div>' : '') +
+                  '<div class="bc-prompt">' + promptText.replace(/</g, '&lt;') + '</div>' +
                   '<div class="bc-meta">' +
                     (creator ? '<span class="bc-creator">' + creator.replace(/</g, '&lt;') + '</span>' : '<span></span>') +
                     (ratingHtml || statusHtml) +
