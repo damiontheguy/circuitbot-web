@@ -290,7 +290,7 @@ import Layout from '../layouts/Layout.astro';
       var empty = document.getElementById('community-empty');
       if (!grid) return;
 
-      fetch(API_BASE + '/api/browse?limit=6')
+      fetch(API_BASE + '/api/browse?limit=6&sort=plays')
         .then(function(r) { return r.json(); })
         .then(function(games) {
           if (!games || !games.length) {
