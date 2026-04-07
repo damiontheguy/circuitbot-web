@@ -10,6 +10,10 @@ import Layout from '../layouts/Layout.astro';
         <p class="section-sub">Play games built by the community.</p>
       </div>
 
+      <div class="search-bar">
+        <input type="text" id="search-input" class="search-input" placeholder="Search games or users..." autocomplete="off" />
+      </div>
+
       <div id="browse-loading" class="state-msg">
         <div class="loader-ring"></div>
         <p>Loading games...</p>
@@ -81,6 +85,31 @@ import Layout from '../layouts/Layout.astro';
 
   @keyframes spin {
     to { transform: rotate(360deg); }
+  }
+
+  .search-bar {
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .search-input::placeholder {
+    color: var(--text-muted);
+  }
+  .search-input:focus {
+    border-color: var(--accent-blue);
   }
 
   .browse-grid {
@@ -170,17 +199,40 @@ import Layout from '../layouts/Layout.astro';
     var LIMIT = 12;
     var offset = 0;
     var allLoaded = false;
+    var currentQuery = '';
+    var searchTimer = null;
 
     var loading = document.getElementById('browse-loading');
     var empty = document.getElementById('browse-empty');
     var grid = document.getElementById('browse-grid');
     var loadMoreWrap = document.getElementById('browse-load-more');
     var loadMoreBtn = document.getElementById('load-more-btn');
+    var searchInput = document.getElementById('search-input');
+
+    // Search with debounce
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        var q = searchInput.value.trim();
+        if (q === currentQuery) return;
+        currentQuery = q;
+        offset = 0;
+        allLoaded = false;
+        grid.innerHTML = '';
+        grid.style.display = 'none';
+        empty.style.display = 'none';
+        loadMoreWrap.style.display = 'none';
+        loading.style.display = 'flex';
+        loadGames();
+      }, 300);
+    });
 
     function loadGames() {
       if (allLoaded) return;
 
-      fetch(API_BASE + '/api/browse?limit=' + LIMIT + '&offset=' + offset)
+      var url = API_BASE + '/api/browse?limit=' + LIMIT + '&offset=' + offset;
+      if (currentQuery) url += '&q=' + encodeURIComponent(currentQuery);
+      fetch(url)
         .then(function(r) { return r.json(); })
         .then(function(games) {
           loading.style.display = 'none';
