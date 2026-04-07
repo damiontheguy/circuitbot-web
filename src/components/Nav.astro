@@ -2,7 +2,7 @@
 const currentPath = Astro.url.pathname;
 const links = [
   { href: '/create', label: 'Create' },
-  { href: '/browse', label: 'Browse' },
+  { href: '/browse', label: 'All Games' },
   { href: '/#how-it-works', label: 'How It Works' },
   { href: '/pricing', label: 'Pricing' },
   { href: 'https://discord.gg/circuitbot', label: 'Support', external: true },
@@ -157,6 +157,7 @@ const links = [
   /* ── Search bar ─────────────────────────────── */
   .nav-search {
     flex-shrink: 0;
+    margin-left: 10px;
   }
 
   .nav-search-input {
