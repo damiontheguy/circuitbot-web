@@ -225,7 +225,13 @@ Describe it. Build on it. Make it yours.
         .then(function(resp) {
           if (!resp.ok) {
             return resp.json().then(function(err) {
-              throw new Error(err.detail || 'Authentication failed');
+              var msg = 'Authentication failed';
+              if (typeof err.detail === 'string') {
+                msg = err.detail;
+              } else if (Array.isArray(err.detail)) {
+                msg = err.detail.map(function(e) { return e.msg || e.message || JSON.stringify(e); }).join('. ');
+              }
+              throw new Error(msg);
             });
           }
           return resp.json();
