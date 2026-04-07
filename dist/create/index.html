@@ -167,6 +167,19 @@ Describe it. Build on it. Make it yours.
   var _phoneVerified = false;
   var _pendingPhone = '';
 
+  // Fetch dynamic cost estimates
+  (function fetchCostEstimates() {
+    fetch(API_BASE + '/api/browse/stats')
+      .then(function(r) { return r.json(); })
+      .then(function(stats) {
+        var costEl = document.getElementById('generate-cost');
+        if (costEl && stats.game_avg_credits) {
+          costEl.textContent = '~' + stats.game_avg_credits.toLocaleString() + ' credits';
+        }
+      })
+      .catch(function() {});
+  })();
+
   // On load: check free trial eligibility
   (function checkTrialEligibility() {
     var token = localStorage.getItem('token');

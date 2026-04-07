@@ -66,7 +66,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="pricing-includes">
             <p class="pricing-includes-label">// credits for</p>
             <ul class="pricing-features">
-              <li><span class="feature-check">&#10003;</span> ~1-2 game generations</li>
+              <li><span class="feature-check">&#10003;</span> <span class="pack-games" data-credits="1000">~1-2</span> game generations</li>
               <li><span class="feature-check">&#10003;</span> Game edits &amp; iterations</li>
               <li><span class="feature-check">&#10003;</span> Credits never expire</li>
               <li><span class="feature-check">&#10003;</span> Pay only for what you use</li>
@@ -94,7 +94,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="pricing-includes">
             <p class="pricing-includes-label">// credits for</p>
             <ul class="pricing-features">
-              <li><span class="feature-check">&#10003;</span> ~3-4 game generations</li>
+              <li><span class="feature-check">&#10003;</span> <span class="pack-games" data-credits="2500">~3-4</span> game generations</li>
               <li><span class="feature-check">&#10003;</span> Plenty of edits &amp; tweaks</li>
               <li><span class="feature-check">&#10003;</span> Credits never expire</li>
               <li><span class="feature-check">&#10003;</span> Best value for builders</li>
@@ -122,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
           <div class="pricing-includes">
             <p class="pricing-includes-label">// credits for</p>
             <ul class="pricing-features">
-              <li><span class="feature-check">&#10003;</span> ~7-8 game generations</li>
+              <li><span class="feature-check">&#10003;</span> <span class="pack-games" data-credits="5000">~7-8</span> game generations</li>
               <li><span class="feature-check">&#10003;</span> Unlimited edits</li>
               <li><span class="feature-check">&#10003;</span> Credits never expire</li>
               <li><span class="feature-check">&#10003;</span> Best per-credit value</li>
@@ -134,7 +134,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
-      <p class="credits-explainer">Credits are deducted based on actual generation cost. Average game costs ~600-900 credits. Edits cost ~200-400 credits.</p>
+      <p class="credits-explainer" id="credits-explainer">Credits are deducted based on actual generation cost. Estimates update as more games are built.</p>
     </div>
   </section>
 
@@ -656,6 +656,28 @@ import Layout from '../layouts/Layout.astro';
     var API_BASE = window.location.hostname === 'localhost'
       ? 'http://localhost:8000'
       : 'https://circuitbot-api-production.up.railway.app';
+
+    // Fetch dynamic cost estimates
+    fetch(API_BASE + '/api/browse/stats')
+      .then(function(r) { return r.json(); })
+      .then(function(stats) {
+        var avg = stats.game_avg_credits || 750;
+        // Update each pack's game estimate
+        document.querySelectorAll('.pack-games').forEach(function(el) {
+          var packCredits = parseInt(el.dataset.credits);
+          var lo = Math.floor(packCredits / avg);
+          var hi = Math.floor(packCredits / (avg * 0.7)); // cheaper games
+          if (lo < 1) lo = 1;
+          if (hi <= lo) hi = lo + 1;
+          el.textContent = '~' + lo + '-' + hi;
+        });
+        // Update explainer
+        var explainer = document.getElementById('credits-explainer');
+        if (explainer && stats.game_count > 0) {
+          explainer.textContent = 'Average game costs ~' + avg.toLocaleString() + ' credits. Edits cost ~' + (stats.edit_avg_credits || 300).toLocaleString() + ' credits. Based on ' + stats.game_count + ' generation' + (stats.game_count !== 1 ? 's' : '') + '.';
+        }
+      })
+      .catch(function() {});
 
     document.querySelectorAll('[data-pack]').forEach(function(btn) {
       btn.addEventListener('click', function() {
