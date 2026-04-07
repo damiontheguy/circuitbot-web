@@ -318,7 +318,7 @@ import Layout from '../layouts/Layout.astro';
 
           Promise.all(thumbPromises).then(function() {
             games.forEach(function(game) {
-              var title = game.game_title || game.prompt.substring(0, 50);
+              var title = game.game_title || game.prompt;
               var creator = game.creator_username ? 'by ' + game.creator_username : '';
               var isInProgress = game.status !== 'completed';
 

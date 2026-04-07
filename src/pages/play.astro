@@ -59,6 +59,31 @@ import Layout from '../layouts/Layout.astro';
           </button>
         </div>
 
+        <!-- Rating -->
+        <div class="social-section">
+          <div class="rating-row">
+            <div class="rating-stars" id="rating-stars">
+              <button class="star" data-star="1">&#9734;</button>
+              <button class="star" data-star="2">&#9734;</button>
+              <button class="star" data-star="3">&#9734;</button>
+              <button class="star" data-star="4">&#9734;</button>
+              <button class="star" data-star="5">&#9734;</button>
+            </div>
+            <span class="rating-summary" id="rating-summary"></span>
+          </div>
+
+          <!-- Comments -->
+          <div class="comments-section">
+            <h3 class="comments-title">Comments</h3>
+            <div id="comment-form" class="comment-form" style="display:none;">
+              <textarea id="comment-input" class="comment-input" placeholder="Leave a comment..." rows="2"></textarea>
+              <button id="comment-submit" class="btn btn-primary comment-submit-btn" type="button">Post</button>
+            </div>
+            <div id="comments-list" class="comments-list"></div>
+            <p id="comments-empty" class="comments-empty">No comments yet.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -141,10 +166,12 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.75rem;
     color: var(--text-muted);
     margin: 2px 0 0;
-    white-space: nowrap;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 500px;
+    max-width: 600px;
   }
 
   .game-header-actions {
@@ -169,6 +196,143 @@ import Layout from '../layouts/Layout.astro';
     height: 100%;
     border: none;
     display: block;
+  }
+
+  /* ---------- Social section ---------- */
+  .social-section {
+    margin-top: 24px;
+    max-width: 720px;
+  }
+
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .rating-stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  .star {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    transition: color 0.15s;
+  }
+  .star:hover,
+  .star.active {
+    color: var(--accent-yellow);
+  }
+
+  .rating-summary {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .comments-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+  }
+
+  .comment-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+
+  .comment-input {
+    flex: 1;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+  }
+  .comment-input:focus {
+    border-color: var(--accent-blue);
+  }
+
+  .comment-submit-btn {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  :global(.comment-item) {
+    display: flex;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  :global(.comment-avatar) {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-deepblue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  :global(.comment-body) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.comment-meta) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  :global(.comment-author) {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  :global(.comment-date) {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  :global(.comment-text) {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .comments-empty {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: italic;
   }
 
   /* ---------- Fullscreen button ---------- */
@@ -540,6 +704,10 @@ import Layout from '../layouts/Layout.astro';
       : API_BASE + '/api/browse/' + game.id + '/web/';
 
     gameFrame.src = webBase + 'index.html';
+
+    // Load social features
+    loadRating(game.id);
+    loadComments(game.id);
   }
 
   // ── Load thumbnail ──────────────────────────
@@ -600,4 +768,132 @@ import Layout from '../layouts/Layout.astro';
 
     loadGame();
   });
+
+  // ── Rating ──────────────────────────────────
+  function loadRating(gameId) {
+    var token = getToken();
+    var headers = {};
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+
+    fetch(API_BASE + '/api/social/' + gameId + '/rating', { headers: headers })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (!data) return;
+        var summary = document.getElementById('rating-summary');
+        if (data.total > 0) {
+          summary.textContent = data.average.toFixed(1) + ' / 5 (' + data.total + ' rating' + (data.total !== 1 ? 's' : '') + ')';
+        }
+        // Highlight user's rating
+        if (data.user_rating) {
+          highlightStars(data.user_rating);
+        }
+      })
+      .catch(function() {});
+
+    // Star click handlers
+    document.querySelectorAll('.star').forEach(function(star) {
+      star.addEventListener('click', function() {
+        var token = getToken();
+        if (!token) { window.location.href = '/login?redirect=' + encodeURIComponent(window.location.href); return; }
+        var stars = parseInt(star.dataset.star);
+        fetch(API_BASE + '/api/social/' + gameId + '/rating', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ stars: stars }),
+        })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (data) {
+            highlightStars(stars);
+            var summary = document.getElementById('rating-summary');
+            summary.textContent = data.average.toFixed(1) + ' / 5 (' + data.total + ' rating' + (data.total !== 1 ? 's' : '') + ')';
+          }
+        })
+        .catch(function() {});
+      });
+
+      star.addEventListener('mouseenter', function() { highlightStars(parseInt(star.dataset.star)); });
+    });
+
+    document.getElementById('rating-stars').addEventListener('mouseleave', function() {
+      // Reset to user's actual rating or clear
+      var active = document.querySelector('.star.rated');
+      if (active) {
+        highlightStars(parseInt(active.dataset.star));
+      } else {
+        document.querySelectorAll('.star').forEach(function(s) { s.textContent = '\u2606'; s.classList.remove('active'); });
+      }
+    });
+  }
+
+  function highlightStars(n) {
+    document.querySelectorAll('.star').forEach(function(s) {
+      var v = parseInt(s.dataset.star);
+      s.textContent = v <= n ? '\u2605' : '\u2606';
+      s.classList.toggle('active', v <= n);
+      if (v === n) s.classList.add('rated');
+    });
+  }
+
+  // ── Comments ────────────────────────────────
+  function loadComments(gameId) {
+    var token = getToken();
+    if (token) document.getElementById('comment-form').style.display = '';
+
+    fetch(API_BASE + '/api/social/' + gameId + '/comments')
+      .then(function(r) { return r.ok ? r.json() : []; })
+      .then(function(comments) {
+        var list = document.getElementById('comments-list');
+        var empty = document.getElementById('comments-empty');
+        if (!comments.length) { empty.style.display = ''; return; }
+        empty.style.display = 'none';
+
+        comments.forEach(function(c) {
+          var name = c.username || 'Anonymous';
+          var letter = name.charAt(0).toUpperCase();
+          var date = new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          var item = document.createElement('div');
+          item.className = 'comment-item';
+          item.innerHTML =
+            '<div class="comment-avatar">' + letter + '</div>' +
+            '<div class="comment-body">' +
+              '<div class="comment-meta">' +
+                '<span class="comment-author">' + name.replace(/</g, '&lt;') + '</span>' +
+                '<span class="comment-date">' + date + '</span>' +
+              '</div>' +
+              '<div class="comment-text">' + c.content.replace(/</g, '&lt;') + '</div>' +
+            '</div>';
+          list.appendChild(item);
+        });
+      })
+      .catch(function() {});
+
+    // Submit comment
+    var submitBtn = document.getElementById('comment-submit');
+    submitBtn.addEventListener('click', function() {
+      var input = document.getElementById('comment-input');
+      var text = input.value.trim();
+      if (!text) return;
+      var token = getToken();
+      if (!token) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Posting...';
+
+      fetch(API_BASE + '/api/social/' + gameId + '/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ content: text }),
+      })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Failed');
+        input.value = '';
+        // Reload comments
+        document.getElementById('comments-list').innerHTML = '';
+        loadComments(gameId);
+      })
+      .catch(function() { alert('Could not post comment.'); })
+      .finally(function() { submitBtn.disabled = false; submitBtn.textContent = 'Post'; });
+    });
+  }
 </script>
