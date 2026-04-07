@@ -34,7 +34,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <!-- Game cards grid (hidden by default) -->
-        <div id="games-grid" class="grid grid-3" style="display:none;"></div>
+        <div id="games-grid" class="games-grid" style="display:none;"></div>
       </div>
     </div>
   </section>
@@ -93,6 +93,14 @@ import Layout from '../layouts/Layout.astro';
 
   @keyframes spin {
     to { transform: rotate(360deg); }
+  }
+
+  /* ---------- Games grid ---------- */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
+    justify-content: center;
+    gap: 20px;
   }
 
   /* ---------- Game cards ---------- */
