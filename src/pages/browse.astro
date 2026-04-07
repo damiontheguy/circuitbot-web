@@ -1,0 +1,268 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Browse Games — CircuitBot" description="Play games built by the CircuitBot community. Explore AI-generated Godot 4 games created from text descriptions.">
+
+  <section class="section browse-section">
+    <div class="container">
+      <div class="section-header">
+        <h1 class="gradient-text">Browse Games</h1>
+        <p class="section-sub">Play games built by the community.</p>
+      </div>
+
+      <div id="browse-loading" class="state-msg">
+        <div class="loader-ring"></div>
+        <p>Loading games...</p>
+      </div>
+
+      <div id="browse-empty" class="state-msg" style="display:none;">
+        <div class="empty-icon">&#127918;</div>
+        <h2>No games yet</h2>
+        <p>Be the first to build a game and share it with the community.</p>
+        <a href="/create" class="btn btn-yellow btn-lg">Create a Game</a>
+      </div>
+
+      <div id="browse-grid" class="browse-grid" style="display:none;"></div>
+
+      <div id="browse-load-more" style="display:none; text-align:center; margin-top:32px;">
+        <button class="btn btn-primary" id="load-more-btn" type="button">Load More</button>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .browse-section {
+    min-height: 70vh;
+    padding-top: 3rem;
+  }
+
+  .section-sub {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-family: var(--font-sans);
+  }
+
+  .state-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .state-msg h2 {
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .state-msg p {
+    max-width: 28rem;
+    line-height: 1.5;
+  }
+
+  .loader-ring {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .browse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  :global(.browse-card) {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  :global(.browse-card:hover) {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(69, 130, 199, 0.12);
+  }
+
+  :global(.bc-thumb-wrap) {
+    aspect-ratio: 16 / 9;
+    background: var(--bg-secondary);
+    overflow: hidden;
+  }
+  :global(.bc-thumb) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  :global(.bc-thumb-placeholder) {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--text-muted);
+  }
+
+  :global(.bc-info) {
+    padding: 14px 16px;
+  }
+  :global(.bc-title) {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  :global(.bc-meta) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  :global(.bc-creator) {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  :global(.bc-rating) {
+    font-size: 12px;
+    color: var(--accent-yellow);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .browse-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:8000'
+      : 'https://circuitbot-api-production.up.railway.app';
+
+    var LIMIT = 12;
+    var offset = 0;
+    var allLoaded = false;
+
+    var loading = document.getElementById('browse-loading');
+    var empty = document.getElementById('browse-empty');
+    var grid = document.getElementById('browse-grid');
+    var loadMoreWrap = document.getElementById('browse-load-more');
+    var loadMoreBtn = document.getElementById('load-more-btn');
+
+    function loadGames() {
+      if (allLoaded) return;
+
+      fetch(API_BASE + '/api/browse?limit=' + LIMIT + '&offset=' + offset)
+        .then(function(r) { return r.json(); })
+        .then(function(games) {
+          loading.style.display = 'none';
+
+          if (!games || !games.length) {
+            if (offset === 0) {
+              empty.style.display = 'flex';
+            } else {
+              allLoaded = true;
+              loadMoreWrap.style.display = 'none';
+            }
+            return;
+          }
+
+          grid.style.display = 'grid';
+
+          // Fetch thumbnails then render
+          var thumbPromises = games.map(function(game) {
+            if (!game.thumbnail_key) return Promise.resolve();
+            return fetch(API_BASE + '/api/browse/' + game.id + '/thumbnail')
+              .then(function(r) { return r.json(); })
+              .then(function(d) { game._thumb = d.thumbnail_url; })
+              .catch(function() {});
+          });
+
+          Promise.all(thumbPromises).then(function() {
+            games.forEach(function(game) {
+              var title = game.game_title || game.prompt.substring(0, 50);
+              var creator = game.creator_username ? 'by ' + game.creator_username : '';
+
+              var card = document.createElement('a');
+              card.href = '/play?id=' + game.id;
+              card.className = 'browse-card';
+
+              var thumbHtml;
+              if (game._thumb) {
+                thumbHtml = '<div class="bc-thumb-wrap"><img src="' + game._thumb + '" alt="" class="bc-thumb" loading="lazy" /></div>';
+              } else {
+                thumbHtml = '<div class="bc-thumb-wrap"><div class="bc-thumb-placeholder">&#127918;</div></div>';
+              }
+
+              var ratingHtml = '';
+              if (game.rating_count > 0) {
+                var stars = Math.round(game.rating_avg);
+                ratingHtml = '<span class="bc-rating">' + '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars) + '</span>';
+              }
+
+              card.innerHTML = thumbHtml +
+                '<div class="bc-info">' +
+                  '<div class="bc-title">' + title.replace(/</g, '&lt;') + '</div>' +
+                  '<div class="bc-meta">' +
+                    (creator ? '<span class="bc-creator">' + creator.replace(/</g, '&lt;') + '</span>' : '<span></span>') +
+                    ratingHtml +
+                  '</div>' +
+                '</div>';
+
+              grid.appendChild(card);
+            });
+
+            offset += games.length;
+            if (games.length < LIMIT) {
+              allLoaded = true;
+              loadMoreWrap.style.display = 'none';
+            } else {
+              loadMoreWrap.style.display = '';
+            }
+          });
+        })
+        .catch(function() {
+          loading.style.display = 'none';
+          if (offset === 0) {
+            empty.style.display = 'flex';
+          }
+        });
+    }
+
+    loadMoreBtn.addEventListener('click', function() {
+      loadMoreBtn.textContent = 'Loading...';
+      loadGames();
+      loadMoreBtn.textContent = 'Load More';
+    });
+
+    loadGames();
+  })();
+</script>
