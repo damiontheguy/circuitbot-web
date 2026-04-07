@@ -72,8 +72,8 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Active Generations -->
       <div id="active-jobs" class="active-jobs" style="display:none;">
-        <p class="active-jobs-label">Your generations</p>
         <div id="active-jobs-list" class="active-jobs-list"></div>
+        <div id="completed-jobs-grid" class="active-jobs-grid"></div>
       </div>
     </div>
   </section>
@@ -143,6 +143,7 @@ import Layout from '../layouts/Layout.astro';
   var freeTrialBtn = document.getElementById('free-trial-btn');
   var jobsContainer = document.getElementById('active-jobs');
   var jobsList = document.getElementById('active-jobs-list');
+  var completedGrid = document.getElementById('completed-jobs-grid');
 
   // Fetch dynamic cost estimates
   fetch(API_BASE + '/api/browse/stats')
@@ -186,10 +187,13 @@ import Layout from '../layouts/Layout.astro';
     })
     .then(function(r) { return r.ok ? r.json() : []; })
     .then(function(games) {
-      var active = games.filter(function(g) {
-        return ['queued', 'generating', 'exporting'].indexOf(g.status) !== -1;
+      // Show in-progress and recent completed games
+      var relevant = games.filter(function(g) {
+        return ['queued', 'generating', 'exporting', 'completed'].indexOf(g.status) !== -1;
+      }).slice(0, MAX_JOBS);
+      relevant.forEach(function(g) {
+        addJobRow(g.id, g.prompt, g.status, g.progress_pct || 0, g.game_title, g.thumbnail_key);
       });
-      active.forEach(function(g) { addJobRow(g.id, g.prompt, g.status, g.progress_pct || 0); });
       if (_activeJobs.length > 0) startPolling();
       updateGenerateButton();
     })
@@ -228,7 +232,7 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
-  function addJobRow(jobId, prompt, status, pct) {
+  function addJobRow(jobId, prompt, status, pct, gameTitle, thumbnailKey) {
     // Don't add duplicates
     if (_activeJobs.some(function(j) { return j.id === jobId; })) return;
 
@@ -237,51 +241,83 @@ import Layout from '../layouts/Layout.astro';
 
     jobsContainer.style.display = '';
 
-    var row = document.createElement('div');
-    row.className = 'job-row';
-    row.id = 'job-' + jobId;
-
-    var truncated = prompt.length > 60 ? prompt.substring(0, 57) + '...' : prompt;
-
     if (status === 'completed') {
-      row.innerHTML =
-        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
-        '<a href="/status?id=' + jobId + '" class="job-link">View Game &rarr;</a>';
+      renderCompletedCard(jobId, prompt, gameTitle, thumbnailKey);
     } else if (status === 'failed') {
+      var row = document.createElement('div');
+      row.className = 'job-row';
+      row.id = 'job-' + jobId;
+      var truncated = prompt.length > 60 ? prompt.substring(0, 57) + '...' : prompt;
       row.innerHTML =
         '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
         '<span class="job-failed">Failed</span>';
+      jobsList.appendChild(row);
     } else {
+      var row = document.createElement('div');
+      row.className = 'job-row';
+      row.id = 'job-' + jobId;
+      var truncated = prompt.length > 60 ? prompt.substring(0, 57) + '...' : prompt;
       row.innerHTML =
         '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
         '<div class="job-progress"><div class="job-progress-fill" style="width:' + pct + '%"></div></div>' +
         '<span class="job-status">' + (status || 'queued') + '</span>';
+      jobsList.appendChild(row);
     }
-
-    jobsList.appendChild(row);
     updateGenerateButton();
   }
 
-  function updateJobRow(jobId, status, pct) {
-    var row = document.getElementById('job-' + jobId);
-    if (!row) return;
+  function renderCompletedCard(jobId, prompt, gameTitle, thumbnailKey) {
+    var card = document.createElement('a');
+    card.href = '/play?id=' + jobId;
+    card.className = 'job-card';
+    card.id = 'job-' + jobId;
 
+    var title = (gameTitle || prompt.substring(0, 40)).replace(/</g, '&lt;');
+    card.innerHTML =
+      '<img class="job-card-thumb" src="/circuitbot.png" alt="" />' +
+      '<div class="job-card-body">' +
+        '<span class="job-card-title">' + title + '</span>' +
+        '<span class="job-card-play">Play &rarr;</span>' +
+      '</div>';
+
+    completedGrid.appendChild(card);
+
+    // Load thumbnail async
+    if (thumbnailKey) {
+      var token = localStorage.getItem('token');
+      fetch(API_BASE + '/api/games/' + jobId + '/thumbnail-url', {
+        headers: { 'Authorization': 'Bearer ' + token },
+      })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.thumbnail_url) {
+          var img = card.querySelector('.job-card-thumb');
+          if (img) img.src = data.thumbnail_url;
+        }
+      })
+      .catch(function() {});
+    }
+  }
+
+  function updateJobRow(jobId, status, pct, gameTitle, thumbnailKey) {
+    var row = document.getElementById('job-' + jobId);
     var job = _activeJobs.find(function(j) { return j.id === jobId; });
-    var truncated = job ? (job.prompt.length > 60 ? job.prompt.substring(0, 57) + '...' : job.prompt) : '';
 
     if (status === 'completed') {
       if (job) job.done = true;
-      row.innerHTML =
-        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
-        '<a href="/status?id=' + jobId + '" class="job-link">View Game &rarr;</a>';
+      if (row) row.remove(); // remove progress row
+      renderCompletedCard(jobId, job ? job.prompt : '', gameTitle, thumbnailKey);
       updateGenerateButton();
     } else if (status === 'failed') {
       if (job) job.done = true;
-      row.innerHTML =
-        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
-        '<span class="job-failed">Failed</span>';
+      if (row) {
+        var truncated = job ? (job.prompt.length > 60 ? job.prompt.substring(0, 57) + '...' : job.prompt) : '';
+        row.innerHTML =
+          '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
+          '<span class="job-failed">Failed</span>';
+      }
       updateGenerateButton();
-    } else {
+    } else if (row) {
       var fill = row.querySelector('.job-progress-fill');
       var statusEl = row.querySelector('.job-status');
       if (fill) fill.style.width = pct + '%';
@@ -310,7 +346,7 @@ import Layout from '../layouts/Layout.astro';
       })
       .then(function(r) { return r.ok ? r.json() : null; })
       .then(function(data) {
-        if (data) updateJobRow(j.id, data.status, data.progress_pct || 0);
+        if (data) updateJobRow(j.id, data.status, data.progress_pct || 0, data.game_title, data.thumbnail_key);
       })
       .catch(function() {});
     });
@@ -739,6 +775,61 @@ import Layout from '../layouts/Layout.astro';
     font-size: 11px;
     color: var(--accent-red);
     flex-shrink: 0;
+  }
+
+  /* Completed game card (gallery style) */
+  :global(.job-card) {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  :global(.job-card:hover) {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(69, 130, 199, 0.12);
+  }
+  :global(.job-card-thumb) {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    background: var(--bg-secondary);
+  }
+  :global(.job-card-body) {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  :global(.job-card-title) {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  :global(.job-card-play) {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .active-jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 12px;
   }
 
   /* ── Phone Modal ────────────────── */
