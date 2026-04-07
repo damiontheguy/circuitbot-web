@@ -50,14 +50,6 @@ import Layout from '../layouts/Layout.astro';
             sandbox="allow-scripts allow-same-origin allow-popups"
           ></iframe>
 
-          <!-- Mobile fullscreen prompt -->
-          <div id="mobile-fs-prompt" class="mobile-fs-prompt" style="display:none;">
-            <div class="mobile-fs-inner">
-              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-              <span>Tap to play fullscreen</span>
-            </div>
-          </div>
-
           <!-- Fullscreen button overlay -->
           <button id="fullscreen-btn" class="fullscreen-btn" title="Toggle fullscreen">
             <svg id="fs-expand-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -437,14 +429,15 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 0;
     border: none;
     aspect-ratio: auto;
-    width: 100% !important;
-    height: 100% !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #000;
   }
 
   .game-container:fullscreen .game-frame,
   .game-container:-webkit-full-screen .game-frame {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
   }
 
   .game-container:fullscreen .fullscreen-btn,
@@ -507,32 +500,9 @@ import Layout from '../layouts/Layout.astro';
     z-index: 99998;
   }
 
-  /* ---------- Mobile fullscreen prompt ---------- */
-  .mobile-fs-prompt {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 5;
-    cursor: pointer;
-  }
-
-  .mobile-fs-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    color: #fff;
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 600;
-  }
-
   /* ---------- Responsive ---------- */
   @media (max-width: 600px) {
-    .play-section { padding-top: 0.5rem; padding-bottom: 0; }
+    .play-section { padding-top: 1rem; }
 
     .game-header {
       flex-direction: column;
@@ -560,9 +530,6 @@ import Layout from '../layouts/Layout.astro';
 
     .game-container {
       border-radius: var(--radius);
-      aspect-ratio: auto;
-      height: calc(100vh - 120px);
-      max-height: 80vh;
     }
 
     .fullscreen-btn {
@@ -953,16 +920,6 @@ import Layout from '../layouts/Layout.astro';
         exitIosFullscreen();
       }
     });
-
-    // Mobile fullscreen prompt
-    var fsPrompt = document.getElementById('mobile-fs-prompt');
-    if (isMobile() && fsPrompt) {
-      fsPrompt.style.display = 'flex';
-      fsPrompt.addEventListener('click', function() {
-        fsPrompt.style.display = 'none';
-        toggleFullscreen();
-      });
-    }
 
     loadGame();
   });
