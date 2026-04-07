@@ -232,6 +232,9 @@ import Layout from '../layouts/Layout.astro';
     color: var(--accent-yellow);
     white-space: nowrap;
   }
+  :global(.bc-updating) {
+    color: var(--accent-blue);
+  }
 
   @media (max-width: 600px) {
     .browse-grid {
@@ -346,7 +349,8 @@ import Layout from '../layouts/Layout.astro';
                 ratingHtml = '<span class="bc-rating">' + '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars) + '</span>';
               }
 
-              var statusHtml = isInProgress ? '<span class="bc-status-badge">Building...</span>' : '';
+              var statusHtml = isInProgress ? '<span class="bc-status-badge">Building...</span>'
+                : game.has_active_edit ? '<span class="bc-status-badge bc-updating">Updating...</span>' : '';
 
               card.innerHTML = thumbHtml +
                 '<div class="bc-info">' +
