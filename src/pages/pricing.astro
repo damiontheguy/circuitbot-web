@@ -106,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
 
-      <p class="credits-explainer" id="credits-explainer">Credits are deducted based on actual generation cost. Estimates update as more games are built.</p>
+      <p class="credits-explainer" id="credits-explainer">Credits are deducted based on actual generation cost.</p>
     </div>
   </section>
 
@@ -629,27 +629,6 @@ import Layout from '../layouts/Layout.astro';
       ? 'http://localhost:8000'
       : 'https://circuitbot-api-production.up.railway.app';
 
-    // Fetch dynamic cost estimates
-    fetch(API_BASE + '/api/browse/stats')
-      .then(function(r) { return r.json(); })
-      .then(function(stats) {
-        var avg = stats.game_avg_credits || 750;
-        // Update each pack's game estimate
-        document.querySelectorAll('.pack-games').forEach(function(el) {
-          var packCredits = parseInt(el.dataset.credits);
-          var lo = Math.floor(packCredits / avg);
-          var hi = Math.floor(packCredits / (avg * 0.7)); // cheaper games
-          if (lo < 1) lo = 1;
-          if (hi <= lo) hi = lo + 1;
-          el.textContent = '~' + lo + '-' + hi;
-        });
-        // Update explainer
-        var explainer = document.getElementById('credits-explainer');
-        if (explainer && stats.game_count > 0) {
-          explainer.textContent = 'Average game costs ~' + avg.toLocaleString() + ' credits. Edits cost ~' + (stats.edit_avg_credits || 300).toLocaleString() + ' credits. Based on ' + stats.game_count + ' generation' + (stats.game_count !== 1 ? 's' : '') + '.';
-        }
-      })
-      .catch(function() {});
 
     document.querySelectorAll('[data-pack]').forEach(function(btn) {
       btn.addEventListener('click', function() {
