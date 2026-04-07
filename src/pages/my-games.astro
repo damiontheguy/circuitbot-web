@@ -280,6 +280,26 @@ import Layout from '../layouts/Layout.astro';
     font-family: var(--font-mono);
   }
 
+  .game-delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted, #555);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: all 0.15s;
+    opacity: 0;
+  }
+  .game-card:hover .game-delete-btn {
+    opacity: 1;
+  }
+  .game-delete-btn:hover {
+    color: var(--accent-red);
+    background: rgba(239, 83, 80, 0.1);
+  }
+
   .game-arrow {
     color: var(--text-muted, #555);
     transition: color 0.2s, transform 0.2s;
@@ -446,6 +466,7 @@ import Layout from '../layouts/Layout.astro';
         '</div>' +
         '<div class="game-card-footer">' +
           '<span class="game-date">' + formatDate(game.created_at) + '</span>' +
+          '<button class="game-delete-btn" data-game-id="' + game.id + '" title="Delete game" onclick="deleteGame(event, \'' + game.id + '\')">&times;</button>' +
           '<span class="game-arrow">&rarr;</span>' +
         '</div>' +
         historyToggle;
@@ -522,6 +543,27 @@ import Layout from '../layouts/Layout.astro';
     })
     .catch(function() {
       historyDiv.innerHTML = '<div style="color:var(--accent-red);font-size:0.75rem;">Failed to load history.</div>';
+    });
+  }
+
+  // ── Delete game ─────────────────────────────
+  function deleteGame(e, gameId) {
+    e.stopPropagation();
+    if (!confirm('Delete this game permanently? This cannot be undone.')) return;
+
+    var token = getToken();
+    if (!token) return;
+
+    fetch(API_BASE + '/api/games/' + gameId, {
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + token },
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('Failed to delete');
+      loadGames();
+    })
+    .catch(function(err) {
+      alert('Could not delete game: ' + err.message);
     });
   }
 
