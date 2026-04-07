@@ -16,6 +16,21 @@ import Layout from '../layouts/Layout.astro';
         <div class="login-sub">Access your account</div>
 
         <form id="login-form" action="#" method="POST">
+          <div class="form-group" id="username-group" style="display:none;">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-input"
+              placeholder="Pick a username"
+              autocomplete="username"
+              minlength="3"
+              maxlength="30"
+              pattern="[a-zA-Z0-9_]+"
+            />
+          </div>
+
           <div class="form-group">
             <label for="email" class="form-label">Email</label>
             <input
@@ -283,6 +298,11 @@ import Layout from '../layouts/Layout.astro';
     var submitBtn = document.querySelector('#login-form button[type="submit"]');
     var signupPrompt = document.querySelector('.signup-prompt');
 
+    var usernameGroup = document.getElementById('username-group');
+    var usernameInput = document.getElementById('username');
+    if (usernameGroup) usernameGroup.style.display = isSignup ? '' : 'none';
+    if (usernameInput) usernameInput.required = isSignup;
+
     if (heading) heading.textContent = isSignup ? 'Sign Up' : 'Log In';
     if (sub) sub.textContent = isSignup ? 'Create your account' : 'Access your account';
     if (submitBtn) submitBtn.textContent = isSignup ? 'Sign Up' : 'Log In';
@@ -322,10 +342,15 @@ import Layout from '../layouts/Layout.astro';
         if (submitBtn) submitBtn.textContent = 'Loading...';
 
         var endpoint = isSignup ? '/api/auth/register' : '/api/auth/login';
+        var payload = { email: email, password: password };
+        if (isSignup) {
+          var usernameVal = document.getElementById('username');
+          payload.username = usernameVal ? usernameVal.value.trim() : '';
+        }
         fetch(API_BASE + endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, password: password }),
+          body: JSON.stringify(payload),
         })
         .then(function(resp) {
           if (!resp.ok) {
