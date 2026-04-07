@@ -1,7 +1,41 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+
+const API_BASE = 'https://circuitbot-api-production.up.railway.app';
+
+// Fetch game meta for OG tags (server-side)
+let ogTitle = 'Play Game — CircuitBot';
+let ogDescription = 'Play an AI-generated game right in your browser.';
+let ogImage: string | undefined;
+
+const gameId = Astro.url.searchParams.get('id');
+if (gameId) {
+  try {
+    const res = await fetch(`${API_BASE}/api/browse/${gameId}`);
+    if (res.ok) {
+      const game = await res.json();
+      const title = game.game_title || game.prompt || 'Untitled Game';
+      ogTitle = `${title} — CircuitBot`;
+      ogDescription = game.prompt || ogDescription;
+
+      if (game.thumbnail_key) {
+        const thumbRes = await fetch(`${API_BASE}/api/browse/${gameId}/thumbnail`);
+        if (thumbRes.ok) {
+          const thumbData = await thumbRes.json();
+          if (thumbData.thumbnail_url) {
+            ogImage = thumbData.thumbnail_url;
+          }
+        }
+      }
+    }
+  } catch {
+    // Fall back to defaults
+  }
+}
 ---
-<Layout title="Play Game — CircuitBot" description="Play an AI-generated game right in your browser." noindex={true}>
+<Layout title={ogTitle} description={ogDescription} ogImage={ogImage} noindex={true}>
 
   <section class="section play-section">
     <div class="container">
