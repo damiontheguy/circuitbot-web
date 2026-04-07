@@ -16,8 +16,8 @@ import Layout from '../layouts/Layout.astro';
 
       <div class="sort-bar">
         <span class="sort-label">Sort by</span>
-        <button class="sort-btn sort-active" data-sort="recent">Recent</button>
-        <button class="sort-btn" data-sort="rating">Top Rated</button>
+        <button class="sort-btn" data-sort="recent">Recent</button>
+        <button class="sort-btn sort-active" data-sort="rating">Top Rated</button>
         <button class="sort-btn" data-sort="plays">Most Played</button>
       </div>
 
@@ -309,7 +309,7 @@ import Layout from '../layouts/Layout.astro';
     var offset = 0;
     var allLoaded = false;
     var currentQuery = '';
-    var currentSort = 'recent';
+    var currentSort = 'rating';
     var searchTimer = null;
 
     var loading = document.getElementById('browse-loading');
