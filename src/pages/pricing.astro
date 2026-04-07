@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Pricing — CircuitBot | First Game Free, Then $6.99" description="First game free with phone verification. Then $6.99 per AI-generated Godot 4 game. No subscriptions, full source code and commercial ownership included.">
+<Layout title="Pricing — CircuitBot | Credits for AI Game Generation" description="First game free. Buy credits to generate AI-powered Godot 4 games. Credits are deducted based on actual generation cost.">
 
   <!-- Hero -->
   <section class="section pricing-hero">
@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="section-header">
         <span class="badge badge-blue">Pricing</span>
         <h1 class="pricing-title">Simple <span class="gradient-text">Pricing</span></h1>
-        <p class="pricing-subtitle-text">First game free. No credit card required.</p>
+        <p class="pricing-subtitle-text">First game free. Then buy credits to keep building.</p>
       </div>
     </div>
   </section>
@@ -20,67 +20,121 @@ import Layout from '../layouts/Layout.astro';
   <!-- Pricing Cards -->
   <section class="section">
     <div class="container">
-      <div class="pricing-card-grid">
+      <div class="pricing-card-grid pricing-card-grid-4">
         <!-- Free Tier -->
         <div class="pricing-card pricing-card-free">
           <div class="pricing-card-glow pricing-card-glow-yellow"></div>
           <div class="pricing-card-header">
-            <span class="badge badge-yellow">First Game Free</span>
+            <span class="badge badge-yellow">Free Trial</span>
             <div class="pricing-amount">
               <span class="pricing-dollar pricing-dollar-yellow">$</span>
               <span class="pricing-value pricing-value-yellow">0</span>
             </div>
-            <p class="pricing-label">your first game</p>
+            <p class="pricing-label">first game</p>
           </div>
 
           <div class="pricing-divider"></div>
 
           <div class="pricing-includes">
-            <p class="pricing-includes-label">// everything included</p>
+            <p class="pricing-includes-label">// included</p>
             <ul class="pricing-features">
+              <li><span class="feature-check feature-check-yellow">&#10003;</span> 1 full game generation</li>
               <li><span class="feature-check feature-check-yellow">&#10003;</span> Complete <span style="color: #4582c7;">Godot 4</span> project</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> AI-generated 2D art</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> Full <span style="color: #4582c7;">GDScript</span> game code</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> Compiled Windows executable</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> Source code included — edit freely</li>
-              <li><span class="feature-check feature-check-yellow">&#10003;</span> Just verify your phone number</li>
+              <li><span class="feature-check feature-check-yellow">&#10003;</span> AI art + code + build</li>
+              <li><span class="feature-check feature-check-yellow">&#10003;</span> Phone verification only</li>
             </ul>
           </div>
 
-          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Try It Free</a>
+          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Try Free</a>
           <p class="pricing-note">No credit card required</p>
         </div>
 
-        <!-- Paid Tier -->
+        <!-- Starter Pack -->
         <div class="pricing-card">
           <div class="pricing-card-glow"></div>
           <div class="pricing-card-header">
-            <span class="badge badge-blue">Pay Per Game</span>
+            <span class="badge badge-blue">Starter</span>
             <div class="pricing-amount">
               <span class="pricing-dollar">$</span>
-              <span class="pricing-value">6.99</span>
+              <span class="pricing-value">10</span>
             </div>
-            <p class="pricing-label">per game</p>
+            <p class="pricing-label">1,000 credits</p>
           </div>
 
           <div class="pricing-divider"></div>
 
           <div class="pricing-includes">
-            <p class="pricing-includes-label">// everything included</p>
+            <p class="pricing-includes-label">// credits for</p>
             <ul class="pricing-features">
-              <li><span class="feature-check">&#10003;</span> Everything in the free tier</li>
-              <li><span class="feature-check">&#10003;</span> Unlimited game generation</li>
-              <li><span class="feature-check">&#10003;</span> No restrictions on output</li>
-              <li><span class="feature-check">&#10003;</span> Delivered in ~15-30 minutes</li>
-              <li><span class="feature-check">&#10003;</span> Full commercial ownership</li>
-              <li><span class="feature-check">&#10003;</span> Refund if generation fails</li>
+              <li><span class="feature-check">&#10003;</span> ~1-2 game generations</li>
+              <li><span class="feature-check">&#10003;</span> Game edits &amp; iterations</li>
+              <li><span class="feature-check">&#10003;</span> Credits never expire</li>
+              <li><span class="feature-check">&#10003;</span> Pay only for what you use</li>
             </ul>
           </div>
 
-          <a href="/create" class="btn btn-primary btn-lg pricing-cta">Create a Game</a>
-          <p class="pricing-note">One-time payment, no subscription</p>
+          <button class="btn btn-primary btn-lg pricing-cta" data-pack="starter">Buy Credits</button>
+          <p class="pricing-note">One-time purchase</p>
+        </div>
+
+        <!-- Standard Pack -->
+        <div class="pricing-card pricing-card-popular">
+          <div class="pricing-card-glow"></div>
+          <div class="pricing-card-header">
+            <span class="badge badge-yellow">Popular</span>
+            <div class="pricing-amount">
+              <span class="pricing-dollar">$</span>
+              <span class="pricing-value">25</span>
+            </div>
+            <p class="pricing-label">2,500 credits</p>
+          </div>
+
+          <div class="pricing-divider"></div>
+
+          <div class="pricing-includes">
+            <p class="pricing-includes-label">// credits for</p>
+            <ul class="pricing-features">
+              <li><span class="feature-check">&#10003;</span> ~3-4 game generations</li>
+              <li><span class="feature-check">&#10003;</span> Plenty of edits &amp; tweaks</li>
+              <li><span class="feature-check">&#10003;</span> Credits never expire</li>
+              <li><span class="feature-check">&#10003;</span> Best value for builders</li>
+            </ul>
+          </div>
+
+          <button class="btn btn-yellow btn-lg pricing-cta" data-pack="standard">Buy Credits</button>
+          <p class="pricing-note">Most popular choice</p>
+        </div>
+
+        <!-- Pro Pack -->
+        <div class="pricing-card">
+          <div class="pricing-card-glow"></div>
+          <div class="pricing-card-header">
+            <span class="badge badge-blue">Pro</span>
+            <div class="pricing-amount">
+              <span class="pricing-dollar">$</span>
+              <span class="pricing-value">50</span>
+            </div>
+            <p class="pricing-label">5,000 credits</p>
+          </div>
+
+          <div class="pricing-divider"></div>
+
+          <div class="pricing-includes">
+            <p class="pricing-includes-label">// credits for</p>
+            <ul class="pricing-features">
+              <li><span class="feature-check">&#10003;</span> ~7-8 game generations</li>
+              <li><span class="feature-check">&#10003;</span> Unlimited edits</li>
+              <li><span class="feature-check">&#10003;</span> Credits never expire</li>
+              <li><span class="feature-check">&#10003;</span> Best per-credit value</li>
+            </ul>
+          </div>
+
+          <button class="btn btn-primary btn-lg pricing-cta" data-pack="pro">Buy Credits</button>
+          <p class="pricing-note">For serious builders</p>
         </div>
       </div>
+
+      <p class="credits-explainer">Credits are deducted based on actual generation cost. Average game costs ~600-900 credits. Edits cost ~200-400 credits.</p>
     </div>
   </section>
 
@@ -147,9 +201,9 @@ import Layout from '../layouts/Layout.astro';
         <details class="faq-item">
           <summary class="faq-question">Is it a subscription?</summary>
           <p class="faq-answer">
-            No. After your free game, you pay once per game. There are no recurring
-            charges, no monthly fees, and no hidden costs. Each additional game is
-            a one-time purchase of $6.99.
+            No. You buy credit packs and spend them on game generations. There are
+            no recurring charges, no monthly fees. Credits never expire — use them
+            whenever you want.
           </p>
         </details>
 
@@ -165,8 +219,8 @@ import Layout from '../layouts/Layout.astro';
         <details class="faq-item">
           <summary class="faq-question">How many games can I create?</summary>
           <p class="faq-answer">
-            As many as you want. Each game costs $6.99 to generate. There are no
-            limits on how many games you can create.
+            As many as you want. Each game deducts credits based on actual
+            generation cost. Buy more credits anytime to keep building.
           </p>
         </details>
 
@@ -309,6 +363,26 @@ import Layout from '../layouts/Layout.astro';
     gap: 24px;
     max-width: 860px;
     margin: 0 auto;
+  }
+
+  .pricing-card-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1100px;
+  }
+
+  .pricing-card-popular {
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 30px rgba(255, 211, 64, 0.08);
+  }
+
+  .credits-explainer {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 24px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .pricing-card {
@@ -545,8 +619,15 @@ import Layout from '../layouts/Layout.astro';
   }
 
   /* ── Responsive ─────────────────── */
+  @media (max-width: 900px) {
+    .pricing-card-grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
   @media (max-width: 600px) {
-    .pricing-card-grid {
+    .pricing-card-grid,
+    .pricing-card-grid-4 {
       grid-template-columns: 1fr;
     }
 
@@ -569,3 +650,47 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 </style>
+
+<script is:inline>
+  (function() {
+    var API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:8000'
+      : 'https://circuitbot-api-production.up.railway.app';
+
+    document.querySelectorAll('[data-pack]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/login?redirect=/pricing';
+          return;
+        }
+        var pack = btn.dataset.pack;
+        btn.textContent = 'Loading...';
+        btn.disabled = true;
+
+        fetch(API_BASE + '/api/billing/credits/purchase', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ pack_id: pack }),
+        })
+        .then(function(r) {
+          if (!r.ok) throw new Error('Failed');
+          return r.json();
+        })
+        .then(function(data) {
+          if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+          }
+        })
+        .catch(function(err) {
+          alert('Could not start checkout. Please try again.');
+          btn.textContent = 'Buy Credits';
+          btn.disabled = false;
+        });
+      });
+    });
+  })();
+</script>

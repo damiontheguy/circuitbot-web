@@ -209,6 +209,14 @@ import Layout from '../layouts/Layout.astro';
     var loadMoreBtn = document.getElementById('load-more-btn');
     var searchInput = document.getElementById('search-input');
 
+    // Pre-fill from URL ?q= param (e.g. from nav search)
+    var urlParams = new URLSearchParams(window.location.search);
+    var initialQ = urlParams.get('q');
+    if (initialQ) {
+      searchInput.value = initialQ;
+      currentQuery = initialQ;
+    }
+
     // Search with debounce
     searchInput.addEventListener('input', function() {
       clearTimeout(searchTimer);

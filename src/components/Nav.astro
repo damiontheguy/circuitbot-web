@@ -29,6 +29,10 @@ const links = [
         ))}
       </div>
 
+      <form class="nav-search" id="nav-search-form" action="/browse" method="GET">
+        <input type="text" name="q" class="nav-search-input" id="nav-search-input" placeholder="Search..." autocomplete="off" />
+      </form>
+
       <div class="nav-actions">
         <a href="/login" class="btn btn-ghost nav-login" id="nav-login-btn">Log in</a>
 
@@ -135,6 +139,7 @@ const links = [
     font-weight: 500;
     color: var(--text-secondary);
     transition: all 0.2s;
+    white-space: nowrap;
   }
   .nav-link:hover {
     color: var(--text-primary);
@@ -148,6 +153,31 @@ const links = [
   .nav-actions { display: flex; align-items: center; gap: 8px; }
   .nav-login { font-size: 16px; padding: 6px 14px; }
   .nav-cta { font-size: 14px; padding: 8px 20px; }
+
+  /* ── Search bar ─────────────────────────────── */
+  .nav-search {
+    flex-shrink: 0;
+  }
+
+  .nav-search-input {
+    width: 160px;
+    padding: 6px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, width 0.3s;
+  }
+  .nav-search-input::placeholder {
+    color: var(--text-muted);
+  }
+  .nav-search-input:focus {
+    border-color: var(--accent-blue);
+    width: 220px;
+  }
 
   /* ── User profile section ──────────────────── */
   .nav-user {
@@ -394,6 +424,7 @@ const links = [
     .nav-cta { display: none; }
     .nav-login { display: none; }
     .nav-user { display: none !important; }
+    .nav-search { display: none; }
     .nav-inner { padding: 0 16px; }
   }
 
