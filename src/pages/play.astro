@@ -61,6 +61,13 @@ import Layout from '../layouts/Layout.astro';
           </button>
         </div>
 
+        <!-- Controls -->
+        <div id="controls-panel" class="controls-panel" style="display:none;">
+          <h3 class="controls-title">Controls</h3>
+          <div id="controls-description" class="controls-desc"></div>
+          <div id="controls-list" class="controls-list"></div>
+        </div>
+
         <!-- Rating -->
         <div class="social-section">
           <div class="rating-row">
@@ -190,6 +197,70 @@ import Layout from '../layouts/Layout.astro';
     height: 100%;
     border: none;
     display: block;
+  }
+
+  /* ---------- Controls panel ---------- */
+  .controls-panel {
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    max-width: 720px;
+  }
+
+  .controls-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .controls-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .controls-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  :global(.controls-group) {
+    flex: 1;
+    min-width: 180px;
+  }
+
+  :global(.controls-group-title) {
+    font-family: var(--font-display);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  :global(.control-row) {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+
+  :global(.control-action) {
+    color: var(--text-secondary);
+  }
+
+  :global(.control-key) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-blue);
+    background: rgba(69, 130, 199, 0.1);
+    padding: 1px 8px;
+    border-radius: 4px;
   }
 
   /* ---------- Social section ---------- */
@@ -787,6 +858,37 @@ import Layout from '../layouts/Layout.astro';
 
     // Record play
     fetch(API_BASE + '/api/browse/' + game.id + '/play', { method: 'POST' }).catch(function() {});
+
+    // Controls
+    if (game.controls_json) {
+      try {
+        var controls = JSON.parse(game.controls_json);
+        var panel = document.getElementById('controls-panel');
+        var desc = document.getElementById('controls-description');
+        var list = document.getElementById('controls-list');
+
+        if (controls.description) desc.textContent = controls.description;
+
+        var sections = ['keyboard', 'mouse', 'touch'];
+        var labels = {keyboard: 'Keyboard', mouse: 'Mouse', touch: 'Touch'};
+        var hasAny = false;
+
+        sections.forEach(function(section) {
+          if (!controls[section] || !controls[section].length) return;
+          hasAny = true;
+          var group = document.createElement('div');
+          group.className = 'controls-group';
+          group.innerHTML = '<div class="controls-group-title">' + labels[section] + '</div>';
+          controls[section].forEach(function(c) {
+            group.innerHTML += '<div class="control-row"><span class="control-action">' +
+              c.action + '</span><span class="control-key">' + c.keys + '</span></div>';
+          });
+          list.appendChild(group);
+        });
+
+        if (hasAny) panel.style.display = '';
+      } catch(e) {}
+    }
 
     // Fork button (non-owners)
     var forkBtn = document.getElementById('game-fork');
