@@ -1,0 +1,261 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="How It Works — CircuitBot" description="Learn how CircuitBot turns your game idea into a playable Godot 4 project with AI-generated art, code, and a compiled build.">
+
+  <section class="section hiw-hero">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-blue">How It Works</span>
+        <h1>From Idea to <span class="gradient-text">Playable Game</span></h1>
+        <p class="hiw-subtitle">Three steps. One prompt. A real game you can play and learn from.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Steps -->
+  <section class="section">
+    <div class="container">
+      <div class="hiw-steps">
+
+        <div class="hiw-step">
+          <div class="hiw-step-number">1</div>
+          <div class="hiw-step-content">
+            <h2>Describe Your Game</h2>
+            <p>
+              Write a few sentences about the game you want to build. Describe the genre, mechanics,
+              art style, enemies, levels — whatever you imagine. The more detail you give, the better
+              the result.
+            </p>
+            <div class="hiw-example">
+              <div class="hiw-example-label">Example prompt</div>
+              <p>"A retro pixel-art roguelike dungeon crawler with procedural levels, three enemy types, and a boss fight at the end of each floor."</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hiw-step">
+          <div class="hiw-step-number">2</div>
+          <div class="hiw-step-content">
+            <h2>We Build It</h2>
+            <p>
+              CircuitBot's AI plans the game architecture, generates all the art assets (sprites,
+              tilesets, backgrounds), writes the complete <span style="color: var(--accent-blue);">GDScript</span> code, assembles everything in
+              <span style="color: var(--accent-blue);">Godot 4</span>, and compiles a playable build. This takes about 15-30 minutes.
+            </p>
+            <ul class="hiw-detail-list">
+              <li>Custom AI-generated 2D art assets</li>
+              <li>Full game logic — movement, combat, UI, menus</li>
+              <li>Properly structured Godot project with scenes and scripts</li>
+              <li>Compiled Windows executable</li>
+              <li>Web-playable build you can share instantly</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hiw-step">
+          <div class="hiw-step-number">3</div>
+          <div class="hiw-step-content">
+            <h2>Play, Learn, and Build On It</h2>
+            <p>
+              Download the full <span style="color: var(--accent-blue);">Godot 4</span> project. Play your game, read the code, tweak things,
+              break things, and learn by doing. This is a real starting point — not a demo.
+              You own everything and can take it in any direction.
+            </p>
+            <ul class="hiw-detail-list">
+              <li>Open in the Godot editor and modify anything</li>
+              <li>Study the GDScript code to learn game dev patterns</li>
+              <li>Request edits through CircuitBot to iterate further</li>
+              <li>Full commercial ownership — sell it, share it, open-source it</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- What's Inside -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>What Is Inside <span class="gradient-text">Your Game</span></h2>
+        <p>Every generated game comes with real, editable source code you can learn from.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#127912;</span> Custom Art</h3>
+          <p>AI-generated sprites, textures, and backgrounds that match your game's visual style.</p>
+        </div>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#128187;</span> Real Code</h3>
+          <p>Complete GDScript you can read and learn from — player movement, enemies, scoring, and more.</p>
+        </div>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#127760;</span> UI &amp; Menus</h3>
+          <p>Title screens, HUD, health bars, and score displays — all properly structured in Godot scenes.</p>
+        </div>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#128736;</span> Scene Architecture</h3>
+          <p>Properly organized Godot project with correct node hierarchies you can study and extend.</p>
+        </div>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#127916;</span> Input Handling</h3>
+          <p>Keyboard and controller mappings pre-configured for your game's mechanics.</p>
+        </div>
+        <div class="card feature-card">
+          <h3><span class="feature-icon">&#128640;</span> Playable Build</h3>
+          <p>A compiled Windows .exe ready to share with friends — no engine installation needed to play.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="section" style="padding-bottom:80px;">
+    <div class="container">
+      <div class="section-header">
+        <h2>Ready to <span class="gradient-text">Build</span>?</h2>
+        <p>Your first game is free. Describe your idea and have a playable build in minutes.</p>
+        <a href="/create" class="btn btn-yellow btn-lg" style="margin-top:24px;">Create Your Free Game</a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .hiw-hero {
+    padding-bottom: 40px;
+  }
+
+  .hiw-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+  }
+
+  .hiw-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .hiw-step {
+    display: flex;
+    gap: 24px;
+  }
+
+  .hiw-step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(69, 130, 199, 0.1);
+    border: 2px solid var(--accent-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    flex-shrink: 0;
+  }
+
+  .hiw-step-content h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+
+  .hiw-step-content p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .hiw-example {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+  }
+
+  .hiw-example-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .hiw-example p {
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .hiw-detail-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .hiw-detail-list li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    line-height: 1.6;
+  }
+
+  .hiw-detail-list li::before {
+    content: "\2713 ";
+    color: var(--accent-blue);
+    font-weight: 700;
+    margin-right: 8px;
+  }
+
+  .feature-card {
+    padding: 28px 24px;
+  }
+
+  .feature-icon {
+    font-size: 22px;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+
+  .feature-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .hiw-step {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hiw-step-number {
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+    }
+  }
+</style>
