@@ -25,48 +25,10 @@ import Layout from '../layouts/Layout.astro';
         <p class="hero-free-note">No credit card required. First game on us.</p>
       </div>
 
-      <div class="terminal hero-terminal">
-        <div class="terminal-bar">
-          <span class="terminal-dot red"></span>
-          <span class="terminal-dot yellow"></span>
-          <span class="terminal-dot green"></span>
-          <span class="terminal-title"><span style="color: #4582c7;">CircuitBot</span> &mdash; Building Your Game</span>
-        </div>
-        <div class="terminal-body">
-          <div class="term-line line-1"><span class="prompt">&gt; </span><span class="cmd typewriter">A retro pixel-art roguelike dungeon crawler with procedural levels</span></div>
-          <div class="term-line line-2">
-            <span class="output">Planning your game...</span>
-          </div>
-          <div class="term-line line-3">
-            <span class="highlight">Generating pixel art assets...</span>
-          </div>
-          <div class="term-line line-4">
-            <span class="highlight">Implementing 4 game systems...</span>
-          </div>
-          <div class="term-line line-5">
-            <span class="output">Exporting executable...</span>
-          </div>
-          <div class="term-line line-6">
-            <span class="success">&#10004; Your game is ready! Time to make it your own.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- Community Games -->
-  <section class="section" id="community-games">
-    <div class="container">
-      <div class="section-header">
-        <h2>Community <span class="gradient-text">Games</span></h2>
-        <p>See what others have built with CircuitBot.</p>
-      </div>
-      <div class="community-grid" id="community-grid"></div>
-      <p class="community-empty" id="community-empty" style="display:none;">No games yet — be the first to build one!</p>
-      <div class="community-cta">
-        <a href="/create" class="btn btn-primary btn-lg">Build Your Own</a>
+      <div class="hero-games" id="community-games">
+        <p class="hero-games-label">See what others have built</p>
+        <div class="community-grid" id="community-grid"></div>
+        <p class="community-empty" id="community-empty" style="display:none;">Games will appear here soon!</p>
       </div>
     </div>
   </section>
@@ -433,49 +395,20 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text-muted);
   }
 
-  .hero-terminal {
-    max-width: 680px;
+  .hero-games {
+    max-width: 960px;
     margin: 0 auto;
   }
 
-  /* ── Terminal typewriter animation ─────────── */
-  .term-line {
-    opacity: 0;
-    visibility: hidden;
-    white-space: nowrap;
-  }
-
-  .line-1 { animation: appear 0.3s 0.5s forwards; }
-  .line-2 { animation: appear 0.3s 1.8s forwards; }
-  .line-3 { animation: appear 0.3s 2.8s forwards; }
-  .line-4 { animation: appear 0.3s 3.8s forwards; }
-  .line-5 { animation: appear 0.3s 4.8s forwards; }
-  .line-6 { animation: appear 0.4s 5.8s forwards; }
-
-  @keyframes appear {
-    from { opacity: 0; visibility: visible; transform: translateY(4px); }
-    to   { opacity: 1; visibility: visible; transform: translateY(0); }
-  }
-
-  .typewriter {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    vertical-align: bottom;
-    border-right: 2px solid var(--accent-blue);
-    width: 0;
-    animation:
-      typing 1.0s 0.5s steps(40) forwards,
-      blink 0.6s 0.5s step-end 3;
-  }
-
-  @keyframes typing {
-    from { width: 0; }
-    to   { width: 100%; }
-  }
-
-  @keyframes blink {
-    50% { border-color: transparent; }
+  .hero-games-label {
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
   }
 
   /* ── Step cards ────────────────────────────── */
