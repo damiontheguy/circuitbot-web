@@ -57,6 +57,13 @@ import Layout from '../layouts/Layout.astro';
             />
           </div>
 
+          <div class="form-group form-check" id="mailing-list-group" style="display:none;">
+            <label class="check-label">
+              <input type="checkbox" id="mailing-list" name="mailing_list" />
+              <span>Keep me updated on new features</span>
+            </label>
+          </div>
+
           <button type="submit" class="btn btn-primary login-btn">Log In</button>
 
           <a href="#" class="forgot-link">Forgot password?</a>
@@ -210,6 +217,27 @@ import Layout from '../layouts/Layout.astro';
     letter-spacing: 1.5px;
   }
 
+  .form-check {
+    margin-bottom: 8px;
+  }
+
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+
+  .check-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-blue);
+    cursor: pointer;
+  }
+
   .forgot-link {
     display: inline-block;
     margin-top: 14px;
@@ -300,8 +328,10 @@ import Layout from '../layouts/Layout.astro';
 
     var usernameGroup = document.getElementById('username-group');
     var usernameInput = document.getElementById('username');
+    var mailingGroup = document.getElementById('mailing-list-group');
     if (usernameGroup) usernameGroup.style.display = isSignup ? '' : 'none';
     if (usernameInput) usernameInput.required = isSignup;
+    if (mailingGroup) mailingGroup.style.display = isSignup ? '' : 'none';
 
     if (heading) heading.textContent = isSignup ? 'Sign Up' : 'Log In';
     if (sub) sub.textContent = isSignup ? 'Create your account' : 'Access your account';
@@ -345,7 +375,9 @@ import Layout from '../layouts/Layout.astro';
         var payload = { email: email, password: password };
         if (isSignup) {
           var usernameVal = document.getElementById('username');
+          var mailingCheckbox = document.getElementById('mailing-list');
           payload.username = usernameVal ? usernameVal.value.trim() : '';
+          payload.wants_mailing_list = mailingCheckbox ? mailingCheckbox.checked : false;
         }
         fetch(API_BASE + endpoint, {
           method: 'POST',
