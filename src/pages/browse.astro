@@ -238,6 +238,9 @@ import Layout from '../layouts/Layout.astro';
     color: var(--accent-yellow);
     white-space: nowrap;
   }
+  :global(.bc-rating-empty) {
+    color: var(--border-light);
+  }
 
   :global(.browse-card-loading) {
     opacity: 0.7;
@@ -422,7 +425,7 @@ import Layout from '../layouts/Layout.astro';
               var ratingHtml = '';
               if (!isInProgress && game.rating_count > 0) {
                 var stars = Math.round(game.rating_avg);
-                ratingHtml = '<span class="bc-rating">' + '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars) + '</span>';
+                ratingHtml = '<span class="bc-rating">' + '\u2605'.repeat(stars) + '<span class="bc-rating-empty">' + '\u2605'.repeat(5 - stars) + '</span></span>';
               }
 
               var statusHtml = isInProgress ? '<span class="bc-status-badge">Building...</span>'
