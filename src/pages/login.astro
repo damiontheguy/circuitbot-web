@@ -23,11 +23,9 @@ import Layout from '../layouts/Layout.astro';
               id="username"
               name="username"
               class="form-input"
-              placeholder="Pick a username"
-              autocomplete="username"
-              minlength="3"
-              maxlength="30"
-              pattern="[a-zA-Z0-9_]+"
+              placeholder="Pick a username (letters, numbers, _)"
+              autocomplete="off"
+              disabled
             />
           </div>
 
@@ -330,7 +328,10 @@ import Layout from '../layouts/Layout.astro';
     var usernameInput = document.getElementById('username');
     var mailingGroup = document.getElementById('mailing-list-group');
     if (usernameGroup) usernameGroup.style.display = isSignup ? '' : 'none';
-    if (usernameInput) usernameInput.required = isSignup;
+    if (usernameInput) {
+      usernameInput.required = isSignup;
+      usernameInput.disabled = !isSignup;
+    }
     if (mailingGroup) mailingGroup.style.display = isSignup ? '' : 'none';
 
     if (heading) heading.textContent = isSignup ? 'Sign Up' : 'Log In';
