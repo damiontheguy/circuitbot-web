@@ -56,6 +56,23 @@ import Layout from '../layouts/Layout.astro';
 
   <hr class="divider">
 
+  <!-- Community Games -->
+  <section class="section" id="community-games">
+    <div class="container">
+      <div class="section-header">
+        <h2>Community <span class="gradient-text">Games</span></h2>
+        <p>See what others have built with CircuitBot.</p>
+      </div>
+      <div class="community-grid" id="community-grid"></div>
+      <p class="community-empty" id="community-empty" style="display:none;">No games yet — be the first to build one!</p>
+      <div class="community-cta">
+        <a href="/create" class="btn btn-primary btn-lg">Build Your Own</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
   <!-- How It Works -->
   <section class="section" id="how-it-works">
     <div class="container">
@@ -300,6 +317,60 @@ import Layout from '../layouts/Layout.astro';
       }
     ]
   })} />
+
+  <script is:inline>
+    (function() {
+      var API_BASE = window.location.hostname === 'localhost'
+        ? 'http://localhost:8000'
+        : 'https://circuitbot-api-production.up.railway.app';
+
+      var grid = document.getElementById('community-grid');
+      var empty = document.getElementById('community-empty');
+      if (!grid) return;
+
+      fetch(API_BASE + '/api/browse?limit=6')
+        .then(function(r) { return r.json(); })
+        .then(function(games) {
+          if (!games || !games.length) {
+            if (empty) empty.style.display = '';
+            return;
+          }
+
+          // Fetch thumbnails in parallel, then render
+          var thumbPromises = games.map(function(game) {
+            if (!game.thumbnail_key) return Promise.resolve();
+            return fetch(API_BASE + '/api/browse/' + game.id + '/thumbnail')
+              .then(function(r) { return r.json(); })
+              .then(function(d) { game._thumb = d.thumbnail_url; })
+              .catch(function() {});
+          });
+
+          Promise.all(thumbPromises).then(function() {
+            games.forEach(function(game) {
+              var title = game.game_title || game.prompt.substring(0, 50);
+              var creator = game.creator_username ? 'by ' + game.creator_username : '';
+              var thumb = game._thumb || '/circuitbot.png';
+
+              var card = document.createElement('a');
+              card.href = '/play?id=' + game.id;
+              card.className = 'community-card';
+              card.innerHTML =
+                '<div class="cc-thumb-wrap">' +
+                  '<img src="' + thumb + '" alt="" class="cc-thumb" loading="lazy" />' +
+                '</div>' +
+                '<div class="cc-info">' +
+                  '<div class="cc-title">' + title.replace(/</g, '&lt;') + '</div>' +
+                  (creator ? '<div class="cc-creator">' + creator.replace(/</g, '&lt;') + '</div>' : '') +
+                '</div>';
+              grid.appendChild(card);
+            });
+          });
+        })
+        .catch(function() {
+          if (empty) empty.style.display = '';
+        });
+    })();
+  </script>
 
 </Layout>
 
@@ -769,11 +840,80 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.6;
   }
 
+  /* ── Community Games ────────────────────────── */
+  .community-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .community-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .community-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(69, 130, 199, 0.12);
+  }
+
+  .cc-thumb-wrap {
+    aspect-ratio: 16 / 9;
+    background: var(--bg-secondary);
+    overflow: hidden;
+  }
+  .cc-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cc-info {
+    padding: 14px 16px;
+  }
+  .cc-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cc-creator {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .community-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 15px;
+    padding: 40px 0;
+  }
+
+  .community-cta {
+    text-align: center;
+    margin-top: 32px;
+  }
+
   /* ── Mobile adjustments ────────────────────── */
+  @media (max-width: 768px) {
+    .community-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
   @media (max-width: 600px) {
     .hero { padding-top: 48px; }
     .hero h1 { font-size: 26px; }
     .hero-mascot { width: 64px; height: 64px; }
+    .community-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
     .pricing-grid-3 { grid-template-columns: 1fr; }
     .pricing-card { padding: 32px 24px; }

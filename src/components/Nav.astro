@@ -2,6 +2,7 @@
 const currentPath = Astro.url.pathname;
 const links = [
   { href: '/create', label: 'Create a Game' },
+  { href: '/#how-it-works', label: 'How It Works' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/my-games', label: 'My Games' },
   { href: '/download', label: 'Desktop App' },
@@ -21,7 +22,7 @@ const links = [
         {links.map(link => (
           <a
             href={link.href}
-            class:list={['nav-link', { active: currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) }]}
+            class:list={['nav-link', { active: !link.href.startsWith('/#') && (currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href))) }]}
             {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           >
             {link.label}
@@ -31,7 +32,26 @@ const links = [
 
       <div class="nav-actions">
         <a href="/login" class="btn btn-ghost nav-login" id="nav-login-btn">Log in</a>
-        <a href="#" class="btn btn-ghost nav-login" id="nav-logout-btn" style="display:none;">Log out</a>
+
+        <div class="nav-user" id="nav-user" style="display:none;">
+          <a href="/pricing" class="nav-credits" id="nav-credits" title="Credit balance">
+            <span id="nav-credits-num">&mdash;</span> credits
+          </a>
+          <div class="nav-profile-wrap">
+            <button class="nav-profile-btn" id="nav-profile-btn" type="button">
+              <div class="nav-avatar" id="nav-avatar"></div>
+              <span class="nav-uname" id="nav-uname"></span>
+              <svg class="nav-caret" viewBox="0 0 10 6" width="10" height="6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            </button>
+            <div class="nav-dropdown" id="nav-dropdown">
+              <a href="/my-games" class="nav-dd-item">My Games</a>
+              <a href="/pricing" class="nav-dd-item">Buy Credits</a>
+              <hr class="nav-dd-sep" />
+              <button class="nav-dd-item nav-dd-logout" id="nav-dd-logout" type="button">Log out</button>
+            </div>
+          </div>
+        </div>
+
         <a href="/create" class="btn btn-yellow nav-cta">BUILD</a>
       </div>
 
@@ -46,6 +66,14 @@ const links = [
       <a href={link.href} class="nav-mobile-link">{link.label}</a>
     ))}
     <a href="/login" class="nav-mobile-link" id="nav-mobile-login">Log in</a>
+    <div class="nav-mobile-user" id="nav-mobile-user" style="display:none;">
+      <div class="nav-mobile-profile">
+        <div class="nav-avatar nav-avatar-sm" id="nav-mobile-avatar"></div>
+        <span class="nav-mobile-uname" id="nav-mobile-uname"></span>
+        <span class="nav-mobile-credits-pill"><span id="nav-mobile-credits-num">0</span> credits</span>
+      </div>
+      <button class="nav-mobile-link nav-mobile-logout" id="nav-mobile-logout" type="button">Log out</button>
+    </div>
     <a href="/create" class="btn btn-yellow nav-mobile-cta">BUILD</a>
   </div>
 </div>
@@ -120,6 +148,157 @@ const links = [
   .nav-login { font-size: 16px; padding: 6px 14px; }
   .nav-cta { font-size: 14px; padding: 8px 20px; }
 
+  /* ── User profile section ──────────────────── */
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-credits {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    background: rgba(69, 130, 199, 0.1);
+    border: 1px solid rgba(69, 130, 199, 0.2);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-credits:hover {
+    background: rgba(69, 130, 199, 0.18);
+    border-color: rgba(69, 130, 199, 0.35);
+  }
+
+  .nav-profile-wrap {
+    position: relative;
+  }
+
+  .nav-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 4px;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-secondary);
+  }
+  .nav-profile-btn:hover {
+    background: var(--bg-card);
+    border-color: var(--border);
+  }
+
+  .nav-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent-deepblue);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-avatar-sm {
+    width: 26px;
+    height: 26px;
+  }
+  .nav-avatar :global(.nav-avatar-img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .nav-avatar :global(.nav-avatar-letter) {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .nav-avatar-sm :global(.nav-avatar-letter) {
+    font-size: 12px;
+  }
+
+  .nav-uname {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-caret {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  /* ── Dropdown ──────────────────────────────── */
+  .nav-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 160px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+  }
+  .nav-dropdown.open {
+    display: block;
+  }
+
+  .nav-dd-item {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius);
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+  }
+  .nav-dd-item:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+  }
+
+  .nav-dd-sep {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 8px;
+  }
+
+  .nav-dd-logout {
+    color: var(--accent-red);
+  }
+  .nav-dd-logout:hover {
+    background: rgba(239, 83, 80, 0.1);
+    color: var(--accent-red);
+  }
+
+  /* ── Mobile ────────────────────────────────── */
   .nav-toggle {
     display: none;
     flex-direction: column;
@@ -137,7 +316,6 @@ const links = [
     transition: all 0.2s;
   }
 
-  /* Mobile menu — sibling of nav, not child */
   .nav-mobile {
     display: none;
     flex-direction: column;
@@ -154,6 +332,12 @@ const links = [
     font-weight: 500;
     color: var(--text-secondary);
     border-bottom: 1px solid var(--border);
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    cursor: pointer;
+    text-align: left;
   }
   .nav-mobile-link:hover { color: var(--text-primary); }
 
@@ -165,11 +349,50 @@ const links = [
     padding: 14px;
   }
 
+  .nav-mobile-user {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+
+  .nav-mobile-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .nav-mobile-uname {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .nav-mobile-credits-pill {
+    margin-left: auto;
+    padding: 3px 10px;
+    background: rgba(69, 130, 199, 0.1);
+    border: 1px solid rgba(69, 130, 199, 0.2);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    white-space: nowrap;
+  }
+
+  .nav-mobile-logout {
+    color: var(--accent-red);
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
   @media (max-width: 768px) {
     .nav-toggle { display: flex; }
     .nav-links { display: none; }
     .nav-cta { display: none; }
     .nav-login { display: none; }
+    .nav-user { display: none !important; }
     .nav-inner { padding: 0 16px; }
   }
 
@@ -191,17 +414,140 @@ const links = [
       toggle.addEventListener('click', function() { mobile.classList.toggle('open'); });
     }
 
+    var API_BASE = window.location.hostname === 'localhost'
+      ? 'http://localhost:8000'
+      : 'https://circuitbot-api-production.up.railway.app';
+
     var token = localStorage.getItem('token');
     var loginBtn = document.getElementById('nav-login-btn');
-    var logoutBtn = document.getElementById('nav-logout-btn');
-    if (token) {
-      if (loginBtn) loginBtn.style.display = 'none';
-      if (logoutBtn) logoutBtn.style.display = '';
-      logoutBtn && logoutBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        localStorage.removeItem('token');
-        window.location.href = '/';
+    var navUser = document.getElementById('nav-user');
+    var mobileLogin = document.getElementById('nav-mobile-login');
+    var mobileUser = document.getElementById('nav-mobile-user');
+
+    if (!token) return;
+
+    // Logged in — swap login for user section
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (navUser) navUser.style.display = '';
+    if (mobileLogin) mobileLogin.style.display = 'none';
+    if (mobileUser) mobileUser.style.display = '';
+
+    // Decode JWT to get user_id
+    function parseJwt(t) {
+      try {
+        var b64 = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(decodeURIComponent(atob(b64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join('')));
+      } catch(e) { return null; }
+    }
+
+    var jwt = parseJwt(token);
+    var userId = jwt && jwt.sub;
+
+    function setAvatarImg(el, url, letter) {
+      if (!el) return;
+      var img = document.createElement('img');
+      img.className = 'nav-avatar-img';
+      img.alt = '';
+      img.src = url;
+      img.onerror = function() { el.innerHTML = '<span class="nav-avatar-letter">' + letter + '</span>'; };
+      el.innerHTML = '';
+      el.appendChild(img);
+    }
+
+    function setAvatarLetter(el, letter) {
+      if (!el) return;
+      el.innerHTML = '<span class="nav-avatar-letter">' + letter + '</span>';
+    }
+
+    // Fetch profile
+    fetch(API_BASE + '/api/auth/profile', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('auth');
+      return r.json();
+    })
+    .then(function(profile) {
+      var name = profile.username || profile.email.split('@')[0];
+      var letter = name.charAt(0).toUpperCase();
+
+      var unameEl = document.getElementById('nav-uname');
+      var mUnameEl = document.getElementById('nav-mobile-uname');
+      if (unameEl) unameEl.textContent = name;
+      if (mUnameEl) mUnameEl.textContent = name;
+
+      var avatarEl = document.getElementById('nav-avatar');
+      var mAvatarEl = document.getElementById('nav-mobile-avatar');
+
+      if (profile.avatar_key && userId) {
+        fetch(API_BASE + '/api/auth/avatar/' + userId)
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.avatar_url) {
+              setAvatarImg(avatarEl, data.avatar_url, letter);
+              setAvatarImg(mAvatarEl, data.avatar_url, letter);
+            } else {
+              setAvatarLetter(avatarEl, letter);
+              setAvatarLetter(mAvatarEl, letter);
+            }
+          })
+          .catch(function() {
+            setAvatarLetter(avatarEl, letter);
+            setAvatarLetter(mAvatarEl, letter);
+          });
+      } else {
+        setAvatarLetter(avatarEl, letter);
+        setAvatarLetter(mAvatarEl, letter);
+      }
+    })
+    .catch(function() {
+      // Token invalid — reset to logged-out state
+      localStorage.removeItem('token');
+      if (loginBtn) loginBtn.style.display = '';
+      if (navUser) navUser.style.display = 'none';
+      if (mobileLogin) mobileLogin.style.display = '';
+      if (mobileUser) mobileUser.style.display = 'none';
+    });
+
+    // Fetch credit balance
+    fetch(API_BASE + '/api/billing/credits', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var bal = data.balance_cents || 0;
+      var formatted = bal.toLocaleString();
+      var el = document.getElementById('nav-credits-num');
+      var mEl = document.getElementById('nav-mobile-credits-num');
+      if (el) el.textContent = formatted;
+      if (mEl) mEl.textContent = formatted;
+    })
+    .catch(function() {});
+
+    // Profile dropdown toggle
+    var profileBtn = document.getElementById('nav-profile-btn');
+    var dropdown = document.getElementById('nav-dropdown');
+    if (profileBtn && dropdown) {
+      profileBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+      });
+      document.addEventListener('click', function() {
+        dropdown.classList.remove('open');
       });
     }
+
+    // Logout
+    function logout(e) {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    }
+    var ddLogout = document.getElementById('nav-dd-logout');
+    var mLogout = document.getElementById('nav-mobile-logout');
+    if (ddLogout) ddLogout.addEventListener('click', logout);
+    if (mLogout) mLogout.addEventListener('click', logout);
   });
 </script>
