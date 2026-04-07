@@ -69,6 +69,12 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
       </div>
+
+      <!-- Active Generations -->
+      <div id="active-jobs" class="active-jobs" style="display:none;">
+        <p class="active-jobs-label">Your generations</p>
+        <div id="active-jobs-list" class="active-jobs-list"></div>
+      </div>
     </div>
   </section>
 
@@ -129,25 +135,30 @@ import Layout from '../layouts/Layout.astro';
   var _freeTrialEligible = false;
   var _phoneVerified = false;
   var _pendingPhone = '';
+  var _activeJobs = []; // tracked jobs on this page
+  var _pollTimer = null;
+  var MAX_JOBS = 5;
+
+  var genBtn = document.getElementById('generate-btn');
+  var freeTrialBtn = document.getElementById('free-trial-btn');
+  var jobsContainer = document.getElementById('active-jobs');
+  var jobsList = document.getElementById('active-jobs-list');
 
   // Fetch dynamic cost estimates
-  (function fetchCostEstimates() {
-    fetch(API_BASE + '/api/browse/stats')
-      .then(function(r) { return r.json(); })
-      .then(function(stats) {
-        var costEl = document.getElementById('generate-cost');
-        if (costEl && stats.game_avg_credits) {
-          costEl.textContent = '~' + stats.game_avg_credits.toLocaleString() + ' credits';
-        }
-      })
-      .catch(function() {});
-  })();
+  fetch(API_BASE + '/api/browse/stats')
+    .then(function(r) { return r.json(); })
+    .then(function(stats) {
+      var costEl = document.getElementById('generate-cost');
+      if (costEl && stats.game_avg_credits) {
+        costEl.textContent = '~' + stats.game_avg_credits.toLocaleString() + ' credits';
+      }
+    })
+    .catch(function() {});
 
-  // On load: check free trial eligibility
-  (function checkTrialEligibility() {
+  // Check free trial eligibility
+  (function() {
     var token = localStorage.getItem('token');
     if (!token) return;
-
     fetch(API_BASE + '/api/auth/phone/status', {
       headers: { 'Authorization': 'Bearer ' + token },
     })
@@ -156,14 +167,31 @@ import Layout from '../layouts/Layout.astro';
       if (!data) return;
       _phoneVerified = data.phone_verified;
       _freeTrialEligible = data.free_trial_eligible;
+      if (freeTrialBtn && (_freeTrialEligible || !_phoneVerified)) {
+        freeTrialBtn.style.display = '';
+      }
+      if (freeTrialBtn && _freeTrialEligible) {
+        freeTrialBtn.textContent = 'or Generate Free';
+      }
+    })
+    .catch(function() {});
+  })();
 
-      var btn = document.getElementById('free-trial-btn');
-      if (btn && (_freeTrialEligible || !_phoneVerified)) {
-        btn.style.display = '';
-      }
-      if (btn && _freeTrialEligible) {
-        btn.textContent = 'or Generate Free';
-      }
+  // Load existing in-progress jobs on page load
+  (function loadExistingJobs() {
+    var token = localStorage.getItem('token');
+    if (!token) return;
+    fetch(API_BASE + '/api/games', {
+      headers: { 'Authorization': 'Bearer ' + token },
+    })
+    .then(function(r) { return r.ok ? r.json() : []; })
+    .then(function(games) {
+      var active = games.filter(function(g) {
+        return ['queued', 'generating', 'exporting'].indexOf(g.status) !== -1;
+      });
+      active.forEach(function(g) { addJobRow(g.id, g.prompt, g.status, g.progress_pct || 0); });
+      if (_activeJobs.length > 0) startPolling();
+      updateGenerateButton();
     })
     .catch(function() {});
   })();
@@ -181,28 +209,110 @@ import Layout from '../layouts/Layout.astro';
     });
   });
 
-  // --- Paid Generate ---
-  var genBtn = document.getElementById('generate-btn');
-  if (genBtn) {
-    genBtn.addEventListener('click', function() {
-      startGeneration(false);
-    });
+  genBtn.addEventListener('click', function() { startGeneration(false); });
+  freeTrialBtn.addEventListener('click', function() {
+    var token = localStorage.getItem('token');
+    if (!token) { window.location.href = '/login?redirect=/create'; return; }
+    if (!_phoneVerified) { openPhoneModal(); return; }
+    startGeneration(true);
+  });
+
+  function updateGenerateButton() {
+    var inProgress = _activeJobs.filter(function(j) { return j.done === false; });
+    if (inProgress.length >= MAX_JOBS) {
+      genBtn.disabled = true;
+      genBtn.textContent = 'Max 5 active';
+    } else {
+      genBtn.disabled = false;
+      genBtn.textContent = 'Generate Game';
+    }
   }
 
-  // --- Free Trial ---
-  var freeTrialBtn = document.getElementById('free-trial-btn');
-  if (freeTrialBtn) {
-    freeTrialBtn.addEventListener('click', function() {
-      var token = localStorage.getItem('token');
-      if (!token) {
-        window.location.href = '/login?redirect=' + encodeURIComponent('/create');
-        return;
-      }
-      if (!_phoneVerified) {
-        openPhoneModal();
-        return;
-      }
-      startGeneration(true);
+  function addJobRow(jobId, prompt, status, pct) {
+    // Don't add duplicates
+    if (_activeJobs.some(function(j) { return j.id === jobId; })) return;
+
+    var done = status === 'completed' || status === 'failed';
+    _activeJobs.push({ id: jobId, prompt: prompt, done: done });
+
+    jobsContainer.style.display = '';
+
+    var row = document.createElement('div');
+    row.className = 'job-row';
+    row.id = 'job-' + jobId;
+
+    var truncated = prompt.length > 60 ? prompt.substring(0, 57) + '...' : prompt;
+
+    if (status === 'completed') {
+      row.innerHTML =
+        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
+        '<a href="/status?id=' + jobId + '" class="job-link">View Game &rarr;</a>';
+    } else if (status === 'failed') {
+      row.innerHTML =
+        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
+        '<span class="job-failed">Failed</span>';
+    } else {
+      row.innerHTML =
+        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
+        '<div class="job-progress"><div class="job-progress-fill" style="width:' + pct + '%"></div></div>' +
+        '<span class="job-status">' + (status || 'queued') + '</span>';
+    }
+
+    jobsList.appendChild(row);
+    updateGenerateButton();
+  }
+
+  function updateJobRow(jobId, status, pct) {
+    var row = document.getElementById('job-' + jobId);
+    if (!row) return;
+
+    var job = _activeJobs.find(function(j) { return j.id === jobId; });
+    var truncated = job ? (job.prompt.length > 60 ? job.prompt.substring(0, 57) + '...' : job.prompt) : '';
+
+    if (status === 'completed') {
+      if (job) job.done = true;
+      row.innerHTML =
+        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
+        '<a href="/status?id=' + jobId + '" class="job-link">View Game &rarr;</a>';
+      updateGenerateButton();
+    } else if (status === 'failed') {
+      if (job) job.done = true;
+      row.innerHTML =
+        '<span class="job-prompt">' + truncated.replace(/</g, '&lt;') + '</span>' +
+        '<span class="job-failed">Failed</span>';
+      updateGenerateButton();
+    } else {
+      var fill = row.querySelector('.job-progress-fill');
+      var statusEl = row.querySelector('.job-status');
+      if (fill) fill.style.width = pct + '%';
+      if (statusEl) statusEl.textContent = status;
+    }
+  }
+
+  function startPolling() {
+    if (_pollTimer) return;
+    _pollTimer = setInterval(pollJobs, 8000);
+  }
+
+  function stopPolling() {
+    if (_pollTimer) { clearInterval(_pollTimer); _pollTimer = null; }
+  }
+
+  function pollJobs() {
+    var token = localStorage.getItem('token');
+    if (!token) return;
+    var pending = _activeJobs.filter(function(j) { return !j.done; });
+    if (pending.length === 0) { stopPolling(); return; }
+
+    pending.forEach(function(j) {
+      fetch(API_BASE + '/api/games/' + j.id, {
+        headers: { 'Authorization': 'Bearer ' + token },
+      })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data) updateJobRow(j.id, data.status, data.progress_pct || 0);
+      })
+      .catch(function() {});
     });
   }
 
@@ -217,69 +327,55 @@ import Layout from '../layouts/Layout.astro';
     }
 
     var token = localStorage.getItem('token');
-    if (!token) {
-      window.location.href = '/login?redirect=' + encodeURIComponent('/create');
-      return;
-    }
+    if (!token) { window.location.href = '/login?redirect=/create'; return; }
 
     var activeBtn = isFreeTrial ? freeTrialBtn : genBtn;
     activeBtn.disabled = true;
-    activeBtn.textContent = 'Creating job...';
+    activeBtn.textContent = 'Creating...';
 
-    // Step 1: Create game job
     fetch(API_BASE + '/api/games', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({ prompt: prompt }),
     })
-    .then(function(jobRes) {
-      if (!jobRes.ok) return jobRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create game job'); });
-      return jobRes.json();
+    .then(function(r) {
+      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Failed'); });
+      return r.json();
     })
     .then(function(job) {
       if (isFreeTrial) {
-        // Step 2a: Claim free trial
         return fetch(API_BASE + '/api/billing/free-trial', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ game_job_id: job.id }),
         }).then(function(r) {
           if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Free trial failed'); });
           return r.json();
-        }).then(function(result) {
-          window.location.href = '/status?id=' + result.job_id;
+        }).then(function() {
+          addJobRow(job.id, prompt, 'queued', 0);
+          textarea.value = '';
+          startPolling();
         });
       } else {
-        // Step 2b: Stripe checkout
         return fetch(API_BASE + '/api/billing/checkout', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ game_job_id: job.id }),
-        }).then(function(checkoutRes) {
-          if (!checkoutRes.ok) return checkoutRes.json().then(function(e) { throw new Error(e.detail || 'Failed to create checkout'); });
-          return checkoutRes.json();
+        }).then(function(r) {
+          if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Checkout failed'); });
+          return r.json();
         }).then(function(checkout) {
-          if (checkout.checkout_url) {
-            window.location.href = checkout.checkout_url;
-          } else {
-            throw new Error('No checkout URL returned');
-          }
+          if (checkout.checkout_url) window.location.href = checkout.checkout_url;
         });
       }
     })
     .catch(function(err) {
-      showError(err.message || 'Something went wrong. Please try again.');
+      showError(err.message);
+    })
+    .finally(function() {
       activeBtn.disabled = false;
-      activeBtn.textContent = isFreeTrial ? 'or Try Free' : 'Generate Game';
+      activeBtn.textContent = isFreeTrial ? 'or Generate Free' : 'Generate Game';
+      updateGenerateButton();
     });
   }
 
@@ -552,6 +648,97 @@ import Layout from '../layouts/Layout.astro';
   .generate-free-btn:disabled {
     opacity: 0.5;
     cursor: wait;
+  }
+
+  /* ── Active Generations ──────────── */
+  .active-jobs {
+    margin-top: 28px;
+  }
+
+  .active-jobs-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .active-jobs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  :global(.job-row) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  :global(.job-prompt) {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  :global(.job-progress) {
+    width: 80px;
+    height: 4px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  :global(.job-progress-fill) {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-yellow));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+
+  :global(.job-status) {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    flex-shrink: 0;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  :global(.job-link) {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    background: var(--accent-blue);
+    color: #fff;
+    border-radius: var(--radius);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  :global(.job-link:hover) {
+    background: var(--accent-deepblue);
+  }
+
+  :global(.job-failed) {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent-red);
+    flex-shrink: 0;
   }
 
   /* ── Phone Modal ────────────────── */
