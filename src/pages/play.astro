@@ -393,6 +393,16 @@ import Layout from '../layouts/Layout.astro';
     box-sizing: border-box;
   }
   .form-input:focus { border-color: var(--accent-blue); }
+  .form-label-small {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .form-file-input {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
 
   /* ---------- Fullscreen button ---------- */
   .fullscreen-btn {
@@ -542,16 +552,20 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <!-- iOS fullscreen backdrop (behind the rotated container) -->
-<!-- Edit Modal -->
+<!-- Edit/Fork Modal (shared) -->
 <div id="edit-modal" class="modal-overlay" style="display:none;">
   <div class="modal-card">
     <button class="modal-close" id="edit-modal-close">&times;</button>
-    <h2 class="modal-title">Request Changes</h2>
-    <p class="modal-sub">Describe what you want changed.</p>
+    <h2 class="modal-title" id="edit-modal-title">Request Changes</h2>
+    <p class="modal-sub" id="edit-modal-sub">Describe what you want changed.</p>
     <div class="form-group">
       <textarea id="edit-instructions" class="form-input" rows="4" placeholder="e.g. Make the player faster, add a health bar, change the background..."></textarea>
     </div>
-    <button id="edit-submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;" type="button">Submit Update</button>
+    <div class="form-group">
+      <label class="form-label-small">Reference images (optional, up to 5)</label>
+      <input type="file" id="edit-images" accept="image/*" multiple class="form-file-input" />
+    </div>
+    <button id="edit-submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;" type="button">Submit</button>
     <p id="edit-error" style="display:none;margin-top:10px;color:var(--accent-red);font-size:13px;"></p>
   </div>
 </div>
@@ -784,24 +798,14 @@ import Layout from '../layouts/Layout.astro';
     if (!isOwner && getToken()) {
       forkBtn.style.display = '';
       forkBtn.addEventListener('click', function() {
-        forkBtn.disabled = true;
-        forkBtn.textContent = 'Forking...';
-        fetch(API_BASE + '/api/games/' + game.id + '/fork', {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + getToken() },
-        })
-        .then(function(r) {
-          if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Fork failed'); });
-          return r.json();
-        })
-        .then(function(forked) {
-          window.location.href = '/status?id=' + forked.id;
-        })
-        .catch(function(err) {
-          alert(err.message);
-          forkBtn.disabled = false;
-          forkBtn.textContent = 'Fork This Game';
-        });
+        _editMode = 'fork';
+        document.getElementById('edit-modal-title').textContent = 'Fork This Game';
+        document.getElementById('edit-modal-sub').textContent = 'Describe what changes you want in your version.';
+        document.getElementById('edit-submit').textContent = 'Fork & Build';
+        document.getElementById('edit-instructions').value = '';
+        document.getElementById('edit-images').value = '';
+        document.getElementById('edit-error').style.display = 'none';
+        document.getElementById('edit-modal').style.display = 'flex';
       });
     }
 
@@ -811,6 +815,13 @@ import Layout from '../layouts/Layout.astro';
       editBtn.textContent = 'Update';
       editBtn.style.display = '';
       editBtn.addEventListener('click', function() {
+        _editMode = 'edit';
+        document.getElementById('edit-modal-title').textContent = 'Update Game';
+        document.getElementById('edit-modal-sub').textContent = 'Describe what you want changed or fixed.';
+        document.getElementById('edit-submit').textContent = 'Submit Update';
+        document.getElementById('edit-instructions').value = '';
+        document.getElementById('edit-images').value = '';
+        document.getElementById('edit-error').style.display = 'none';
         document.getElementById('edit-modal').style.display = 'flex';
       });
     }
@@ -820,7 +831,9 @@ import Layout from '../layouts/Layout.astro';
     loadComments(game.id);
   }
 
-  // ── Edit modal ──────────────────────────────
+  // ── Edit/Fork modal ─────────────────────────
+  var _editMode = 'edit'; // 'edit' or 'fork'
+
   document.getElementById('edit-modal-close').addEventListener('click', function() {
     document.getElementById('edit-modal').style.display = 'none';
   });
@@ -830,7 +843,7 @@ import Layout from '../layouts/Layout.astro';
 
   document.getElementById('edit-submit').addEventListener('click', function() {
     var instructions = document.getElementById('edit-instructions').value.trim();
-    if (!instructions) return;
+    if (!instructions) { alert('Please describe what you want changed.'); return; }
     var token = getToken();
     var jobId = getJobId();
     if (!token || !jobId) return;
@@ -844,24 +857,36 @@ import Layout from '../layouts/Layout.astro';
     var formData = new FormData();
     formData.append('instructions', instructions);
 
-    fetch(API_BASE + '/api/games/' + jobId + '/edit', {
+    // Attach images if any
+    var imageInput = document.getElementById('edit-images');
+    if (imageInput && imageInput.files) {
+      for (var i = 0; i < Math.min(imageInput.files.length, 5); i++) {
+        formData.append('images', imageInput.files[i]);
+      }
+    }
+
+    var endpoint = _editMode === 'fork'
+      ? API_BASE + '/api/games/' + jobId + '/fork'
+      : API_BASE + '/api/games/' + jobId + '/edit';
+
+    fetch(endpoint, {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token },
       body: formData,
     })
     .then(function(r) {
-      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Edit failed'); });
+      if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Failed'); });
       return r.json();
     })
-    .then(function(editJob) {
+    .then(function(newJob) {
       document.getElementById('edit-modal').style.display = 'none';
-      window.location.href = '/status?id=' + editJob.id;
+      window.location.href = '/status?id=' + newJob.id;
     })
     .catch(function(err) {
       errEl.textContent = err.message;
       errEl.style.display = '';
       btn.disabled = false;
-      btn.textContent = 'Submit Update';
+      btn.textContent = _editMode === 'fork' ? 'Fork & Build' : 'Submit Update';
     });
   });
 
