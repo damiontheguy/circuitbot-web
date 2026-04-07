@@ -608,7 +608,7 @@ Describe it. Build on it. Make it yours.
           var item = document.createElement('div');
           item.className = 'comment-item';
           item.innerHTML =
-            '<div class="comment-avatar">' + letter + '</div>' +
+            '<div class="comment-avatar" id="cavatar-' + c.id + '">' + letter + '</div>' +
             '<div class="comment-body">' +
               '<div class="comment-meta">' +
                 '<span class="comment-author">' + name.replace(/</g, '&lt;') + '</span>' +
@@ -617,6 +617,19 @@ Describe it. Build on it. Make it yours.
               '<div class="comment-text">' + c.content.replace(/</g, '&lt;') + '</div>' +
             '</div>';
           list.appendChild(item);
+
+          // Load avatar if user has one
+          if (c.avatar_key && c.user_id) {
+            fetch(API_BASE + '/api/auth/avatar/' + c.user_id)
+              .then(function(r) { return r.ok ? r.json() : null; })
+              .then(function(data) {
+                if (data && data.avatar_url) {
+                  var el = document.getElementById('cavatar-' + c.id);
+                  if (el) el.innerHTML = '<img src="' + data.avatar_url + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />';
+                }
+              })
+              .catch(function() {});
+          }
         });
       })
       .catch(function() {});
