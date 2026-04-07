@@ -393,15 +393,31 @@ import Layout from '../layouts/Layout.astro';
           startPolling();
         });
       } else {
-        return fetch(API_BASE + '/api/billing/checkout', {
+        // Try credits first, fall back to Stripe checkout
+        return fetch(API_BASE + '/api/billing/use-credits', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ game_job_id: job.id }),
         }).then(function(r) {
-          if (!r.ok) return r.json().then(function(e) { throw new Error(e.detail || 'Checkout failed'); });
-          return r.json();
-        }).then(function(checkout) {
-          if (checkout.checkout_url) window.location.href = checkout.checkout_url;
+          if (r.ok) return r.json();
+          // Not enough credits — fall back to Stripe
+          return fetch(API_BASE + '/api/billing/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ game_job_id: job.id }),
+          }).then(function(cr) {
+            if (!cr.ok) return cr.json().then(function(e) { throw new Error(e.detail || 'Checkout failed'); });
+            return cr.json();
+          }).then(function(checkout) {
+            if (checkout.checkout_url) window.location.href = checkout.checkout_url;
+            return null;
+          });
+        }).then(function(result) {
+          if (result && result.status === 'queued') {
+            addJobRow(job.id, prompt, 'queued', 0);
+            textarea.value = '';
+            startPolling();
+          }
         });
       }
     })
