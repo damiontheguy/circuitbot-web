@@ -82,6 +82,21 @@ const links = [
   </div>
 </div>
 
+<!-- Admin Welcome Modal -->
+<div id="admin-welcome-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--bg-card);border:1px solid var(--accent-yellow);border-radius:12px;padding:32px;max-width:440px;width:90%;text-align:center;position:relative;">
+    <div style="font-size:40px;margin-bottom:12px;">&#9889;</div>
+    <h2 style="font-family:var(--font-heading);font-size:22px;margin:0 0 8px;color:var(--text-primary);">Welcome to the team.</h2>
+    <p style="color:var(--text-secondary);font-size:14px;line-height:1.6;margin:0 0 16px;">
+      You now have admin access to CircuitBot. You can generate games for free — head to
+      <a href="/create" style="color:var(--accent-yellow);">Create</a> and hit the
+      <span style="color:var(--accent-yellow);font-weight:600;">Generate Free</span> text
+      to the right of the Generate Game button.
+    </p>
+    <button id="admin-welcome-close" type="button" style="background:var(--accent-yellow);color:#000;border:none;padding:10px 28px;border-radius:6px;font-weight:600;cursor:pointer;font-size:14px;">Got it</button>
+  </div>
+</div>
+
 <style>
   .nav-wrapper {
     position: fixed;
@@ -503,6 +518,21 @@ const links = [
       return r.json();
     })
     .then(function(profile) {
+      // Admin welcome — show once
+      if (profile.is_admin && !localStorage.getItem('admin_welcome_seen')) {
+        var modal = document.getElementById('admin-welcome-modal');
+        if (modal) {
+          modal.style.display = 'flex';
+          document.getElementById('admin-welcome-close').addEventListener('click', function() {
+            modal.style.display = 'none';
+            localStorage.setItem('admin_welcome_seen', '1');
+          });
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) { modal.style.display = 'none'; localStorage.setItem('admin_welcome_seen', '1'); }
+          });
+        }
+      }
+
       var name = profile.username || profile.email.split('@')[0];
       var letter = name.charAt(0).toUpperCase();
 
